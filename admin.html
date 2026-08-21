@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BudgetFlow — Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="app-page">
+<nav class="nav nav-app">
+  <div class="nav-inner">
+    <a href="dashboard.html" class="logo">💰 BudgetFlow</a>
+    <div class="nav-links">
+      <a href="dashboard.html" class="btn btn-ghost btn-sm">← Dashboard</a>
+      <button class="btn btn-ghost btn-sm" id="logoutBtn">Log out</button>
+    </div>
+  </div>
+</nav>
+
+<div class="app-body" style="max-width:900px">
+  <h2 style="margin:32px 0 20px;font-family:var(--display)">Admin panel</h2>
+  <div class="kpi-strip" id="adminKpis">
+    <div class="kpi"><div class="kpi-l">Total users</div><div class="kpi-v" id="totalUsers">—</div></div>
+    <div class="kpi"><div class="kpi-l">Active this month</div><div class="kpi-v" id="activeUsers">—</div></div>
+    <div class="kpi"><div class="kpi-l">Reminders sent</div><div class="kpi-v" id="remsSent">—</div></div>
+    <div class="kpi"><div class="kpi-l">Joined this month</div><div class="kpi-v" id="newUsers">—</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>All users</h3>
+      <input type="text" id="userSearch" placeholder="Search by email…" style="width:220px">
+    </div>
+    <div class="table-wrap">
+      <table class="plan-table" id="usersTable">
+        <thead><tr><th>Email</th><th>Name</th><th>Joined</th><th>Last active</th><th>Payday</th><th>Action</th></tr></thead>
+        <tbody id="usersBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="auth-msg" id="adminMsg"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>

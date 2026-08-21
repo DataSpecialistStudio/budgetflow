@@ -1,0 +1,28 @@
+name: Budget Reminder Bot
+
+on:
+  schedule:
+    # 3:30 UTC = 9:00 AM IST every day
+    - cron: '30 3 * * *'
+    # Keep-alive ping every 3 days at 4:00 AM IST
+    - cron: '30 22 */3 * *'
+  workflow_dispatch:   # allows manual run from GitHub Actions tab
+
+jobs:
+  remind:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install dependencies
+        run: npm install @supabase/supabase-js nodemailer node-fetch
+      - name: Run reminder bot
+        env:
+          SUPABASE_URL:          ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY:  ${{ secrets.SUPABASE_SERVICE_KEY }}
+          RESEND_API_KEY:        ${{ secrets.RESEND_API_KEY }}
+          FROM_EMAIL:            ${{ secrets.FROM_EMAIL }}
+          SITE_URL:              ${{ secrets.SITE_URL }}
+        run: node remind.js

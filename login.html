@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BudgetFlow — Sign in</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="auth-page">
+
+<div class="auth-wrap">
+  <a href="index.html" class="logo auth-logo">💰 BudgetFlow</a>
+
+  <!-- TAB SWITCHER -->
+  <div class="auth-tabs">
+    <button class="auth-tab active" data-tab="login">Log in</button>
+    <button class="auth-tab" data-tab="signup">Sign up</button>
+  </div>
+
+  <!-- LOGIN PANEL -->
+  <div class="auth-panel active" id="panel-login">
+    <button class="btn-google" id="googleLoginBtn">
+      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18" alt="Google">
+      Continue with Google
+    </button>
+    <div class="or-divider"><span>or</span></div>
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" id="loginEmail" placeholder="you@email.com" autocomplete="email">
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password">
+    </div>
+    <button class="btn btn-primary btn-full" id="loginBtn">Log in</button>
+    <a href="#" class="forgot-link" id="forgotBtn">Forgot password?</a>
+    <div class="auth-msg" id="loginMsg"></div>
+  </div>
+
+  <!-- SIGNUP PANEL -->
+  <div class="auth-panel" id="panel-signup">
+    <button class="btn-google" id="googleSignupBtn">
+      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18" alt="Google">
+      Continue with Google
+    </button>
+    <div class="or-divider"><span>or</span></div>
+    <div class="form-group">
+      <label>Full name</label>
+      <input type="text" id="signupName" placeholder="Kunal Varma" autocomplete="name">
+    </div>
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" id="signupEmail" placeholder="you@email.com" autocomplete="email">
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="signupPassword" placeholder="Min 8 characters" autocomplete="new-password">
+    </div>
+    <div class="form-group">
+      <label>WhatsApp number</label>
+      <input type="tel" id="signupWhatsapp" placeholder="+91 98765 43210">
+    </div>
+    <div class="form-group">
+      <label>Payday date</label>
+      <select id="signupPayday">
+        <option value="1">1st of the month</option>
+        <option value="5">5th of the month</option>
+        <option value="7">7th of the month</option>
+        <option value="10">10th of the month</option>
+        <option value="15">15th of the month</option>
+        <option value="25">25th of the month</option>
+        <option value="28">28th of the month</option>
+        <option value="30">30th of the month</option>
+      </select>
+    </div>
+    <button class="btn btn-primary btn-full" id="signupBtn">Create account</button>
+    <div class="auth-msg" id="signupMsg"></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+<script src="js/auth.js"></script>
+<script>
+  // Switch tabs
+  document.querySelectorAll('.auth-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.auth-panel').forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
+    });
+  });
+  // If URL has #signup, open signup tab
+  if (location.hash === '#signup') {
+    document.querySelector('[data-tab="signup"]').click();
+  }
+</script>
+</body>
+</html>

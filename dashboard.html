@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BudgetFlow — Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="app-page">
+
+<nav class="nav nav-app">
+  <div class="nav-inner">
+    <a href="dashboard.html" class="logo">💰 BudgetFlow</a>
+    <div class="nav-links">
+      <span class="nav-user" id="navUser"></span>
+      <a href="admin.html" class="btn btn-ghost btn-sm" id="adminLink" style="display:none">Admin</a>
+      <button class="btn btn-ghost btn-sm" id="logoutBtn">Log out</button>
+    </div>
+  </div>
+</nav>
+
+<div class="app-tabs">
+  <button class="app-tab active" data-section="month">This Month</button>
+  <button class="app-tab" data-section="year">Year View</button>
+  <button class="app-tab" data-section="corpus">Corpus</button>
+  <button class="app-tab" data-section="reminders">Reminders</button>
+  <button class="app-tab" data-section="settings">Settings</button>
+</div>
+
+<div class="app-body">
+
+  <!-- ══ THIS MONTH ══════════════════════════════════════ -->
+  <section class="tab-section active" id="section-month">
+    <div class="month-hero">
+      <div>
+        <div class="eyebrow" id="monthLabel">August 2026</div>
+        <h2 id="greetUser">Hi there 👋</h2>
+      </div>
+      <div class="payday-badge" id="paydayBadge">Payday: 1st</div>
+    </div>
+
+    <!-- River bar -->
+    <div class="river" id="river"></div>
+
+    <!-- KPI strip -->
+    <div class="kpi-strip" id="kpiStrip">
+      <div class="kpi"><div class="kpi-l">Logged</div><div class="kpi-v" id="kpiLogged">₹0</div></div>
+      <div class="kpi"><div class="kpi-l">Pending</div><div class="kpi-v red" id="kpiPending">₹0</div></div>
+      <div class="kpi"><div class="kpi-l">Saved</div><div class="kpi-v green" id="kpiSaved">₹0</div></div>
+      <div class="kpi"><div class="kpi-l">Days left</div><div class="kpi-v" id="kpiDays">—</div></div>
+    </div>
+
+    <!-- Entry table -->
+    <div class="card">
+      <div class="card-header">
+        <h3>Log this month</h3>
+        <div class="card-actions">
+          <button class="btn btn-outline btn-sm" id="markAllBtn">Mark all as planned</button>
+          <button class="btn btn-outline btn-sm" id="copyLastBtn">Copy last month</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table class="entry-table">
+          <thead><tr><th>Line</th><th>Plan</th><th>Added</th><th>Reason if pending</th><th>Status</th></tr></thead>
+          <tbody id="entryBody"></tbody>
+          <tfoot id="entryFoot"></tfoot>
+        </table>
+      </div>
+    </div>
+
+    <!-- Notes -->
+    <div class="card">
+      <label class="card-label">Month notes</label>
+      <textarea id="monthNotes" rows="3" placeholder="Bonus received, EMI closed, unplanned expense…"></textarea>
+    </div>
+  </section>
+
+  <!-- ══ YEAR VIEW ═══════════════════════════════════════ -->
+  <section class="tab-section" id="section-year">
+    <div class="card">
+      <h3>Year at a glance</h3>
+      <p class="lede">Green = settled · Amber = part-paid · Red = pending · Dot = not started</p>
+      <div class="table-wrap"><table class="year-table" id="yearTable"></table></div>
+    </div>
+    <div class="card">
+      <h3>Monthly savings vs plan</h3>
+      <canvas id="savingsChart" height="220"></canvas>
+    </div>
+  </section>
+
+  <!-- ══ CORPUS ══════════════════════════════════════════ -->
+  <section class="tab-section" id="section-corpus">
+    <div class="kpi-strip">
+      <div class="kpi"><div class="kpi-l">Total deposited</div><div class="kpi-v" id="cDeposited">₹0</div></div>
+      <div class="kpi"><div class="kpi-l">Est. value</div><div class="kpi-v green" id="cEst">₹0</div></div>
+      <div class="kpi"><div class="kpi-l">Growth added</div><div class="kpi-v green" id="cGain">₹0</div></div>
+      <div class="kpi"><div class="kpi-l">Year target</div><div class="kpi-v" id="cTarget">₹0</div></div>
+    </div>
+    <div class="card">
+      <h3>Corpus growth</h3>
+      <p class="lede">Bars = deposited · Green line = estimated with growth · Dashed = plan</p>
+      <canvas id="corpusChart" height="260"></canvas>
+    </div>
+    <div class="card">
+      <h3>10-year projection</h3>
+      <div class="projection-controls">
+        <div class="ctl">
+          <label>Equity return</label>
+          <select id="projRate"><option value="10">10% conservative</option><option value="12" selected>12% base case</option><option value="14">14% optimistic</option></select>
+        </div>
+        <div class="ctl">
+          <label>FD rate</label>
+          <select id="projFd"><option value="6.5" selected>6.5%</option><option value="7">7.0%</option><option value="7.5">7.5%</option></select>
+        </div>
+      </div>
+      <canvas id="projChart" height="220"></canvas>
+      <div class="kpi-strip" id="projMilestones" style="margin-top:12px"></div>
+    </div>
+  </section>
+
+  <!-- ══ REMINDERS ════════════════════════════════════════ -->
+  <section class="tab-section" id="section-reminders">
+    <div class="card">
+      <h3>Reminder settings</h3>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="remEmail" readonly class="input-readonly">
+      </div>
+      <div class="form-group">
+        <label>WhatsApp number</label>
+        <input type="tel" id="remWhatsapp" placeholder="+91 98765 43210">
+        <small>CallMeBot — <a href="https://www.callmebot.com/blog/free-api-whatsapp-messages/" target="_blank">activate your number first</a></small>
+      </div>
+      <div class="form-group">
+        <label>CallMeBot API key</label>
+        <input type="text" id="remApiKey" placeholder="Get this from callmebot.com">
+      </div>
+      <div class="form-group">
+        <label>First reminder each month</label>
+        <select id="remDay">
+          <option value="Friday">First Friday</option>
+          <option value="Saturday" selected>First Saturday</option>
+          <option value="Sunday">First Sunday</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Chase every</label>
+        <select id="remFreq">
+          <option value="2" selected>Every 2 days</option>
+          <option value="3">Every 3 days</option>
+          <option value="7">Weekly</option>
+        </select>
+      </div>
+      <button class="btn btn-primary" id="saveRemBtn">Save reminder settings</button>
+    </div>
+    <div class="card">
+      <h3>Test reminders</h3>
+      <div class="rem-test-btns">
+        <button class="btn btn-outline" id="testEmailBtn">Send test email</button>
+        <button class="btn btn-outline" id="testWaBtn">Send test WhatsApp</button>
+      </div>
+      <div class="auth-msg" id="remMsg"></div>
+    </div>
+    <div class="card">
+      <h3>Reminder log</h3>
+      <div class="table-wrap"><table class="log-table" id="remLog"><thead><tr><th>When</th><th>Type</th><th>Message</th></tr></thead><tbody id="remLogBody"></tbody></table></div>
+    </div>
+  </section>
+
+  <!-- ══ SETTINGS ═════════════════════════════════════════ -->
+  <section class="tab-section" id="section-settings">
+    <div class="card">
+      <h3>Income</h3>
+      <div class="form-group">
+        <label>Monthly take-home (₹)</label>
+        <input type="number" id="settIncome" step="500" min="1000">
+      </div>
+      <div class="form-group">
+        <label>Payday date</label>
+        <select id="settPayday">
+          <option value="1">1st</option><option value="5">5th</option><option value="7">7th</option>
+          <option value="10">10th</option><option value="15">15th</option><option value="25">25th</option>
+          <option value="28">28th</option><option value="30">30th</option>
+        </select>
+      </div>
+    </div>
+    <div class="card">
+      <div class="plan-header">
+        <h3>Monthly plan</h3>
+        <div class="balance-badge" id="settBalanceBadge">—</div>
+      </div>
+      <table class="plan-table">
+        <thead><tr><th>Line</th><th>Amount (₹)</th><th>Type</th><th></th></tr></thead>
+        <tbody id="settPlanBody"></tbody>
+      </table>
+      <button class="btn btn-outline btn-sm" id="settAddLineBtn">+ Add a line</button>
+    </div>
+    <div class="card">
+      <button class="btn btn-primary" id="saveSettingsBtn">Save all settings</button>
+      <div class="auth-msg" id="settMsg"></div>
+    </div>
+    <div class="card danger-zone">
+      <h3>Account</h3>
+      <button class="btn btn-danger" id="deleteAccountBtn">Delete my account and all data</button>
+    </div>
+  </section>
+
+</div><!-- app-body -->
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="js/config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/dashboard.js"></script>
+</body>
+</html>

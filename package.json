@@ -1,0 +1,14 @@
+{
+  "name": "budgetflow-reminder",
+  "version": "1.0.0",
+  "description": "BudgetFlow payday reminder bot",
+  "main": "remind.js",
+  "scripts": {
+    "remind": "node remind.js",
+    "test": "echo 'Run: node remind.js'"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.0.0",
+    "node-fetch": "^3.0.0"
+  }
+}

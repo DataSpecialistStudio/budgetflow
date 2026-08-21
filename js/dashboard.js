@@ -1,0 +1,461 @@
+// ============================================================
+//  DASHBOARD.JS  — all five tabs
+// ============================================================
+let USER=null, PROFILE=null, ACTUALS={}, NOTES={};
+let savingsChart=null, corpusChart=null, projChart=null;
+let activeMonth=currentMonthId();
+
+document.addEventListener('DOMContentLoaded',async()=>{
+  USER=await requireAuth();
+  if(!USER)return;
+
+  // Load profile
+  const {data:prof}=await sb.from('profiles').select('*').eq('id',USER.id).single();
+  if(!prof||!prof.plan_configured){window.location.href='setup.html';return;}
+  PROFILE=prof;
+
+  // Update last active
+  await sb.from('profiles').update({last_active:new Date().toISOString()}).eq('id',USER.id);
+
+  // Admin link
+  if(USER.email===ADMIN_EMAIL) document.getElementById('adminLink').style.display='';
+
+  // Load actuals
+  const {data:acts}=await sb.from('actuals').select('*').eq('user_id',USER.id);
+  (acts||[]).forEach(a=>{ ACTUALS[a.month_id]=ACTUALS[a.month_id]||{}; ACTUALS[a.month_id][a.line_name]=a; });
+
+  // Load notes
+  const {data:nts}=await sb.from('month_notes').select('*').eq('user_id',USER.id);
+  (nts||[]).forEach(n=>NOTES[n.month_id]=n.note);
+
+  renderAll();
+
+  // Tab switching
+  document.querySelectorAll('.app-tab').forEach(tab=>{
+    tab.onclick=()=>{
+      document.querySelectorAll('.app-tab').forEach(t=>t.classList.remove('active'));
+      document.querySelectorAll('.tab-section').forEach(s=>s.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById('section-'+tab.dataset.section).classList.add('active');
+      if(tab.dataset.section==='year') renderYear();
+      if(tab.dataset.section==='corpus') renderCorpus();
+      if(tab.dataset.section==='reminders') renderReminders();
+      if(tab.dataset.section==='settings') renderSettings();
+    };
+  });
+});
+
+// ── RENDER ALL ──────────────────────────────────────────────
+function renderAll(){
+  renderNav();
+  renderMonth();
+}
+
+function renderNav(){
+  const name=(PROFILE.full_name||USER.email).split(' ')[0];
+  document.getElementById('navUser').textContent=name;
+}
+
+// ── THIS MONTH ──────────────────────────────────────────────
+function renderMonth(){
+  const plan=PROFILE.plan||DEFAULT_PLAN;
+  const now=new Date();
+  const monthObj=MONTHS.find(m=>m.id===activeMonth)||MONTHS[0];
+  document.getElementById('monthLabel').textContent=monthObj.label;
+  document.getElementById('greetUser').textContent=`Hi ${(PROFILE.full_name||'').split(' ')[0]||'there'} 👋`;
+  document.getElementById('paydayBadge').textContent=`Payday: ${PROFILE.payday_date||1}${ordinal(PROFILE.payday_date||1)}`;
+
+  const acts=ACTUALS[activeMonth]||{};
+  let totalPlan=0,totalAdded=0,totalSaved=0;
+  plan.forEach(l=>{
+    totalPlan+=l.amount;
+    const a=acts[l.name]||{};
+    totalAdded+=a.added||0;
+    if(SAVINGS_TYPES.includes(l.type)) totalSaved+=a.added||0;
+  });
+
+  // River
+  const river=document.getElementById('river');
+  river.innerHTML=plan.map(l=>{
+    const pct=totalPlan?l.amount/totalPlan*100:0;
+    const col=GROUP_COLORS[l.type]||'#8C9A90';
+    return `<div class="river-seg" style="flex:${pct};background:${col}" title="${l.name} — ${INR(l.amount)}"></div>`;
+  }).join('');
+
+  // KPIs
+  const daysLeft=new Date(now.getFullYear(),now.getMonth()+1,0).getDate()-now.getDate();
+  document.getElementById('kpiLogged').textContent=INR(totalAdded);
+  document.getElementById('kpiPending').textContent=INR(Math.max(totalPlan-totalAdded,0));
+  document.getElementById('kpiSaved').textContent=INR(totalSaved);
+  document.getElementById('kpiDays').textContent=daysLeft;
+
+  // Month rail — render inside month card header area
+  renderMonthRail();
+
+  // Entry table
+  const tbody=document.getElementById('entryBody');
+  tbody.innerHTML=plan.map(l=>{
+    const a=acts[l.name]||{};
+    const added=a.added||0, reason=a.reason||'';
+    const pend=l.amount-added;
+    const st=chipStatus(l.amount,added,reason);
+    const cls=added===0?'':pend<0?'over':pend===0?'done':'';
+    return `<tr>
+      <td><strong>${esc(l.name)}</strong><br><span style="font-size:11px;color:var(--slate);font-family:var(--mono)">${l.type}</span></td>
+      <td class="num">${INR(l.amount)}</td>
+      <td><input class="amt-input ${cls}" type="number" inputmode="decimal" step="50" min="0" placeholder="0"
+          value="${added||''}" data-line="${esc(l.name)}" aria-label="${esc(l.name)}"></td>
+      <td><input class="reason-input" type="text" placeholder="Only if not paid"
+          value="${esc(reason)}" data-reason="${esc(l.name)}"></td>
+      <td><span class="status-chip ${st[0]}">${st[1]}</span></td>
+    </tr>`;
+  }).join('');
+
+  // Footer
+  document.getElementById('entryFoot').innerHTML=`<tr>
+    <td colspan="2"><strong>Total</strong></td>
+    <td class="num">${INR(totalAdded)}</td>
+    <td></td>
+    <td class="num">${totalPlan?Math.round(totalAdded/totalPlan*100):0}%</td>
+  </tr>`;
+
+  // Wire inputs
+  tbody.querySelectorAll('.amt-input').forEach(inp=>{
+    inp.onblur=()=>saveEntry(inp.dataset.line, inp.value, null);
+    inp.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();inp.blur();}};
+  });
+  tbody.querySelectorAll('.reason-input').forEach(inp=>{
+    inp.onblur=()=>saveEntry(null, null, {line:inp.dataset.reason, reason:inp.value});
+    inp.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();inp.blur();}};
+  });
+
+  // Notes
+  document.getElementById('monthNotes').value=NOTES[activeMonth]||'';
+  document.getElementById('monthNotes').onblur=saveNote;
+
+  // Buttons
+  document.getElementById('markAllBtn').onclick=markAllAsPlanned;
+  document.getElementById('copyLastBtn').onclick=copyLastMonth;
+}
+
+function renderMonthRail(){
+  // Insert rail above the entry table card if not already there
+  let rail=document.getElementById('monthRail');
+  if(!rail){
+    rail=document.createElement('div');
+    rail.id='monthRail';
+    rail.style.cssText='display:flex;overflow-x:auto;border:1.5px solid var(--ink);border-top:0;background:var(--paper2);margin-bottom:16px;scrollbar-width:thin;-webkit-overflow-scrolling:touch';
+    document.getElementById('entryBody').closest('.card').before(rail);
+  }
+  rail.innerHTML=MONTHS.map(m=>{
+    const acts=ACTUALS[m.id]||{};
+    const plan=PROFILE.plan||DEFAULT_PLAN;
+    const tp=plan.reduce((s,l)=>s+l.amount,0);
+    const ta=plan.reduce((s,l)=>s+Math.min((acts[l.name]||{}).added||0,l.amount),0);
+    const pct=tp?Math.round(ta/tp*100):0;
+    const bits=m.label.split(' ');
+    return `<button style="flex:0 0 auto;min-width:74px;padding:9px 11px;border:0;border-right:1px solid var(--rule);
+      background:${m.id===activeMonth?'var(--ink)':'none'};color:${m.id===activeMonth?'var(--paper)':'var(--ink)'};cursor:pointer;text-align:left"
+      data-mid="${m.id}">
+      <b style="font-family:var(--display);font-weight:700;font-size:13px;display:block">${bits[0]}</b>
+      <span style="font-family:var(--mono);font-size:9.5px;color:${m.id===activeMonth?'#A9B7AC':'var(--slate)'}">${bits[1]}</span>
+      <div style="height:3px;background:${m.id===activeMonth?'#3A4B54':'var(--rule-soft)'};margin-top:6px">
+        <div style="height:100%;width:${pct}%;background:var(--teal)"></div>
+      </div>
+    </button>`;
+  }).join('');
+  rail.querySelectorAll('button').forEach(b=>{
+    b.onclick=()=>{activeMonth=b.dataset.mid;renderMonth();};
+  });
+}
+
+// ── SAVE ────────────────────────────────────────────────────
+async function saveEntry(lineName, addedVal, reasonObj){
+  const mid=activeMonth;
+  ACTUALS[mid]=ACTUALS[mid]||{};
+
+  if(lineName!==null&&addedVal!==null){
+    const added=parseFloat(addedVal)||0;
+    ACTUALS[mid][lineName]=ACTUALS[mid][lineName]||{};
+    ACTUALS[mid][lineName].added=added;
+    await sb.from('actuals').upsert({
+      user_id:USER.id, month_id:mid, line_name:lineName, added,
+      reason:ACTUALS[mid][lineName].reason||'', updated_at:new Date().toISOString()
+    },{onConflict:'user_id,month_id,line_name'});
+  }
+  if(reasonObj){
+    ACTUALS[mid][reasonObj.line]=ACTUALS[mid][reasonObj.line]||{};
+    ACTUALS[mid][reasonObj.line].reason=reasonObj.reason;
+    await sb.from('actuals').upsert({
+      user_id:USER.id, month_id:mid, line_name:reasonObj.line,
+      added:ACTUALS[mid][reasonObj.line].added||0, reason:reasonObj.reason,
+      updated_at:new Date().toISOString()
+    },{onConflict:'user_id,month_id,line_name'});
+  }
+  toast('Saved');
+  renderMonth();
+}
+
+async function saveNote(){
+  const note=document.getElementById('monthNotes').value;
+  NOTES[activeMonth]=note;
+  await sb.from('month_notes').upsert({user_id:USER.id,month_id:activeMonth,note},{onConflict:'user_id,month_id'});
+}
+
+async function markAllAsPlanned(){
+  const plan=PROFILE.plan||DEFAULT_PLAN;
+  ACTUALS[activeMonth]=ACTUALS[activeMonth]||{};
+  await Promise.all(plan.map(l=>{
+    ACTUALS[activeMonth][l.name]={added:l.amount,reason:''};
+    return sb.from('actuals').upsert({
+      user_id:USER.id,month_id:activeMonth,line_name:l.name,added:l.amount,reason:'',updated_at:new Date().toISOString()
+    },{onConflict:'user_id,month_id,line_name'});
+  }));
+  toast('All marked as planned');
+  renderMonth();
+}
+
+async function copyLastMonth(){
+  const idx=MONTHS.findIndex(m=>m.id===activeMonth);
+  if(idx<=0){toast('No earlier month to copy',true);return;}
+  const prev=MONTHS[idx-1].id;
+  const src=ACTUALS[prev]||{};
+  ACTUALS[activeMonth]=ACTUALS[activeMonth]||{};
+  await Promise.all(Object.entries(src).map(([line,v])=>{
+    ACTUALS[activeMonth][line]={added:v.added||0,reason:v.reason||''};
+    return sb.from('actuals').upsert({
+      user_id:USER.id,month_id:activeMonth,line_name:line,added:v.added||0,reason:v.reason||'',updated_at:new Date().toISOString()
+    },{onConflict:'user_id,month_id,line_name'});
+  }));
+  toast('Copied from last month');
+  renderMonth();
+}
+
+// ── YEAR ────────────────────────────────────────────────────
+function renderYear(){
+  const plan=PROFILE.plan||DEFAULT_PLAN;
+  let head='<thead><tr><th>Line</th><th>Plan</th>'+MONTHS.map(m=>`<th>${m.label.split(' ')[0]}</th>`).join('')+'<th>Total</th></tr></thead>';
+  let body=plan.map(l=>{
+    let tot=0;
+    const cells=MONTHS.map(m=>{
+      const a=(ACTUALS[m.id]||{})[l.name]||{};
+      const added=a.added||0; tot+=added;
+      let bg='transparent',col='var(--slate)',txt='·';
+      if(added>0){
+        txt=Math.round(added/1000)+'k';
+        if(added>=l.amount){bg='rgba(18,122,107,.18)';col='var(--teal)';}
+        else if(added>0){bg='rgba(201,135,31,.18)';col='var(--marigold)';}
+      }
+      if(added>l.amount){bg='rgba(168,64,47,.18)';col='var(--rust)';}
+      return `<td><span class="heat-cell" style="background:${bg};color:${col}" title="${m.label}: ${INR(added)}">${txt}</span></td>`;
+    }).join('');
+    return `<tr><td><strong>${esc(l.name)}</strong></td><td class="num">${INR(l.amount)}</td>${cells}<td class="num"><strong>${INRs(tot)}</strong></td></tr>`;
+  }).join('');
+  document.getElementById('yearTable').innerHTML=head+'<tbody>'+body+'</tbody>';
+
+  // Savings bar chart
+  const savLabels=MONTHS.map(m=>m.label.split(' ')[0]);
+  const savPlan=MONTHS.map(()=>plan.filter(l=>SAVINGS_TYPES.includes(l.type)).reduce((s,l)=>s+l.amount,0));
+  const savAct=MONTHS.map(m=>plan.filter(l=>SAVINGS_TYPES.includes(l.type)).reduce((s,l)=>s+((ACTUALS[m.id]||{})[l.name]?.added||0),0));
+  if(savingsChart) savingsChart.destroy();
+  savingsChart=new Chart(document.getElementById('savingsChart'),{
+    type:'bar',
+    data:{labels:savLabels,datasets:[
+      {label:'Plan',data:savPlan,backgroundColor:'rgba(198,207,188,.7)',borderColor:'var(--rule)',borderWidth:1},
+      {label:'Actual',data:savAct,backgroundColor:'rgba(18,122,107,.7)',borderColor:'#127A6B',borderWidth:1}
+    ]},
+    options:{responsive:true,plugins:{legend:{position:'top'}},scales:{y:{ticks:{callback:v=>`₹${(v/1000).toFixed(0)}k`}}}}
+  });
+}
+
+// ── CORPUS ──────────────────────────────────────────────────
+function renderCorpus(){
+  const plan=PROFILE.plan||DEFAULT_PLAN;
+  const savLines=plan.filter(l=>SAVINGS_TYPES.includes(l.type));
+  let dep=0,vals={};
+  savLines.forEach(l=>vals[l.name]=0);
+  const deps=[],ests=[],plans=[];
+  MONTHS.forEach((m,i)=>{
+    let mDep=0;
+    savLines.forEach(l=>{
+      const a=((ACTUALS[m.id]||{})[l.name]||{}).added||0;
+      mDep+=a;
+      const r=l.type==='Savings'?(l.name.includes('SIP')?0.12:0.065):0.065;
+      vals[l.name]=(vals[l.name]+a)*(1+r/12);
+    });
+    dep+=mDep;
+    const est=Object.values(vals).reduce((a,b)=>a+b,0);
+    const planTo=savLines.reduce((s,l)=>s+l.amount,0)*(i+1);
+    deps.push(dep); ests.push(est); plans.push(planTo);
+  });
+  const last=ests[12]||0, lastDep=deps[12]||0;
+  const planTotal=plans[12]||0;
+  document.getElementById('cDeposited').textContent=INRs(lastDep);
+  document.getElementById('cEst').textContent=INRs(last);
+  document.getElementById('cGain').textContent=INR(last-lastDep);
+  document.getElementById('cTarget').textContent=INRs(planTotal);
+  const labels=MONTHS.map(m=>m.label.split(' ')[0]);
+  if(corpusChart) corpusChart.destroy();
+  corpusChart=new Chart(document.getElementById('corpusChart'),{
+    type:'bar',
+    data:{labels,datasets:[
+      {type:'bar',label:'Deposited',data:deps,backgroundColor:'rgba(46,74,125,.65)',borderWidth:0},
+      {type:'line',label:'Estimated',data:ests,borderColor:'#127A6B',backgroundColor:'rgba(18,122,107,.08)',borderWidth:2.5,pointRadius:3,fill:true,tension:.3},
+      {type:'line',label:'Plan',data:plans,borderColor:'#8C9A90',borderWidth:1.8,borderDash:[5,4],pointRadius:0,fill:false}
+    ]},
+    options:{responsive:true,plugins:{legend:{position:'top'}},scales:{y:{ticks:{callback:v=>INRs(v)}}}}
+  });
+  renderProjection();
+}
+
+function renderProjection(){
+  const plan=PROFILE.plan||DEFAULT_PLAN;
+  const eqRate=+(document.getElementById('projRate')?.value||12)/100/12;
+  const fdRate=+(document.getElementById('projFd')?.value||6.5)/100/12;
+  const eqM=plan.filter(l=>l.name.includes('SIP')).reduce((s,l)=>s+l.amount,0)||2000;
+  const fdM=plan.filter(l=>l.type==='Savings'&&!l.name.includes('SIP')).reduce((s,l)=>s+l.amount,0)||25000;
+  let eq=0,fd=0,tot=[],put=[];
+  for(let i=0;i<120;i++){
+    eq=(eq+eqM)*(1+eqRate); fd=(fd+fdM)*(1+fdRate);
+    tot.push(eq+fd); put.push((eqM+fdM)*(i+1));
+  }
+  const labels=Array.from({length:120},(_,i)=>`Y${Math.floor(i/12)+1}`).filter((_,i)=>i%12===11);
+  const totY=tot.filter((_,i)=>(i+1)%12===0);
+  const putY=put.filter((_,i)=>(i+1)%12===0);
+  if(projChart) projChart.destroy();
+  projChart=new Chart(document.getElementById('projChart'),{
+    type:'line',
+    data:{labels,datasets:[
+      {label:'Corpus',data:totY,borderColor:'#127A6B',backgroundColor:'rgba(18,122,107,.1)',fill:true,borderWidth:2.5,tension:.4},
+      {label:'Invested',data:putY,borderColor:'#8C9A90',borderWidth:1.8,borderDash:[5,4],fill:false,tension:.4}
+    ]},
+    options:{responsive:true,plugins:{legend:{position:'top'}},scales:{y:{ticks:{callback:v=>INRs(v)}}}}
+  });
+  const ms=document.getElementById('projMilestones');
+  ms.innerHTML=[[1,12],[3,36],[5,60],[10,120]].map(([yr,i])=>{
+    const v=tot[i-1]||0,p=put[i-1]||0;
+    return `<div class="kpi"><div class="kpi-l">Year ${yr}</div><div class="kpi-v">${INRs(v)}</div><div style="font-size:11px;color:var(--slate)">+${INRs(v-p)} gain</div></div>`;
+  }).join('');
+  document.getElementById('projRate')?.addEventListener('change',renderProjection);
+  document.getElementById('projFd')?.addEventListener('change',renderProjection);
+}
+
+// ── REMINDERS ────────────────────────────────────────────────
+function renderReminders(){
+  document.getElementById('remEmail').value=USER.email;
+  document.getElementById('remWhatsapp').value=PROFILE.whatsapp||'';
+  document.getElementById('remApiKey').value=PROFILE.callmebot_key||'';
+  document.getElementById('remDay').value=PROFILE.reminder_day||'Saturday';
+  document.getElementById('remFreq').value=PROFILE.chase_every_days||2;
+
+  document.getElementById('saveRemBtn').onclick=saveReminders;
+  document.getElementById('testEmailBtn').onclick=testEmail;
+  document.getElementById('testWaBtn').onclick=testWhatsApp;
+  loadRemLog();
+}
+
+async function saveReminders(){
+  const {error}=await sb.from('profiles').update({
+    whatsapp:document.getElementById('remWhatsapp').value.trim(),
+    callmebot_key:document.getElementById('remApiKey').value.trim(),
+    reminder_day:document.getElementById('remDay').value,
+    chase_every_days:+document.getElementById('remFreq').value
+  }).eq('id',USER.id);
+  if(error){msg('remMsg',error.message,true);return;}
+  PROFILE.whatsapp=document.getElementById('remWhatsapp').value.trim();
+  PROFILE.callmebot_key=document.getElementById('remApiKey').value.trim();
+  PROFILE.reminder_day=document.getElementById('remDay').value;
+  PROFILE.chase_every_days=+document.getElementById('remFreq').value;
+  msg('remMsg','Reminder settings saved.');
+}
+
+async function testEmail(){
+  msg('remMsg','Test email feature requires the GitHub Actions cron to be deployed. See GUIDE.md.');
+}
+
+async function testWhatsApp(){
+  const num=PROFILE.whatsapp, key=PROFILE.callmebot_key;
+  if(!num||!key){msg('remMsg','Save your WhatsApp number and CallMeBot API key first.',true);return;}
+  const phone=num.replace(/\D/g,'');
+  const text=encodeURIComponent('BudgetFlow test: your reminders are working! 💰');
+  const url=`https://api.callmebot.com/whatsapp.php?phone=${phone}&text=${text}&apikey=${key}`;
+  try{
+    await fetch(url,{mode:'no-cors'});
+    msg('remMsg','WhatsApp message sent — check your phone.');
+  }catch(e){msg('remMsg','Sent (check your phone — browser security may block the response).');}
+}
+
+async function loadRemLog(){
+  const {data}=await sb.from('reminder_log').select('*').eq('user_id',USER.id).order('sent_at',{ascending:false}).limit(10);
+  const tbody=document.getElementById('remLogBody');
+  if(!data||!data.length){tbody.innerHTML='<tr><td colspan="3" style="color:var(--slate);font-size:13px">No reminders sent yet.</td></tr>';return;}
+  tbody.innerHTML=data.map(r=>`<tr>
+    <td class="num">${new Date(r.sent_at).toLocaleDateString('en-IN')}</td>
+    <td>${r.channel}</td>
+    <td>${esc(r.message||'')}</td>
+  </tr>`).join('');
+}
+
+// ── SETTINGS ─────────────────────────────────────────────────
+function renderSettings(){
+  document.getElementById('settIncome').value=PROFILE.income||55000;
+  document.getElementById('settPayday').value=PROFILE.payday_date||1;
+  let settPlan=[...(PROFILE.plan||DEFAULT_PLAN)];
+
+  function renderSettPlan(){
+    const tbody=document.getElementById('settPlanBody');
+    tbody.innerHTML=settPlan.map((l,i)=>`
+      <tr>
+        <td><input value="${esc(l.name)}" data-i="${i}" data-f="name" placeholder="Line name"></td>
+        <td><input type="number" value="${l.amount}" data-i="${i}" data-f="amount" min="0" step="100" style="width:110px"></td>
+        <td><select data-i="${i}" data-f="type">
+          ${['Fixed','Savings','Flexible'].map(t=>`<option${l.type===t?' selected':''}>${t}</option>`).join('')}
+        </select></td>
+        <td><button class="del-btn" data-del="${i}">✕</button></td>
+      </tr>`).join('');
+    tbody.querySelectorAll('[data-f]').forEach(el=>{
+      el.onchange=()=>{const i=+el.dataset.i,f=el.dataset.f;settPlan[i][f]=f==='amount'?(parseFloat(el.value)||0):el.value;updateSettBal();};
+    });
+    tbody.querySelectorAll('[data-del]').forEach(b=>{b.onclick=()=>{settPlan.splice(+b.dataset.del,1);renderSettPlan();};});
+    updateSettBal();
+  }
+
+  function updateSettBal(){
+    const income=parseFloat(document.getElementById('settIncome').value)||0;
+    const total=settPlan.reduce((s,l)=>s+(+l.amount||0),0);
+    const diff=income-total;
+    const badge=document.getElementById('settBalanceBadge');
+    badge.textContent=diff===0?'✅ Balanced':diff>0?`${INR(diff)} unassigned`:`${INR(-diff)} over`;
+    badge.className='balance-badge '+(diff===0?'ok':'bad');
+  }
+
+  renderSettPlan();
+  document.getElementById('settIncome').oninput=updateSettBal;
+  document.getElementById('settAddLineBtn').onclick=()=>{settPlan.push({name:'New line',amount:0,type:'Fixed'});renderSettPlan();};
+  document.getElementById('saveSettingsBtn').onclick=async()=>{
+    const income=parseFloat(document.getElementById('settIncome').value)||0;
+    const payday=+document.getElementById('settPayday').value;
+    const {error}=await sb.from('profiles').update({income,payday_date:payday,plan:settPlan}).eq('id',USER.id);
+    if(error){msg('settMsg',error.message,true);return;}
+    PROFILE.income=income; PROFILE.payday_date=payday; PROFILE.plan=settPlan;
+    msg('settMsg','Settings saved.'); renderAll();
+  };
+  document.getElementById('deleteAccountBtn').onclick=async()=>{
+    if(!confirm('This deletes your account and all budget data permanently. Are you sure?'))return;
+    await sb.from('actuals').delete().eq('user_id',USER.id);
+    await sb.from('month_notes').delete().eq('user_id',USER.id);
+    await sb.from('profiles').delete().eq('id',USER.id);
+    await sb.auth.admin.deleteUser(USER.id).catch(()=>{});
+    await sb.auth.signOut(); window.location.href='index.html';
+  };
+}
+
+// ── HELPERS ───────────────────────────────────────────────────
+function chipStatus(plan,added,reason){
+  if(plan>0&&added>=plan) return['chip-settled','Settled'];
+  if(reason) return['chip-explained','Explained'];
+  if(added>0) return['chip-part','Part paid'];
+  return['chip-pending','Pending'];
+}
+function ordinal(n){const s=['th','st','nd','rd'],v=n%100;return s[(v-20)%10]||s[v]||s[0];}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
