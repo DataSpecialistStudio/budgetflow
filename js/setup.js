@@ -63,9 +63,10 @@ async function saveSetup(){
   if(Math.abs(income-total)>1){msg('setupMsg','Plan doesn\'t balance to your income yet.',true);return;}
 
   msg('setupMsg','Saving…');
-  const {error}=await sb.from('profiles').update({
+  const {error}=await sb.from('profiles').upsert({
+    id: user.id,
     income, plan:planLines, plan_configured:true, last_active:new Date().toISOString()
-  }).eq('id',user.id);
+  });
 
   if(error){msg('setupMsg',error.message,true);return;}
   msg('setupMsg','Done! Opening your dashboard…');
