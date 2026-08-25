@@ -2,41 +2,38 @@
 //  DASHBOARD.JS  — all five tabs
 // ============================================================
 let USER=null, PROFILE=null, ACTUALS={}, NOTES={};
-let savingsChart=null, corpusChart=null, projChart=null;
+let savingsChart=null, corpusChart=null, projChart=null, donutChart=null;
 let activeMonth=currentMonthId();
 
 document.addEventListener('DOMContentLoaded',async()=>{
   USER=await requireAuth();
   if(!USER)return;
 
-  // Load profile
   const {data:prof}=await sb.from('profiles').select('*').eq('id',USER.id).single();
   if(!prof||!prof.plan_configured){window.location.href='setup.html';return;}
   PROFILE=prof;
 
-  // Update last active
   await sb.from('profiles').update({last_active:new Date().toISOString()}).eq('id',USER.id);
 
-  // Admin link
   if(USER.email===ADMIN_EMAIL) document.getElementById('adminLink').style.display='';
 
-  // Load actuals
   const {data:acts}=await sb.from('actuals').select('*').eq('user_id',USER.id);
   (acts||[]).forEach(a=>{ ACTUALS[a.month_id]=ACTUALS[a.month_id]||{}; ACTUALS[a.month_id][a.line_name]=a; });
 
-  // Load notes
   const {data:nts}=await sb.from('month_notes').select('*').eq('user_id',USER.id);
   (nts||[]).forEach(n=>NOTES[n.month_id]=n.note);
 
   renderAll();
 
-  // Tab switching
   document.querySelectorAll('.app-tab').forEach(tab=>{
     tab.onclick=()=>{
       document.querySelectorAll('.app-tab').forEach(t=>t.classList.remove('active'));
       document.querySelectorAll('.tab-section').forEach(s=>s.classList.remove('active'));
       tab.classList.add('active');
       document.getElementById('section-'+tab.dataset.section).classList.add('active');
+      const titles={month:'This Month',year:'Year View',corpus:'Corpus',reminders:'Reminders',settings:'Settings'};
+      const tt=document.getElementById('topbarTitle');
+      if(tt) tt.textContent=titles[tab.dataset.section]||'';
       if(tab.dataset.section==='year') renderYear();
       if(tab.dataset.section==='corpus') renderCorpus();
       if(tab.dataset.section==='reminders') renderReminders();
@@ -53,7 +50,21 @@ function renderAll(){
 
 function renderNav(){
   const name=(PROFILE.full_name||USER.email).split(' ')[0];
-  document.getElementById('navUser').textContent=name;
+  const el=document.getElementById('navUser');
+  if(el) el.textContent=name;
+  const emailEl=document.getElementById('navUserEmail');
+  if(emailEl) emailEl.textContent=USER.email;
+  // Set avatar initials
+  const av=document.getElementById('userAvatarInitials');
+  if(av){
+    const parts=(PROFILE.full_name||USER.email).split(/[\s@]/);
+    av.textContent=(parts[0][0]+(parts[1]?.[0]||'')).toUpperCase();
+  }
+}
+
+// ── TYPE PILL HELPER ─────────────────────────────────────────
+function typePillClass(type){
+  return{Fixed:'pill-fixed',Savings:'pill-savings',Flexible:'pill-flex'}[type]||'';
 }
 
 // ── THIS MONTH ──────────────────────────────────────────────
@@ -62,16 +73,20 @@ function renderMonth(){
   const now=new Date();
   const monthObj=MONTHS.find(m=>m.id===activeMonth)||MONTHS[0];
   document.getElementById('monthLabel').textContent=monthObj.label;
-  document.getElementById('greetUser').textContent=`Hi ${(PROFILE.full_name||'').split(' ')[0]||'there'} 👋`;
+  document.getElementById('greetUser').textContent=`Hi ${(PROFILE.full_name||'').split(' ')[0]||'there'}`;
   document.getElementById('paydayBadge').textContent=`Payday: ${PROFILE.payday_date||1}${ordinal(PROFILE.payday_date||1)}`;
 
   const acts=ACTUALS[activeMonth]||{};
   let totalPlan=0,totalAdded=0,totalSaved=0;
+  let fixedTotal=0,savingsTotal=0,flexTotal=0;
   plan.forEach(l=>{
     totalPlan+=l.amount;
     const a=acts[l.name]||{};
     totalAdded+=a.added||0;
     if(SAVINGS_TYPES.includes(l.type)) totalSaved+=a.added||0;
+    if(l.type==='Fixed') fixedTotal+=l.amount;
+    else if(l.type==='Savings') savingsTotal+=l.amount;
+    else flexTotal+=l.amount;
   });
 
   // River
@@ -89,10 +104,13 @@ function renderMonth(){
   document.getElementById('kpiSaved').textContent=INR(totalSaved);
   document.getElementById('kpiDays').textContent=daysLeft;
 
-  // Month rail — render inside month card header area
+  // Donut chart — allocation split
+  renderMonthDonut(fixedTotal, savingsTotal, flexTotal);
+
+  // Month rail
   renderMonthRail();
 
-  // Entry table
+  // Entry table — with color pills + progress bars
   const tbody=document.getElementById('entryBody');
   tbody.innerHTML=plan.map(l=>{
     const a=acts[l.name]||{};
@@ -100,9 +118,19 @@ function renderMonth(){
     const pend=l.amount-added;
     const st=chipStatus(l.amount,added,reason);
     const cls=added===0?'':pend<0?'over':pend===0?'done':'';
+    const pct=l.amount>0?Math.min(100,Math.round(added/l.amount*100)):0;
+    const barCol=l.type==='Savings'?'var(--teal)':l.type==='Fixed'?'var(--rust)':'var(--marigold)';
     return `<tr>
-      <td><strong>${esc(l.name)}</strong><br><span style="font-size:11px;color:var(--slate);font-family:var(--mono)">${l.type}</span></td>
-      <td class="num">${INR(l.amount)}</td>
+      <td>
+        <strong>${esc(l.name)}</strong><br>
+        <span class="type-pill ${typePillClass(l.type)}">${l.type}</span>
+      </td>
+      <td class="num">
+        ${INR(l.amount)}
+        <div class="bar-wrap" style="margin-top:5px;min-width:60px">
+          <div class="bar-fill" style="width:${pct}%;background:${barCol}"></div>
+        </div>
+      </td>
       <td><input class="amt-input ${cls}" type="number" inputmode="decimal" step="50" min="0" placeholder="0"
           value="${added||''}" data-line="${esc(l.name)}" aria-label="${esc(l.name)}"></td>
       <td><input class="reason-input" type="text" placeholder="Only if not paid"
@@ -138,8 +166,41 @@ function renderMonth(){
   document.getElementById('copyLastBtn').onclick=copyLastMonth;
 }
 
+// ── DONUT CHART ──────────────────────────────────────────────
+function renderMonthDonut(fixed, savings, flex){
+  const canvas=document.getElementById('monthDonut');
+  if(!canvas) return;
+  // Update legend values
+  const lf=document.getElementById('legendFixed');
+  const ls=document.getElementById('legendSavings');
+  const lx=document.getElementById('legendFlex');
+  if(lf) lf.textContent=INR(fixed);
+  if(ls) ls.textContent=INR(savings);
+  if(lx) lx.textContent=INR(flex);
+  if(donutChart) donutChart.destroy();
+  donutChart=new Chart(canvas,{
+    type:'doughnut',
+    data:{
+      labels:['Fixed','Savings','Flexible'],
+      datasets:[{
+        data:[fixed, savings, flex],
+        backgroundColor:['#A8402F','#127A6B','#C9871F'],
+        borderWidth:0,
+        hoverOffset:4
+      }]
+    },
+    options:{
+      cutout:'72%',
+      plugins:{
+        legend:{display:false},
+        tooltip:{callbacks:{label:ctx=>' '+INR(ctx.raw)}}
+      },
+      animation:{duration:600}
+    }
+  });
+}
+
 function renderMonthRail(){
-  // Insert rail above the entry table card if not already there
   let rail=document.getElementById('monthRail');
   if(!rail){
     rail=document.createElement('div');
@@ -249,11 +310,10 @@ function renderYear(){
       if(added>l.amount){bg='rgba(168,64,47,.18)';col='var(--rust)';}
       return `<td><span class="heat-cell" style="background:${bg};color:${col}" title="${m.label}: ${INR(added)}">${txt}</span></td>`;
     }).join('');
-    return `<tr><td><strong>${esc(l.name)}</strong></td><td class="num">${INR(l.amount)}</td>${cells}<td class="num"><strong>${INRs(tot)}</strong></td></tr>`;
+    return `<tr><td><strong>${esc(l.name)}</strong><br><span class="type-pill ${typePillClass(l.type)}">${l.type}</span></td><td class="num">${INR(l.amount)}</td>${cells}<td class="num"><strong>${INRs(tot)}</strong></td></tr>`;
   }).join('');
   document.getElementById('yearTable').innerHTML=head+'<tbody>'+body+'</tbody>';
 
-  // Savings bar chart
   const savLabels=MONTHS.map(m=>m.label.split(' ')[0]);
   const savPlan=MONTHS.map(()=>plan.filter(l=>SAVINGS_TYPES.includes(l.type)).reduce((s,l)=>s+l.amount,0));
   const savAct=MONTHS.map(m=>plan.filter(l=>SAVINGS_TYPES.includes(l.type)).reduce((s,l)=>s+((ACTUALS[m.id]||{})[l.name]?.added||0),0));
@@ -347,7 +407,6 @@ function renderReminders(){
   document.getElementById('remApiKey').value=PROFILE.callmebot_key||'';
   document.getElementById('remDay').value=PROFILE.reminder_day||'Saturday';
   document.getElementById('remFreq').value=PROFILE.chase_every_days||2;
-
   document.getElementById('saveRemBtn').onclick=saveReminders;
   document.getElementById('testEmailBtn').onclick=testEmail;
   document.getElementById('testWaBtn').onclick=testWhatsApp;
@@ -377,7 +436,7 @@ async function testWhatsApp(){
   const num=PROFILE.whatsapp, key=PROFILE.callmebot_key;
   if(!num||!key){msg('remMsg','Save your WhatsApp number and CallMeBot API key first.',true);return;}
   const phone=num.replace(/\D/g,'');
-  const text=encodeURIComponent('BudgetFlow test: your reminders are working! 💰');
+  const text=encodeURIComponent('BudgetFlow test: your reminders are working!');
   const url=`https://api.callmebot.com/whatsapp.php?phone=${phone}&text=${text}&apikey=${key}`;
   try{
     await fetch(url,{mode:'no-cors'});
@@ -425,7 +484,7 @@ function renderSettings(){
     const total=settPlan.reduce((s,l)=>s+(+l.amount||0),0);
     const diff=income-total;
     const badge=document.getElementById('settBalanceBadge');
-    badge.textContent=diff===0?'✅ Balanced':diff>0?`${INR(diff)} unassigned`:`${INR(-diff)} over`;
+    badge.textContent=diff===0?'Balanced':diff>0?`${INR(diff)} unassigned`:`${INR(-diff)} over`;
     badge.className='balance-badge '+(diff===0?'ok':'bad');
   }
 

@@ -118,6 +118,36 @@
           <div class="kpi"><div class="kpi-l">Days left</div><div class="kpi-v" id="kpiDays">—</div></div>
         </div>
 
+        <!-- Allocation donut -->
+        <div class="month-summary">
+          <div class="donut-wrap">
+            <canvas id="monthDonut"></canvas>
+          </div>
+          <div class="donut-legend">
+            <div class="legend-row">
+              <div class="legend-left">
+                <div class="legend-dot" style="background:#A8402F"></div>
+                <span class="legend-name">Fixed</span>
+              </div>
+              <span class="legend-val" style="color:#A8402F" id="legendFixed">—</span>
+            </div>
+            <div class="legend-row">
+              <div class="legend-left">
+                <div class="legend-dot" style="background:#127A6B"></div>
+                <span class="legend-name">Savings</span>
+              </div>
+              <span class="legend-val" style="color:#127A6B" id="legendSavings">—</span>
+            </div>
+            <div class="legend-row">
+              <div class="legend-left">
+                <div class="legend-dot" style="background:#C9871F"></div>
+                <span class="legend-name">Flexible</span>
+              </div>
+              <span class="legend-val" style="color:#C9871F" id="legendFlex">—</span>
+            </div>
+          </div>
+        </div>
+
         <!-- Entry table -->
         <div class="card">
           <div class="card-header">

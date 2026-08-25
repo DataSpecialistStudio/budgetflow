@@ -498,3 +498,43 @@ canvas { max-width: 100%; }
   .feat-grid { grid-template-columns: 1fr; gap: 2px; }
   .feat:first-child, .feat:last-child { border-radius: 0; }
 }
+
+/* ── STATUS CHIPS ────────────────────────────────── */
+.status-chip {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 20px;
+}
+.chip-settled  { background: var(--green-bg); color: var(--green); }
+.chip-explained{ background: var(--blue-bg);  color: var(--blue);  }
+.chip-part     { background: var(--amber-bg); color: var(--amber); }
+.chip-pending  { background: var(--red-bg);   color: var(--red);   }
+
+/* ── AMT INPUT STATES ────────────────────────────── */
+.amt-input.done { border-color: var(--teal); }
+.amt-input.over { border-color: var(--rust); }
+
+/* ── HEAT CELLS (year table) ─────────────────────── */
+.heat-cell {
+  display: inline-block; padding: 3px 6px;
+  border-radius: 4px; font-size: 12px; font-weight: 600; font-family: var(--mono);
+}
+
+/* ── MONTH DONUT LAYOUT ──────────────────────────── */
+.month-summary {
+  display: grid; grid-template-columns: 160px 1fr;
+  gap: 20px; align-items: center;
+  background: var(--card); border: 1.5px solid var(--rule);
+  border-radius: var(--radius); padding: 18px 20px; margin-bottom: 16px;
+}
+.donut-wrap { position: relative; width: 140px; height: 140px; }
+.donut-wrap canvas { width: 140px !important; height: 140px !important; }
+.donut-legend { display: flex; flex-direction: column; gap: 10px; }
+.legend-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.legend-left { display: flex; align-items: center; gap: 8px; }
+.legend-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+.legend-name { font-size: 13px; font-weight: 500; }
+.legend-val { font-size: 13px; font-weight: 600; font-family: var(--mono); }
+
+@media (max-width: 480px) {
+  .month-summary { grid-template-columns: 1fr; justify-items: center; }
+}
