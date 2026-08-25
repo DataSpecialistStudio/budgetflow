@@ -10,73 +10,114 @@
 </head>
 <body class="auth-page">
 
-<div class="auth-wrap">
-  <a href="index.html" class="logo auth-logo">💰 BudgetFlow</a>
+<!-- LEFT BRAND PANEL -->
+<div class="auth-brand">
+  <div class="auth-brand-logo">BudgetFlow</div>
 
-  <!-- TAB SWITCHER -->
-  <div class="auth-tabs">
-    <button class="auth-tab active" data-tab="login">Log in</button>
-    <button class="auth-tab" data-tab="signup">Sign up</button>
+  <div class="auth-brand-middle">
+    <div class="auth-brand-headline">
+      Every rupee.<br>Accounted for.<br><em>Every month.</em>
+    </div>
+    <p class="auth-brand-sub">
+      Set your salary plan once. Log actuals each month. Get reminded on WhatsApp and email until it's all settled.
+    </p>
+    <div class="auth-features">
+      <div class="auth-feature">
+        <div class="auth-feature-icon">
+          <svg viewBox="0 0 24 24" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <div class="auth-feature-text"><strong>Payday reminders</strong> — full plan delivered to email and WhatsApp every month.</div>
+      </div>
+      <div class="auth-feature">
+        <div class="auth-feature-icon">
+          <svg viewBox="0 0 24 24" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <div class="auth-feature-text"><strong>Corpus tracking</strong> — watch FD and SIP compound in real time.</div>
+      </div>
+      <div class="auth-feature">
+        <div class="auth-feature-icon">
+          <svg viewBox="0 0 24 24" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="auth-feature-text"><strong>Private by design</strong> — your numbers are only visible to you.</div>
+      </div>
+    </div>
   </div>
 
-  <!-- LOGIN PANEL -->
-  <div class="auth-panel active" id="panel-login">
-    <button class="btn-google" id="googleLoginBtn">
-      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18" alt="Google">
-      Continue with Google
-    </button>
-    <div class="or-divider"><span>or</span></div>
-    <div class="form-group">
-      <label>Email</label>
-      <input type="email" id="loginEmail" placeholder="you@email.com" autocomplete="email">
-    </div>
-    <div class="form-group">
-      <label>Password</label>
-      <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password">
-    </div>
-    <button class="btn btn-primary btn-full" id="loginBtn">Log in</button>
-    <a href="#" class="forgot-link" id="forgotBtn">Forgot password?</a>
-    <div class="auth-msg" id="loginMsg"></div>
-  </div>
+  <div class="auth-brand-footer">Free forever &nbsp;·&nbsp; No credit card &nbsp;·&nbsp; No app to install</div>
+</div>
 
-  <!-- SIGNUP PANEL -->
-  <div class="auth-panel" id="panel-signup">
-    <button class="btn-google" id="googleSignupBtn">
-      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18" alt="Google">
-      Continue with Google
-    </button>
-    <div class="or-divider"><span>or</span></div>
-    <div class="form-group">
-      <label>Full name</label>
-      <input type="text" id="signupName" placeholder="Kunal Varma" autocomplete="name">
+<!-- RIGHT FORM PANEL -->
+<div class="auth-form-panel">
+  <div class="auth-form-inner">
+    <div class="auth-form-title">Welcome back</div>
+    <p class="auth-form-sub">Sign in to your account or create a new one.</p>
+
+    <!-- TAB SWITCHER — keep classes/IDs exactly as JS expects -->
+    <div class="auth-tabs">
+      <button class="auth-tab active" data-tab="login">Log in</button>
+      <button class="auth-tab" data-tab="signup">Sign up</button>
     </div>
-    <div class="form-group">
-      <label>Email</label>
-      <input type="email" id="signupEmail" placeholder="you@email.com" autocomplete="email">
+
+    <!-- LOGIN PANEL -->
+    <div class="auth-panel active" id="panel-login">
+      <button class="btn-google" id="googleLoginBtn">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18" alt="Google">
+        Continue with Google
+      </button>
+      <div class="or-divider"><span>or</span></div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="loginEmail" placeholder="you@email.com" autocomplete="email">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password">
+      </div>
+      <button class="btn btn-primary btn-full" id="loginBtn">Log in</button>
+      <a href="#" class="forgot-link" id="forgotBtn">Forgot password?</a>
+      <div class="auth-msg" id="loginMsg"></div>
     </div>
-    <div class="form-group">
-      <label>Password</label>
-      <input type="password" id="signupPassword" placeholder="Min 8 characters" autocomplete="new-password">
+
+    <!-- SIGNUP PANEL -->
+    <div class="auth-panel" id="panel-signup">
+      <button class="btn-google" id="googleSignupBtn">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18" alt="Google">
+        Continue with Google
+      </button>
+      <div class="or-divider"><span>or</span></div>
+      <div class="form-group">
+        <label>Full name</label>
+        <input type="text" id="signupName" placeholder="Kunal Varma" autocomplete="name">
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="signupEmail" placeholder="you@email.com" autocomplete="email">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="signupPassword" placeholder="Min 8 characters" autocomplete="new-password">
+      </div>
+      <div class="form-group">
+        <label>WhatsApp number</label>
+        <input type="tel" id="signupWhatsapp" placeholder="+91 98765 43210">
+      </div>
+      <div class="form-group">
+        <label>Payday date</label>
+        <select id="signupPayday">
+          <option value="1">1st of the month</option>
+          <option value="5">5th of the month</option>
+          <option value="7">7th of the month</option>
+          <option value="10">10th of the month</option>
+          <option value="15">15th of the month</option>
+          <option value="25">25th of the month</option>
+          <option value="28">28th of the month</option>
+          <option value="30">30th of the month</option>
+        </select>
+      </div>
+      <button class="btn btn-primary btn-full" id="signupBtn">Create account</button>
+      <div class="auth-msg" id="signupMsg"></div>
     </div>
-    <div class="form-group">
-      <label>WhatsApp number</label>
-      <input type="tel" id="signupWhatsapp" placeholder="+91 98765 43210">
-    </div>
-    <div class="form-group">
-      <label>Payday date</label>
-      <select id="signupPayday">
-        <option value="1">1st of the month</option>
-        <option value="5">5th of the month</option>
-        <option value="7">7th of the month</option>
-        <option value="10">10th of the month</option>
-        <option value="15">15th of the month</option>
-        <option value="25">25th of the month</option>
-        <option value="28">28th of the month</option>
-        <option value="30">30th of the month</option>
-      </select>
-    </div>
-    <button class="btn btn-primary btn-full" id="signupBtn">Create account</button>
-    <div class="auth-msg" id="signupMsg"></div>
+
   </div>
 </div>
 
@@ -84,7 +125,6 @@
 <script src="js/config.js"></script>
 <script src="js/auth.js"></script>
 <script>
-  // Switch tabs
   document.querySelectorAll('.auth-tab').forEach(tab => {
     tab.addEventListener('click', () => {
       document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
@@ -93,7 +133,6 @@
       document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
     });
   });
-  // If URL has #signup, open signup tab
   if (location.hash === '#signup') {
     document.querySelector('[data-tab="signup"]').click();
   }
