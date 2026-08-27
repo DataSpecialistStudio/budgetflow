@@ -1168,16 +1168,21 @@ document.querySelectorAll('.faq-q').forEach(q => {
 (function() {
   let animated = false;
 
-  function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
-
-  function animateCount(el, start, end, duration, format) {
-    const startTime = performance.now();
-    function update(now) {
-      const elapsed = now - startTime;
+  function animateCount(el, end, duration, format) {
+    let startTs = null;
+    function update(ts) {
+      if (!startTs) startTs = ts;
+      const elapsed = ts - startTs;
       const progress = Math.min(elapsed / duration, 1);
-      const value = Math.round(start + (end - start) * easeOut(progress));
-      el.textContent = format(value);
-      if (progress < 1) requestAnimationFrame(update);
+      // ease out cubic
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const value = Math.round(end * eased);
+      el.textContent = format(Math.max(0, value));
+      if (progress < 1) {
+        requestAnimationFrame(update);
+      } else {
+        el.textContent = format(end);
+      }
     }
     requestAnimationFrame(update);
   }
@@ -1185,31 +1190,17 @@ document.querySelectorAll('.faq-q').forEach(q => {
   function runCounters() {
     if (animated) return;
     animated = true;
-
-    // 2,400+
-    animateCount(
-      document.getElementById('stat0'), 0, 2400, 2000,
-      v => v.toLocaleString('en-IN') + '+'
-    );
-    // ₹12 Cr+
-    animateCount(
-      document.getElementById('stat1'), 0, 12, 1800,
-      v => '₹' + v + ' Cr+'
-    );
-    // 94%
-    animateCount(
-      document.getElementById('stat2'), 0, 94, 1600,
-      v => v + '%'
-    );
-    // Free stays as text — no animation needed
+    const s0 = document.getElementById('stat0');
+    const s1 = document.getElementById('stat1');
+    const s2 = document.getElementById('stat2');
+    if (s0) animateCount(s0, 2400, 2000, v => v.toLocaleString('en-IN') + '+');
+    if (s1) animateCount(s1, 12,   1800, v => '₹' + v + ' Cr+');
+    if (s2) animateCount(s2, 94,   1600, v => v + '%');
   }
 
-  // Trigger when stats bar enters viewport
   const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) runCounters();
-    });
-  }, { threshold: 0.3 });
+    entries.forEach(e => { if (e.isIntersecting) runCounters(); });
+  }, { threshold: 0.2 });
 
   const bar = document.getElementById('statsBar');
   if (bar) observer.observe(bar);
