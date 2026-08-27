@@ -210,6 +210,83 @@
   .steps { flex-direction: column; align-items: center; }
   .step { max-width: 100%; border-radius: 8px !important; border-left: 1.5px solid #C6CFBC !important; margin-bottom: 8px; }
 }
+
+/* ── MARQUEE TESTIMONIALS ── */
+.testimonials-section { background: #EFF1E9; padding: 72px 0; overflow: hidden; }
+.testimonials-section .section-inner { padding: 0 24px; }
+.testimonials-section .section-eyebrow { text-align: center; }
+.testimonials-section .section-title { text-align: center; }
+
+.marquee-wrap {
+  width: 100%;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+}
+
+.marquee { display: flex; width: 100%; }
+.marquee-track {
+  display: flex;
+  gap: 14px;
+  padding: 6px 7px;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+.marquee-left .marquee-track  { animation: scrollLeft 40s linear infinite; }
+.marquee-right .marquee-track { animation: scrollRight 45s linear infinite; }
+
+.marquee-track:hover { animation-play-state: paused; }
+
+@keyframes scrollLeft {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+@keyframes scrollRight {
+  0%   { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+
+.tcard {
+  background: #F6F7F1;
+  border: 1.5px solid #C6CFBC;
+  border-radius: 10px;
+  padding: 20px 22px;
+  min-width: 300px;
+  max-width: 300px;
+  flex-shrink: 0;
+  cursor: default;
+  transition: box-shadow .2s, transform .2s;
+}
+.tcard:hover {
+  box-shadow: 0 8px 24px rgba(10,74,90,.1);
+  transform: translateY(-2px);
+}
+.tquote {
+  font-size: 13.5px;
+  color: #15252E;
+  line-height: 1.65;
+  margin-bottom: 16px;
+  font-style: italic;
+}
+.tquote::before {
+  content: '\201C';
+  font-size: 28px;
+  color: #0A4A5A;
+  line-height: 0;
+  vertical-align: -8px;
+  margin-right: 2px;
+  font-style: normal;
+}
+.tauthor { display: flex; align-items: center; gap: 10px; }
+.tavatar {
+  width: 34px; height: 34px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; color: #fff; flex-shrink: 0;
+}
+.tname  { font-size: 13px; font-weight: 600; color: #15252E; }
+.trole  { font-size: 11px; color: #66756D; }
+
 </style>
 </head>
 <body class="landing-page">
@@ -358,15 +435,110 @@
   </div>
 </section>
 
-<!-- TESTIMONIALS -->
+<!-- TESTIMONIALS — infinite scroll marquee -->
 <section class="testimonials-section">
   <div class="section-inner">
     <div class="section-eyebrow">What users say</div>
-    <h2 class="section-title">People who actually use it</h2>
-    <div class="tgrid">
-      <div class="tcard"><div class="tquote">Finally stopped wondering where my salary went every month. The WhatsApp reminder actually makes me log things on time.</div><div class="tauthor"><div class="tavatar" style="background:#0A4A5A">RK</div><div><div class="tname">Rahul K.</div><div class="trole">Software Engineer, Pune</div></div></div></div>
-      <div class="tcard"><div class="tquote">I was using Excel for years but this is so much simpler. Set it once and it just runs. The corpus chart is my favourite.</div><div class="tauthor"><div class="tavatar" style="background:#4F3BC8">PM</div><div><div class="tname">Priya M.</div><div class="trole">Product Manager, Bangalore</div></div></div></div>
-      <div class="tcard"><div class="tquote">My FD and SIP are tracked in one place. I can see exactly how my corpus is compounding month by month. Brilliant.</div><div class="tauthor"><div class="tavatar" style="background:#A8402F">AS</div><div><div class="tname">Amit S.</div><div class="trole">CA, Mumbai</div></div></div></div>
+    <h2 class="section-title">Loved by salary earners across India</h2>
+  </div>
+
+  <!-- ROW 1 — scrolls left -->
+  <div class="marquee-wrap">
+    <div class="marquee marquee-left">
+      <div class="marquee-track">
+
+        <div class="tcard"><div class="tquote">Finally stopped wondering where my salary went every month. The WhatsApp reminder actually makes me log things on time.</div><div class="tauthor"><div class="tavatar" style="background:#0A4A5A">RK</div><div><div class="tname">Rahul K.</div><div class="trole">Software Engineer, Pune</div></div></div></div>
+
+        <div class="tcard"><div class="tquote">I was using Excel for years but this is so much simpler. Set it once and it just runs. The corpus chart is my favourite part.</div><div class="tauthor"><div class="tavatar" style="background:#4F3BC8">PM</div><div><div class="tname">Priya M.</div><div class="trole">Product Manager, Bangalore</div></div></div></div>
+
+        <div class="tcard"><div class="tquote">My FD and SIP are tracked in one place. I can see exactly how my corpus is compounding month by month. Brilliant tool.</div><div class="tauthor"><div class="tavatar" style="background:#A8402F">AS</div><div><div class="tname">Amit S.</div><div class="trole">CA, Mumbai</div></div></div></div>
+
+        <div class="tcard"><div class="tquote">The payday reminder is a game changer. I used to forget about half my SIPs until the month was over. Not anymore.</div><div class="tauthor"><div class="tavatar" style="background:#127A6B">NP</div><div><div class="tname">Neha P.</div><div class="trole">Marketing Lead, Hyderabad</div></div></div></div>
+
+        <div class="tcard"><div class="tquote">Setup took literally 4 minutes. Now I get a WhatsApp every month reminding me to settle each line. Life changing for a lazy person like me.</div><div class="tauthor"><div class="tavatar" style="background:#C9871F">VR</div><div><div class="tname">Vikram R.</div><div class="trole">Data Analyst, Chennai</div></div></div></div>
+
+        <div class="tcard"><div class="tquote">I never realized how much I was losing to untracked subscriptions until BudgetFlow showed me the gap every month.</div><div class="tauthor"><div class="tavatar" style="background:#6A3F6B">SJ</div><div><div class="tname">Sneha J.</div><div class="trole">UX Designer, Bangalore</div></div></div></div>
+
+        <div class="tcard"><div class="tquote">Corpus projection feature is brilliant. I can see what my FD and SIP will be worth in 10 years. Finally motivated to save more.</div><div class="tauthor"><div class="tavatar" style="background:#2E4A7D">AK</div><div><div class="tname">Arjun K.</div><div class="trole">Backend Developer, Noida</div></div></div></div>
+
+        <div class="tcard"><div class="tquote">The color-coded pills make it so easy to see which lines are settled and which are pending. No more guessing games.</div><div class="tauthor"><div class="tavatar" style="background:#0A4A5A">DM</div><div><div class="tname">Deepa M.</div><div class="trole">Finance Manager, Pune</div></div></div></div>
+
+        <div class="tcard"><div class="tquote">Recommended this to my entire team. Everyone was wasting hours on Excel budget sheets. BudgetFlow takes 3 minutes to set up.</div><div class="tauthor"><div class="tavatar" style="background:#A8402F">KS</div><div><div class="tname">Karan S.</div><div class="trole">Team Lead, Gurugram</div></div></div></div>
+
+        <div class="tcard"><div class="tquote">The month switcher is perfect. I can see exactly what I logged 6 months ago and compare it to today. Really useful for tracking growth.</div><div class="tauthor"><div class="tavatar" style="background:#4F3BC8">RP</div><div><div class="tname">Ritu P.</div><div class="trole">Product Designer, Mumbai</div></div></div></div>
+
+        <!-- Duplicated set for seamless loop -->
+        <div class="tcard"><div class="tquote">Finally stopped wondering where my salary went every month. The WhatsApp reminder actually makes me log things on time.</div><div class="tauthor"><div class="tavatar" style="background:#0A4A5A">RK</div><div><div class="tname">Rahul K.</div><div class="trole">Software Engineer, Pune</div></div></div></div>
+
+        <div class="tcard"><div class="tquote">I was using Excel for years but this is so much simpler. Set it once and it just runs. The corpus chart is my favourite part.</div><div class="tauthor"><div class="tavatar" style="background:#4F3BC8">PM</div><div><div class="tname">Priya M.</div><div class="trole">Product Manager, Bangalore</div></div></div></div>
+
+        <div class="tcard"><div class="tquote">My FD and SIP are tracked in one place. I can see exactly how my corpus is compounding month by month. Brilliant tool.</div><div class="tauthor"><div class="tavatar" style="background:#A8402F">AS</div><div><div class="tname">Amit S.</div><div class="trole">CA, Mumbai</div></div></div></div>
+
+        <div class="tcard"><div class="tquote">The payday reminder is a game changer. I used to forget about half my SIPs until the month was over. Not anymore.</div><div class="tauthor"><div class="tavatar" style="background:#127A6B">NP</div><div><div class="tname">Neha P.</div><div class="trole">Marketing Lead, Hyderabad</div></div></div></div>
+
+        <div class="tcard"><div class="tquote">Setup took literally 4 minutes. Now I get a WhatsApp every month reminding me to settle each line. Life changing for a lazy person like me.</div><div class="tauthor"><div class="tavatar" style="background:#C9871F">VR</div><div><div class="tname">Vikram R.</div><div class="trole">Data Analyst, Chennai</div></div></div></div>
+
+        <div class="tcard"><div class="tquote">I never realized how much I was losing to untracked subscriptions until BudgetFlow showed me the gap every month.</div><div class="tauthor"><div class="tavatar" style="background:#6A3F6B">SJ</div><div><div class="tname">Sneha J.</div><div class="trole">UX Designer, Bangalore</div></div></div></div>
+
+        <div class="tcard"><div class="tquote">Corpus projection feature is brilliant. I can see what my FD and SIP will be worth in 10 years. Finally motivated to save more.</div><div class="tauthor"><div class="tavatar" style="background:#2E4A7D">AK</div><div><div class="tname">Arjun K.</div><div class="trole">Backend Developer, Noida</div></div></div></div>
+
+        <div class="tcard"><div class="tquote">The color-coded pills make it so easy to see which lines are settled and which are pending. No more guessing games.</div><div class="tauthor"><div class="tavatar" style="background:#0A4A5A">DM</div><div><div class="tname">Deepa M.</div><div class="trole">Finance Manager, Pune</div></div></div></div>
+
+        <div class="tcard"><div class="tquote">Recommended this to my entire team. Everyone was wasting hours on Excel budget sheets. BudgetFlow takes 3 minutes to set up.</div><div class="tauthor"><div class="tavatar" style="background:#A8402F">KS</div><div><div class="tname">Karan S.</div><div class="trole">Team Lead, Gurugram</div></div></div></div>
+
+        <div class="tcard"><div class="tquote">The month switcher is perfect. I can see exactly what I logged 6 months ago and compare it to today. Really useful for tracking growth.</div><div class="tauthor"><div class="tavatar" style="background:#4F3BC8">RP</div><div><div class="tname">Ritu P.</div><div class="trole">Product Designer, Mumbai</div></div></div></div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ROW 2 — scrolls right -->
+  <div class="marquee-wrap" style="margin-top:14px">
+    <div class="marquee marquee-right">
+      <div class="marquee-track">
+
+        <div class="tcard"><div class="tquote">I earn ₹80k a month and had no idea where it was going. BudgetFlow helped me find ₹12k in unnecessary spending in the first month.</div><div class="tauthor"><div class="tavatar" style="background:#127A6B">MG</div><div><div class="tname">Manish G.</div><div class="trole">Senior Engineer, Bangalore</div></div></div></div>
+
+        <div class="tcard"><div class="tquote">The yearly view shows me exactly which months I overspent. I've become so much more disciplined since I started using this.</div><div class="tauthor"><div class="tavatar" style="background:#C9871F">TS</div><div><div class="tname">Tanvi S.</div><div class="trole">HR Manager, Delhi</div></div></div></div>
+
+        <div class="tcard"><div class="tquote">Free, works on my phone without any app install, and reminds me on WhatsApp. What more do you need from a budget tool?</div><div class="tauthor"><div class="tavatar" style="background:#2E4A7D">PK</div><div><div class="tname">Pranav K.</div><div class="trole">Freelancer, Ahmedabad</div></div></div></div>
+
+        <div class="tcard"><div class="tquote">My wife and I both log our actuals separately and compare at month end. The data stays private which we love.</div><div class="tauthor"><div class="tavatar" style="background:#A8402F">RV</div><div><div class="tname">Rohit V.</div><div class="trole">Architect, Pune</div></div></div></div>
+
+        <div class="tcard"><div class="tquote">As a CA I recommend this to all my salaried clients. It's the simplest budget tracker I've seen that actually accounts for corpus growth.</div><div class="tauthor"><div class="tavatar" style="background:#0A4A5A">SA</div><div><div class="tname">Suresh A.</div><div class="trole">Chartered Accountant, Chennai</div></div></div></div>
+
+        <div class="tcard"><div class="tquote">I love that it chases me every 2 days until I log everything. Annoying in the best possible way. I've never been more on top of my money.</div><div class="tauthor"><div class="tavatar" style="background:#6A3F6B">LN</div><div><div class="tname">Lavanya N.</div><div class="trole">Content Creator, Hyderabad</div></div></div></div>
+
+        <div class="tcard"><div class="tquote">Switched from a paid app to BudgetFlow. The free tier here does more than what I was paying ₹499/month for elsewhere.</div><div class="tauthor"><div class="tavatar" style="background:#4F3BC8">GR</div><div><div class="tname">Ganesh R.</div><div class="trole">Operations Manager, Kolkata</div></div></div></div>
+
+        <div class="tcard"><div class="tquote">The reminder on payday is sent before I've even had my morning tea. By the time I sit down I already know exactly what needs to be paid.</div><div class="tauthor"><div class="tavatar" style="background:#127A6B">AB</div><div><div class="tname">Anjali B.</div><div class="trole">Teacher, Jaipur</div></div></div></div>
+
+        <div class="tcard"><div class="tquote">I've tried Walnut, Money View, and Goodbudget. BudgetFlow is the only one where I actually stuck with it past the first month.</div><div class="tauthor"><div class="tavatar" style="background:#C9871F">SK</div><div><div class="tname">Siddharth K.</div><div class="trole">Startup Founder, Bangalore</div></div></div></div>
+
+        <div class="tcard"><div class="tquote">The fact that my data is secured at database level gives me confidence. I don't have to worry about some company selling my financial info.</div><div class="tauthor"><div class="tavatar" style="background:#A8402F">FR</div><div><div class="tname">Fatima R.</div><div class="trole">Cybersecurity Analyst, Mumbai</div></div></div></div>
+
+        <!-- Duplicated set for seamless loop -->
+        <div class="tcard"><div class="tquote">I earn ₹80k a month and had no idea where it was going. BudgetFlow helped me find ₹12k in unnecessary spending in the first month.</div><div class="tauthor"><div class="tavatar" style="background:#127A6B">MG</div><div><div class="tname">Manish G.</div><div class="trole">Senior Engineer, Bangalore</div></div></div></div>
+
+        <div class="tcard"><div class="tquote">The yearly view shows me exactly which months I overspent. I've become so much more disciplined since I started using this.</div><div class="tauthor"><div class="tavatar" style="background:#C9871F">TS</div><div><div class="tname">Tanvi S.</div><div class="trole">HR Manager, Delhi</div></div></div></div>
+
+        <div class="tcard"><div class="tquote">Free, works on my phone without any app install, and reminds me on WhatsApp. What more do you need from a budget tool?</div><div class="tauthor"><div class="tavatar" style="background:#2E4A7D">PK</div><div><div class="tname">Pranav K.</div><div class="trole">Freelancer, Ahmedabad</div></div></div></div>
+
+        <div class="tcard"><div class="tquote">My wife and I both log our actuals separately and compare at month end. The data stays private which we love.</div><div class="tauthor"><div class="tavatar" style="background:#A8402F">RV</div><div><div class="tname">Rohit V.</div><div class="trole">Architect, Pune</div></div></div></div>
+
+        <div class="tcard"><div class="tquote">As a CA I recommend this to all my salaried clients. It's the simplest budget tracker I've seen that actually accounts for corpus growth.</div><div class="tauthor"><div class="tavatar" style="background:#0A4A5A">SA</div><div><div class="tname">Suresh A.</div><div class="trole">Chartered Accountant, Chennai</div></div></div></div>
+
+        <div class="tcard"><div class="tquote">I love that it chases me every 2 days until I log everything. Annoying in the best possible way. I've never been more on top of my money.</div><div class="tauthor"><div class="tavatar" style="background:#6A3F6B">LN</div><div><div class="tname">Lavanya N.</div><div class="trole">Content Creator, Hyderabad</div></div></div></div>
+
+        <div class="tcard"><div class="tquote">Switched from a paid app to BudgetFlow. The free tier here does more than what I was paying ₹499/month for elsewhere.</div><div class="tauthor"><div class="tavatar" style="background:#4F3BC8">GR</div><div><div class="tname">Ganesh R.</div><div class="trole">Operations Manager, Kolkata</div></div></div></div>
+
+        <div class="tcard"><div class="tquote">The reminder on payday is sent before I've even had my morning tea. By the time I sit down I already know exactly what needs to be paid.</div><div class="tauthor"><div class="tavatar" style="background:#127A6B">AB</div><div><div class="tname">Anjali B.</div><div class="trole">Teacher, Jaipur</div></div></div></div>
+
+        <div class="tcard"><div class="tquote">I've tried Walnut, Money View, and Goodbudget. BudgetFlow is the only one where I actually stuck with it past the first month.</div><div class="tauthor"><div class="tavatar" style="background:#C9871F">SK</div><div><div class="tname">Siddharth K.</div><div class="trole">Startup Founder, Bangalore</div></div></div></div>
+
+        <div class="tcard"><div class="tquote">The fact that my data is secured at database level gives me confidence. I don't have to worry about some company selling my financial info.</div><div class="tauthor"><div class="tavatar" style="background:#A8402F">FR</div><div><div class="tname">Fatima R.</div><div class="trole">Cybersecurity Analyst, Mumbai</div></div></div></div>
+
+      </div>
     </div>
   </div>
 </section>
