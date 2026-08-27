@@ -610,12 +610,12 @@
 </section>
 
 <!-- STATS BAR -->
-<div class="stats-bar">
+<div class="stats-bar" id="statsBar">
   <div class="stats-inner">
-    <div class="stat-item"><div class="stat-value">2,400+</div><div class="stat-label">Budgets created</div></div>
-    <div class="stat-item"><div class="stat-value">₹12 Cr+</div><div class="stat-label">Salary tracked</div></div>
-    <div class="stat-item"><div class="stat-value">94%</div><div class="stat-label">Log every month</div></div>
-    <div class="stat-item"><div class="stat-value">Free</div><div class="stat-label">Always, forever</div></div>
+    <div class="stat-item"><div class="stat-value" id="stat0">0+</div><div class="stat-label">Budgets created</div></div>
+    <div class="stat-item"><div class="stat-value" id="stat1">₹0 Cr+</div><div class="stat-label">Salary tracked</div></div>
+    <div class="stat-item"><div class="stat-value" id="stat2">0%</div><div class="stat-label">Log every month</div></div>
+    <div class="stat-item"><div class="stat-value" id="stat3">Free</div><div class="stat-label">Always, forever</div></div>
   </div>
 </div>
 
@@ -1159,6 +1159,60 @@ document.querySelectorAll('.faq-q').forEach(q => {
 
   // Start
   if (document.getElementById('demoScreen')) showStep(0);
+})();
+</script>
+
+
+<script>
+/* ── COUNTING STATS ANIMATION ── */
+(function() {
+  let animated = false;
+
+  function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
+
+  function animateCount(el, start, end, duration, format) {
+    const startTime = performance.now();
+    function update(now) {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const value = Math.round(start + (end - start) * easeOut(progress));
+      el.textContent = format(value);
+      if (progress < 1) requestAnimationFrame(update);
+    }
+    requestAnimationFrame(update);
+  }
+
+  function runCounters() {
+    if (animated) return;
+    animated = true;
+
+    // 2,400+
+    animateCount(
+      document.getElementById('stat0'), 0, 2400, 2000,
+      v => v.toLocaleString('en-IN') + '+'
+    );
+    // ₹12 Cr+
+    animateCount(
+      document.getElementById('stat1'), 0, 12, 1800,
+      v => '₹' + v + ' Cr+'
+    );
+    // 94%
+    animateCount(
+      document.getElementById('stat2'), 0, 94, 1600,
+      v => v + '%'
+    );
+    // Free stays as text — no animation needed
+  }
+
+  // Trigger when stats bar enters viewport
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) runCounters();
+    });
+  }, { threshold: 0.3 });
+
+  const bar = document.getElementById('statsBar');
+  if (bar) observer.observe(bar);
 })();
 </script>
 
