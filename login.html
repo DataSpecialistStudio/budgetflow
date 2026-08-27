@@ -7,6 +7,21 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
+<style>
+/* Eye toggle */
+.pw-wrap { position: relative; display: block; width: 100%; }
+.pw-wrap input { padding-right: 46px !important; width: 100%; }
+.pw-eye {
+  position: absolute; right: 12px; top: 50%;
+  transform: translateY(-50%);
+  background: none; border: none; cursor: pointer;
+  padding: 4px; color: #66756D;
+  display: flex; align-items: center; justify-content: center;
+  z-index: 10; line-height: 1;
+}
+.pw-eye:hover { color: #15252E; }
+.pw-eye svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; display: block; }
+</style>
 </head>
 <body class="auth-page">
 
