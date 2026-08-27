@@ -287,6 +287,291 @@
 .tname  { font-size: 13px; font-weight: 600; color: #15252E; }
 .trole  { font-size: 11px; color: #66756D; }
 
+
+/* ── COMPARISON TWO COL ── */
+.comp-two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 56px;
+  align-items: start;
+}
+.comp-left {}
+.comp-right {}
+.comp-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1.5px solid #C6CFBC;
+  border-radius: 10px;
+  overflow: hidden;
+  font-size: 13px;
+}
+.comp-table th {
+  padding: 10px 14px; text-align: left;
+  background: #E5E9DC; font-size: 11px;
+  font-weight: 600; color: #66756D;
+  text-transform: uppercase; letter-spacing: .06em;
+}
+.comp-table th.bf { background: #0A4A5A; color: #29D9A8; }
+.comp-table td { padding: 10px 14px; border-bottom: 1px solid #E5E9DC; font-size: 13px; color: #15252E; }
+.comp-table tr:last-child td { border-bottom: none; }
+.comp-table td.bf { background: rgba(10,74,90,.04); font-weight: 600; }
+.check  { color: #127A6B; font-weight: 600; }
+.cross  { color: #A8402F; }
+.neutral{ color: #66756D; }
+
+/* ── SETUP DEMO ── */
+.setup-demo {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.demo-phone {
+  width: 160px;
+  flex-shrink: 0;
+  background: #15252E;
+  border-radius: 20px;
+  padding: 12px;
+  box-shadow: 0 16px 48px rgba(10,74,90,.25);
+  position: relative;
+}
+.demo-phone::before {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 4px;
+  background: rgba(255,255,255,.15);
+  border-radius: 2px;
+  margin: 0 auto 10px;
+}
+.demo-screen {
+  background: #EFF1E9;
+  border-radius: 12px;
+  min-height: 260px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Screen content */
+.screen-content {
+  padding: 14px 12px;
+  height: 100%;
+  animation: fadeInUp .4s ease;
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.sc-label {
+  font-size: 8px;
+  font-weight: 600;
+  color: #0A4A5A;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  margin-bottom: 8px;
+}
+.sc-title { font-size: 12px; font-weight: 700; color: #15252E; margin-bottom: 10px; }
+.sc-input {
+  background: #fff;
+  border: 1px solid #C6CFBC;
+  border-radius: 5px;
+  padding: 7px 8px;
+  font-size: 10px;
+  color: #15252E;
+  margin-bottom: 6px;
+  width: 100%;
+}
+.sc-btn {
+  background: #0A4A5A;
+  color: #EFF1E9;
+  border-radius: 5px;
+  padding: 7px;
+  font-size: 10px;
+  font-weight: 600;
+  text-align: center;
+  margin-top: 4px;
+}
+.sc-google {
+  background: #fff;
+  border: 1px solid #C6CFBC;
+  border-radius: 5px;
+  padding: 7px;
+  font-size: 10px;
+  font-weight: 500;
+  text-align: center;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+.sc-g-dot {
+  width: 12px; height: 12px; border-radius: 50%;
+  background: linear-gradient(135deg,#4285F4,#EA4335,#FBBC05,#34A853);
+  flex-shrink: 0;
+}
+.sc-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  border-radius: 5px;
+  padding: 6px 8px;
+  margin-bottom: 4px;
+  font-size: 9px;
+  color: #15252E;
+}
+.sc-pill {
+  font-size: 8px;
+  font-weight: 600;
+  padding: 2px 5px;
+  border-radius: 20px;
+}
+.sc-pill.s { background: #E1F5EE; color: #127A6B; }
+.sc-pill.f { background: #FCEAE8; color: #A8402F; }
+.sc-pill.x { background: #FAF0DC; color: #C9871F; }
+.sc-bar-w { width: 30px; height: 3px; background: #E5E9DC; border-radius: 2px; }
+.sc-bar-f { height: 3px; border-radius: 2px; }
+.sc-metric {
+  background: #0A4A5A;
+  border-radius: 6px;
+  padding: 7px 8px;
+  margin-bottom: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.sc-metric-l { font-size: 8px; color: rgba(239,241,233,.5); }
+.sc-metric-v { font-size: 13px; font-weight: 700; color: #29D9A8; }
+.sc-or { text-align: center; font-size: 9px; color: #66756D; margin: 5px 0; }
+
+/* Steps list */
+.demo-steps { flex: 1; display: flex; flex-direction: column; gap: 10px; }
+.demo-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1.5px solid transparent;
+  transition: all .3s;
+  cursor: pointer;
+  opacity: .45;
+}
+.demo-step.active {
+  background: #F6F7F1;
+  border-color: #C6CFBC;
+  opacity: 1;
+}
+.ds-num {
+  width: 26px; height: 26px; border-radius: 50%;
+  background: #E5E9DC; color: #66756D;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; flex-shrink: 0;
+  transition: all .3s;
+}
+.demo-step.active .ds-num { background: #0A4A5A; color: #EFF1E9; }
+.ds-title { font-size: 13px; font-weight: 600; color: #15252E; }
+.ds-sub   { font-size: 11px; color: #66756D; margin-top: 2px; }
+
+.demo-progress-bar {
+  height: 3px;
+  background: #E5E9DC;
+  border-radius: 2px;
+  margin-top: 6px;
+  overflow: hidden;
+}
+.demo-progress-fill {
+  height: 100%;
+  background: #0A4A5A;
+  border-radius: 2px;
+  width: 0%;
+  transition: width .05s linear;
+}
+
+@media (max-width: 900px) {
+  .comp-two-col { grid-template-columns: 1fr; gap: 40px; }
+  .comp-right .section-title { margin-bottom: 20px; }
+}
+
+
+/* ── REMINDER SECTION ENHANCED ── */
+.reminder-section { background: var(--brand); padding: 72px 24px; }
+.reminder-section .section-eyebrow { color: rgba(239,241,233,.35); }
+.reminder-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start; }
+.reminder-col { display: flex; flex-direction: column; gap: 12px; }
+
+.rem-label {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12px; font-weight: 600; color: rgba(239,241,233,.6);
+  font-family: 'IBM Plex Mono', monospace; letter-spacing: .06em; text-transform: uppercase;
+}
+.rem-label-dot { width: 8px; height: 8px; border-radius: 50%; }
+.rem-note { font-size: 12px; color: rgba(239,241,233,.3); text-align: center; font-family: 'IBM Plex Mono', monospace; }
+
+/* Notification banner */
+.notif-banner {
+  display: flex; align-items: center; gap: 10px;
+  border-radius: 14px; padding: 10px 14px;
+  animation: slideDown .5s ease;
+}
+@keyframes slideDown { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:translateY(0); } }
+.wa-notif { background: rgba(37,211,102,.15); border: 1px solid rgba(37,211,102,.25); }
+.email-notif { background: rgba(234,67,53,.12); border: 1px solid rgba(234,67,53,.2); }
+.notif-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.notif-title { font-size: 12px; font-weight: 600; color: #EFF1E9; }
+.notif-text { font-size: 11px; color: rgba(239,241,233,.5); }
+.notif-time { font-size: 10px; color: rgba(239,241,233,.35); margin-left: auto; flex-shrink: 0; font-family: 'IBM Plex Mono', monospace; }
+
+/* WhatsApp phone */
+.wa-phone { background: #1A1A1A; border-radius: 28px; padding: 14px; box-shadow: 0 24px 64px rgba(0,0,0,.5); }
+.wa-status-bar { display: flex; justify-content: space-between; align-items: center; padding: 0 4px 8px; font-size: 11px; color: #fff; }
+.wa-app { background: #111B21; border-radius: 18px; overflow: hidden; }
+.wa-header { background: #202C33; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; }
+.wa-avatar { width: 36px; height: 36px; background: #29D9A8; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #062F3A; flex-shrink: 0; }
+.wa-contact-name { font-size: 13px; font-weight: 600; color: #E9EDEF; }
+.wa-contact-sub { font-size: 11px; color: #25D366; }
+.wa-body { padding: 10px 10px 0; background: #0B141A; }
+.wa-date-chip { text-align: center; font-size: 10px; color: #8696A0; background: rgba(134,150,160,.15); border-radius: 8px; padding: 3px 10px; display: inline-block; margin: 0 auto 8px; display: block; width: fit-content; margin-left: auto; margin-right: auto; }
+.wa-bubble { background: #202C33; border-radius: 0 10px 10px 10px; padding: 10px 12px; max-width: 95%; margin-bottom: 2px; }
+.wa-reply { background: #005C4B; border-radius: 10px 10px 0 10px; max-width: 75%; margin-left: auto; }
+.wa-text { font-size: 12px; color: #E9EDEF; line-height: 1.7; }
+.wa-line-item { display: flex; align-items: center; gap: 4px; padding: 2px 0; font-size: 11px; }
+.wa-amt { font-weight: 600; margin-left: auto; }
+.wa-status { font-size: 10px; padding: 1px 6px; border-radius: 20px; }
+.wa-status.pending { background: rgba(255,138,128,.2); color: #FF8A80; }
+.wa-status.done { background: rgba(37,211,102,.2); color: #25D366; }
+.wa-time-row { display: flex; justify-content: flex-end; margin-top: 4px; }
+.wa-time { font-size: 10px; color: #8696A0; }
+.wa-input-bar { background: #202C33; padding: 8px 10px; display: flex; align-items: center; gap: 8px; }
+.wa-input { flex: 1; background: #2A3942; border-radius: 20px; padding: 8px 12px; font-size: 12px; color: #8696A0; }
+.wa-send { width: 32px; height: 32px; background: #29D9A8; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+/* Email */
+.email-card { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,.25); }
+.email-toolbar { background: #F6F8FC; padding: 10px 16px; border-bottom: 1px solid #E8EAED; display: flex; align-items: center; gap: 6px; }
+.email-dot { width: 10px; height: 10px; border-radius: 50%; }
+.email-header { padding: 14px 18px; border-bottom: 1px solid #F0F0F0; }
+.email-from { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; }
+.email-avatar { width: 36px; height: 36px; background: #0A4A5A; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #29D9A8; flex-shrink: 0; margin-top: 2px; }
+.email-sender-name { font-size: 13px; font-weight: 600; color: #202124; }
+.email-sender-addr { font-size: 11px; color: #5F6368; }
+.email-subject { font-size: 15px; font-weight: 700; color: #202124; }
+.email-date { font-size: 11px; color: #5F6368; white-space: nowrap; }
+.email-body { padding: 16px 18px; }
+.email-greeting { font-size: 13px; color: #202124; margin-bottom: 14px; line-height: 1.7; }
+.email-table { width: 100%; border-collapse: collapse; margin-bottom: 14px; font-size: 12px; }
+.email-table th { font-size: 10px; text-transform: uppercase; letter-spacing: .05em; color: #5F6368; padding: 6px 10px; text-align: left; border-bottom: 1px solid #E8EAED; }
+.email-table td { padding: 8px 10px; border-bottom: 1px solid #F1F3F4; color: #202124; }
+.email-pending { color: #C5221F; font-weight: 600; }
+.email-done { color: #137333; font-weight: 600; }
+.email-cta { display: inline-block; background: #0A4A5A; color: #fff !important; padding: 10px 20px; border-radius: 6px; font-size: 13px; font-weight: 600; text-decoration: none; }
+.email-footer-text { font-size: 11px; color: #9AA0A6; line-height: 1.5; }
+
+@media (max-width: 768px) {
+  .reminder-grid { grid-template-columns: 1fr; }
+}
+
 </style>
 </head>
 <body class="landing-page">
@@ -341,7 +626,7 @@
     <h2 class="section-title">See exactly where every rupee goes</h2>
     <div class="preview-grid">
       <div class="dash-preview">
-        <div class="dp-topbar"><span class="dp-title">August 2026 — Kunal</span><span class="dp-badge">69% logged</span></div>
+        <div class="dp-topbar"><span class="dp-title">August 2026 — Harshad Mehta</span><span class="dp-badge">69% logged</span></div>
         <div class="dp-metrics">
           <div class="dp-metric"><div class="dp-ml">Income</div><div class="dp-mv">₹55,000</div></div>
           <div class="dp-metric"><div class="dp-ml">Saved</div><div class="dp-mv mint">₹27,700</div></div>
@@ -361,7 +646,7 @@
         <div class="preview-bullets">
           <div class="pb"><div class="pb-icon"><svg viewBox="0 0 24 24" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><div class="pb-text"><strong>Color-coded progress bars</strong> — see at a glance which lines are settled and which need attention.</div></div>
           <div class="pb"><div class="pb-icon"><svg viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div class="pb-text"><strong>Month switcher</strong> — jump to any past month and see exactly what you logged.</div></div>
-          <div class="pb"><div class="pb-icon"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div class="pb-text"><strong>Private by default</strong> — only you can see your numbers, enforced at the database level.</div></div>
+          <div class="pb"><div class="pb-icon"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div class="pb-text"><strong>Private by default</strong> — only you can see your numbers. Always.</div></div>
         </div>
         <a href="login.html#signup" class="btn btn-primary">Try it free &rarr;</a>
       </div>
@@ -378,7 +663,7 @@
       <div class="feat"><div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><h3>Payday reminder</h3><p>Get your full budget plan every month — on email and WhatsApp — before the money disappears.</p></div>
       <div class="feat"><div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg></div><h3>Chase until done</h3><p>Every few days, a reminder lists only the open lines. Stops the moment you log an amount or give a reason.</p></div>
       <div class="feat"><div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><h3>Watch corpus grow</h3><p>See FD, SIP and emergency fund compound in real time. Know exactly where you'll be in 12 months.</p></div>
-      <div class="feat"><div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><h3>Your data, only yours</h3><p>Sign in with Google or email. Nobody else can see your numbers — enforced at the database level.</p></div>
+      <div class="feat"><div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><h3>Your data, only yours</h3><p>Sign in with Google or email. Your numbers are completely private — nobody else can see them.</p></div>
     </div>
   </div>
 </section>
@@ -386,51 +671,155 @@
 <!-- REMINDER PREVIEW -->
 <section class="reminder-section">
   <div class="section-inner">
-    <div class="section-eyebrow">The reminders</div>
-    <h2 class="section-title">See what lands on your phone and inbox</h2>
+    <div class="section-eyebrow">Payday reminders</div>
+    <h2 class="section-title" style="color:#EFF1E9">See exactly what lands on<br>your phone and inbox</h2>
+    <p style="text-align:center;color:rgba(239,241,233,.45);font-size:15px;margin-bottom:48px;max-width:48ch;margin-left:auto;margin-right:auto">On the 1st of every month, BudgetFlow sends your full plan to both WhatsApp and email — before you've even had your morning tea.</p>
+
     <div class="reminder-grid">
-      <div>
+
+      <!-- WHATSAPP -->
+      <div class="reminder-col">
+        <div class="rem-label">
+          <div class="rem-label-dot" style="background:#25D366"></div>
+          WhatsApp Message
+        </div>
+
+        <!-- Notification banner -->
+        <div class="notif-banner wa-notif">
+          <div class="notif-icon" style="background:#25D366">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.149-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M11.999 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.985-1.309A9.951 9.951 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2z" fill-opacity=".2"/></svg>
+          </div>
+          <div class="notif-body">
+            <div class="notif-title">BudgetFlow</div>
+            <div class="notif-text">Hi Harshad, your August budget plan is here...</div>
+          </div>
+          <div class="notif-time">now</div>
+        </div>
+
+        <!-- Phone -->
         <div class="wa-phone">
-          <div class="wa-status-bar"><span>9:01</span><span>▲▲▲ WiFi 🔋</span></div>
+          <div class="wa-status-bar">
+            <span style="font-weight:600">9:01</span>
+            <span style="display:flex;gap:3px;align-items:center;font-size:10px">▲▲▲ 🔋</span>
+          </div>
           <div class="wa-app">
-            <div class="wa-header"><div class="wa-avatar">BF</div><div><div class="wa-contact-name">BudgetFlow</div><div class="wa-contact-sub">Online</div></div></div>
-            <div class="wa-body">
-              <div class="wa-bubble">
-                <div class="wa-text">Hi Kunal, it's payday month-start.<br>Here's your August plan:<br><br>FD savings — ₹20,700 — <b style="color:#FF8A80">Pending</b><br>Credit EMIs — ₹10,200 — <b style="color:#FF8A80">Pending</b><br>Emergency fund — ₹5,000 — <b style="color:#FF8A80">Pending</b><br>Equity SIP — ₹2,000 — <b style="color:#FF8A80">Pending</b><br>Lifestyle — ₹4,800 — <b style="color:#FF8A80">Pending</b><br><br>Log here: budgetflow-6bs.pages.dev</div>
-                <div class="wa-time-row"><span class="wa-time">9:01 AM ✓✓</span></div>
+            <div class="wa-header">
+              <div style="display:flex;align-items:center;gap:10px">
+                <div class="wa-avatar">BF</div>
+                <div>
+                  <div class="wa-contact-name">BudgetFlow</div>
+                  <div class="wa-contact-sub">Online</div>
+                </div>
+              </div>
+              <div style="display:flex;gap:14px">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#aebfc8" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#aebfc8" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
               </div>
             </div>
-            <div class="wa-input-bar"><div class="wa-input">Message</div><div class="wa-send"><svg viewBox="0 0 24 24" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></div></div>
+            <div class="wa-body">
+              <div class="wa-date-chip">Today</div>
+              <div class="wa-bubble">
+                <div class="wa-text">
+                  Hi <b>Harshad</b>, it's the 1st — payday time!<br><br>
+                  Here's your <b>August 2026</b> plan:<br>
+                  <div class="wa-line-item"><span>FD savings</span><span class="wa-amt">₹20,700</span><span class="wa-status pending">Pending</span></div>
+                  <div class="wa-line-item"><span>Credit EMIs</span><span class="wa-amt">₹10,200</span><span class="wa-status pending">Pending</span></div>
+                  <div class="wa-line-item"><span>Emergency fund</span><span class="wa-amt">₹5,000</span><span class="wa-status pending">Pending</span></div>
+                  <div class="wa-line-item"><span>Equity SIP</span><span class="wa-amt">₹2,000</span><span class="wa-status pending">Pending</span></div>
+                  <div class="wa-line-item"><span>Lifestyle</span><span class="wa-amt">₹4,800</span><span class="wa-status pending">Pending</span></div>
+                  <br>
+                  Tap below to log your actuals now.<br>
+                  <div style="margin-top:6px;background:rgba(37,211,102,.2);border-radius:5px;padding:5px 8px;font-size:11px;color:#25D366;font-weight:600;text-align:center">
+                    👉 Open BudgetFlow
+                  </div>
+                </div>
+                <div class="wa-time-row">
+                  <span class="wa-time">9:01 AM ✓✓</span>
+                </div>
+              </div>
+              <div class="wa-bubble wa-reply" style="margin-top:8px">
+                <div class="wa-text" style="color:#25D366;font-weight:600;font-size:11px">✓ Marked FD savings as settled</div>
+                <div class="wa-time-row"><span class="wa-time">9:05 AM</span></div>
+              </div>
+            </div>
+            <div class="wa-input-bar">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8696A0" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+              <div class="wa-input">Type a message</div>
+              <div class="wa-send">
+                <svg width="14" height="14" viewBox="0 0 24 24" stroke="#062F3A" fill="none" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              </div>
+            </div>
           </div>
         </div>
-        <p style="text-align:center;font-size:13px;color:rgba(239,241,233,.3);margin-top:14px">Sent via CallMeBot — free WhatsApp API</p>
+        <div class="rem-note">Sent automatically on payday every month</div>
       </div>
-      <div>
+
+      <!-- EMAIL -->
+      <div class="reminder-col">
+        <div class="rem-label">
+          <div class="rem-label-dot" style="background:#EA4335"></div>
+          Email Reminder
+        </div>
+
+        <!-- Notification banner -->
+        <div class="notif-banner email-notif">
+          <div class="notif-icon" style="background:#fff">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#EA4335" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+          <div class="notif-body">
+            <div class="notif-title">BudgetFlow — August budget</div>
+            <div class="notif-text">5 lines pending · Log your actuals now</div>
+          </div>
+          <div class="notif-time">9:01 AM</div>
+        </div>
+
+        <!-- Email client -->
         <div class="email-card">
-          <div class="email-toolbar"><div class="email-dot" style="background:#FF5F57"></div><div class="email-dot" style="background:#FFBD2E"></div><div class="email-dot" style="background:#28CA41"></div></div>
+          <div class="email-toolbar">
+            <div class="email-dot" style="background:#FF5F57"></div>
+            <div class="email-dot" style="background:#FFBD2E"></div>
+            <div class="email-dot" style="background:#28CA41"></div>
+            <div style="flex:1;text-align:center;font-size:11px;color:#5F6368;margin-left:-36px">Inbox — BudgetFlow</div>
+          </div>
           <div class="email-header">
-            <div class="email-from"><div class="email-avatar">BF</div><div><div class="email-sender-name">BudgetFlow</div><div class="email-sender-addr">noreply@budgetflow.app</div></div></div>
-            <div class="email-subject">August budget — 5 lines pending</div>
-            <div class="email-date">Today, 9:01 AM</div>
+            <div class="email-from">
+              <div class="email-avatar">BF</div>
+              <div style="flex:1">
+                <div style="display:flex;justify-content:space-between;align-items:center">
+                  <div class="email-sender-name">BudgetFlow</div>
+                  <div class="email-date">9:01 AM</div>
+                </div>
+                <div class="email-sender-addr">hello@budgetflow.app</div>
+              </div>
+            </div>
+            <div class="email-subject">August 2026 budget — 5 lines pending</div>
           </div>
           <div class="email-body">
-            <div class="email-greeting">Hi Kunal, your August salary plan is ready. Here's what's pending:</div>
+            <div class="email-greeting">Hi <b>Harshad</b>,<br><br>Your August salary plan is ready. Here are the lines that need your attention today:</div>
             <table class="email-table">
-              <thead><tr><th>Line</th><th>Amount</th><th>Status</th></tr></thead>
+              <thead><tr><th>Budget line</th><th>Planned</th><th>Status</th></tr></thead>
               <tbody>
-                <tr><td>FD savings</td><td>₹20,700</td><td class="email-pending">Pending</td></tr>
-                <tr><td>Credit card EMIs</td><td>₹10,200</td><td class="email-pending">Pending</td></tr>
-                <tr><td>Equity SIP</td><td>₹2,000</td><td class="email-done">Settled</td></tr>
-                <tr><td>Emergency fund</td><td>₹5,000</td><td class="email-pending">Pending</td></tr>
-                <tr><td>Lifestyle</td><td>₹4,800</td><td class="email-pending">Pending</td></tr>
+                <tr><td>FD savings</td><td>₹20,700</td><td class="email-pending">● Pending</td></tr>
+                <tr><td>Credit card EMIs</td><td>₹10,200</td><td class="email-pending">● Pending</td></tr>
+                <tr><td>Emergency fund</td><td>₹5,000</td><td class="email-pending">● Pending</td></tr>
+                <tr><td>Equity SIP</td><td>₹2,000</td><td class="email-done">✓ Settled</td></tr>
+                <tr><td>Lifestyle</td><td>₹4,800</td><td class="email-pending">● Pending</td></tr>
               </tbody>
             </table>
-            <a href="#" class="email-cta">Log your actuals &rarr;</a>
-            <div class="email-footer-text">You'll get a reminder every 2 days until all lines are settled.</div>
+            <div style="margin-bottom:14px">
+              <a href="#" class="email-cta">Log your actuals now →</a>
+            </div>
+            <div style="background:#F8FFF8;border:1px solid #C3E6C3;border-radius:6px;padding:10px 12px;font-size:12px;color:#1A6640;margin-bottom:12px">
+              We'll send a gentle reminder every few days until all lines are logged. It stops automatically once everything is settled.
+            </div>
+            <div class="email-footer-text">
+              BudgetFlow · Unsubscribe · Manage preferences
+            </div>
           </div>
         </div>
-        <p style="text-align:center;font-size:13px;color:rgba(239,241,233,.3);margin-top:14px">Sent via GitHub Actions — fully automated</p>
+        <div class="rem-note">Sent automatically on payday every month</div>
       </div>
+
     </div>
   </div>
 </section>
@@ -543,23 +932,78 @@
   </div>
 </section>
 
-<!-- COMPARISON -->
+<!-- COMPARISON + SETUP ANIMATION -->
 <section class="comparison-section">
   <div class="section-inner">
-    <div class="section-eyebrow">BudgetFlow vs alternatives</div>
-    <h2 class="section-title">Why not just use Excel?</h2>
-    <div class="comp-wrap">
-      <table class="comp-table">
-        <thead><tr><th>Feature</th><th class="bf">BudgetFlow</th><th>Excel / Sheets</th><th>Other apps</th></tr></thead>
-        <tbody>
-          <tr><td>WhatsApp reminders on payday</td><td class="bf"><span class="check">Yes</span></td><td><span class="cross">No</span></td><td><span class="cross">No</span></td></tr>
-          <tr><td>Chases you until every line is logged</td><td class="bf"><span class="check">Yes</span></td><td><span class="cross">No</span></td><td><span class="cross">No</span></td></tr>
-          <tr><td>Corpus + SIP growth projection</td><td class="bf"><span class="check">Yes</span></td><td><span class="neutral">Manual setup</span></td><td><span class="neutral">Partial</span></td></tr>
-          <tr><td>Works on any device instantly</td><td class="bf"><span class="check">Yes</span></td><td><span class="neutral">Desktop only</span></td><td><span class="check">Yes</span></td></tr>
-          <tr><td>Free forever</td><td class="bf"><span class="check">Yes</span></td><td><span class="check">Yes</span></td><td><span class="cross">Paid plans</span></td></tr>
-          <tr><td>Setup time</td><td class="bf"><span class="check">3 minutes</span></td><td><span class="cross">Hours</span></td><td><span class="neutral">10–20 mins</span></td></tr>
-        </tbody>
-      </table>
+    <div class="comp-two-col">
+
+      <!-- LEFT: Comparison table -->
+      <div class="comp-left">
+        <div class="section-eyebrow" style="text-align:left">BudgetFlow vs alternatives</div>
+        <h2 class="section-title" style="text-align:left;margin-bottom:28px">Why not just<br>use Excel?</h2>
+        <table class="comp-table">
+          <thead><tr><th>Feature</th><th class="bf">BudgetFlow</th><th>Excel</th><th>Others</th></tr></thead>
+          <tbody>
+            <tr><td>WhatsApp reminders</td><td class="bf"><span class="check">Yes</span></td><td><span class="cross">No</span></td><td><span class="cross">No</span></td></tr>
+            <tr><td>Chases until logged</td><td class="bf"><span class="check">Yes</span></td><td><span class="cross">No</span></td><td><span class="cross">No</span></td></tr>
+            <tr><td>Corpus + SIP growth</td><td class="bf"><span class="check">Yes</span></td><td><span class="neutral">Manual</span></td><td><span class="neutral">Partial</span></td></tr>
+            <tr><td>Any device, no install</td><td class="bf"><span class="check">Yes</span></td><td><span class="neutral">Desktop</span></td><td><span class="check">Yes</span></td></tr>
+            <tr><td>Free forever</td><td class="bf"><span class="check">Yes</span></td><td><span class="check">Yes</span></td><td><span class="cross">Paid</span></td></tr>
+            <tr><td>Setup time</td><td class="bf"><span class="check">3 min</span></td><td><span class="cross">Hours</span></td><td><span class="neutral">10–20 min</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- RIGHT: Animated setup demo -->
+      <div class="comp-right">
+        <div class="section-eyebrow" style="text-align:left">See how it works</div>
+        <h2 class="section-title" style="text-align:left;margin-bottom:28px">Ready in<br><span style="color:#0A4A5A">3 minutes.</span></h2>
+
+        <div class="setup-demo">
+          <!-- Phone frame -->
+          <div class="demo-phone">
+            <div class="demo-screen" id="demoScreen">
+              <!-- Step screens rendered by JS -->
+            </div>
+          </div>
+
+          <!-- Steps list -->
+          <div class="demo-steps">
+            <div class="demo-step active" data-step="0">
+              <div class="ds-num">1</div>
+              <div class="ds-text">
+                <div class="ds-title">Sign up free</div>
+                <div class="ds-sub">Google or email — 30 seconds</div>
+              </div>
+            </div>
+            <div class="demo-step" data-step="1">
+              <div class="ds-num">2</div>
+              <div class="ds-text">
+                <div class="ds-title">Enter your income</div>
+                <div class="ds-sub">Your monthly take-home</div>
+              </div>
+            </div>
+            <div class="demo-step" data-step="2">
+              <div class="ds-num">3</div>
+              <div class="ds-text">
+                <div class="ds-title">Add budget lines</div>
+                <div class="ds-sub">FD, SIP, EMIs, lifestyle</div>
+              </div>
+            </div>
+            <div class="demo-step" data-step="3">
+              <div class="ds-num">4</div>
+              <div class="ds-text">
+                <div class="ds-title">Dashboard ready</div>
+                <div class="ds-sub">Track, log, and get reminded</div>
+              </div>
+            </div>
+            <div class="demo-progress-bar">
+              <div class="demo-progress-fill" id="demoProgressFill"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -583,8 +1027,8 @@
     <h2 class="section-title">Questions you might have</h2>
     <div class="faq-wrap">
       <div class="faq-item"><div class="faq-q">Is BudgetFlow really free?</div><div class="faq-a">Yes — completely free, forever. No premium plan, no credit card required, no hidden charges.</div></div>
-      <div class="faq-item"><div class="faq-q">How do the WhatsApp reminders work?</div><div class="faq-a">We use CallMeBot — a free WhatsApp API. You activate it once by sending a message to their number, then paste your API key in Settings. After that, reminders are fully automatic.</div></div>
-      <div class="faq-item"><div class="faq-q">Is my financial data safe?</div><div class="faq-a">Yes. Your data is stored in Supabase with Row Level Security (RLS) — only you can read or write your own records, even database administrators cannot access your data.</div></div>
+      <div class="faq-item"><div class="faq-q">How do the WhatsApp reminders work?</div><div class="faq-a">Add your WhatsApp number once in Settings. From the next payday, reminders go out automatically — no action needed.</div></div>
+      <div class="faq-item"><div class="faq-q">Is my financial data safe?</div><div class="faq-a">Yes. Your data is fully encrypted and private — only you can see your own records. We take your financial privacy seriously.</div></div>
       <div class="faq-item"><div class="faq-q">Do I need to install anything?</div><div class="faq-a">No. BudgetFlow is a web app — it works on any browser on your phone or desktop. Just bookmark the URL.</div></div>
       <div class="faq-item"><div class="faq-q">Can I change my budget plan later?</div><div class="faq-a">Yes — go to Settings any time to update your income, payday date, or any budget line.</div></div>
     </div>
@@ -605,7 +1049,7 @@
 <footer class="footer">
   <div class="container">
     <span class="logo">BudgetFlow</span>
-    <p>Free, private, and yours. Built with Supabase and Cloudflare Pages.</p>
+    <p>Free, private, and yours.</p>
   </div>
 </footer>
 
@@ -618,5 +1062,105 @@ document.querySelectorAll('.faq-q').forEach(q => {
   });
 });
 </script>
+
+<script>
+/* ── SETUP DEMO ANIMATION ── */
+(function() {
+  const screens = [
+    // Step 0 — Sign up
+    `<div class="screen-content">
+      <div class="sc-label">BudgetFlow</div>
+      <div class="sc-title">Create account</div>
+      <div class="sc-google"><div class="sc-g-dot"></div> Continue with Google</div>
+      <div class="sc-or">or</div>
+      <div class="sc-input">your@email.com</div>
+      <div class="sc-input">••••••••</div>
+      <div class="sc-btn">Sign up free</div>
+    </div>`,
+
+    // Step 1 — Income
+    `<div class="screen-content">
+      <div class="sc-label">Step 1 of 2</div>
+      <div class="sc-title">Monthly take-home</div>
+      <div class="sc-input" style="font-size:13px;font-weight:700;color:#0A4A5A">₹ 55,000</div>
+      <div style="font-size:9px;color:#66756D;margin-bottom:10px">Your salary after tax and deductions</div>
+      <div class="sc-input">Payday: 1st of month</div>
+      <div class="sc-btn" style="margin-top:8px">Continue →</div>
+    </div>`,
+
+    // Step 2 — Budget lines
+    `<div class="screen-content">
+      <div class="sc-label">Step 2 of 2 — Your plan</div>
+      <div class="sc-row"><span>FD savings</span><span class="sc-pill s">Savings</span><span style="font-weight:600;font-size:9px">₹20,700</span></div>
+      <div class="sc-row"><span>Credit EMIs</span><span class="sc-pill f">Fixed</span><span style="font-weight:600;font-size:9px">₹10,200</span></div>
+      <div class="sc-row"><span>Equity SIP</span><span class="sc-pill s">Savings</span><span style="font-weight:600;font-size:9px">₹2,000</span></div>
+      <div class="sc-row"><span>Lifestyle</span><span class="sc-pill x">Flexible</span><span style="font-weight:600;font-size:9px">₹4,800</span></div>
+      <div class="sc-row" style="opacity:.5"><span>+ Add line</span></div>
+      <div class="sc-btn" style="margin-top:6px;background:#29D9A8;color:#062F3A">Save plan ✓</div>
+    </div>`,
+
+    // Step 3 — Dashboard
+    `<div class="screen-content" style="padding:10px 10px">
+      <div class="sc-metric"><div><div class="sc-metric-l">Income</div><div class="sc-metric-v">₹55,000</div></div><div><div class="sc-metric-l">Saved</div><div class="sc-metric-v" style="color:#EFF1E9">₹27.7K</div></div></div>
+      <div class="sc-row"><span>FD savings</span><div class="sc-bar-w"><div class="sc-bar-f" style="width:100%;background:#127A6B"></div></div><span class="sc-pill s" style="font-size:8px">Done</span></div>
+      <div class="sc-row"><span>Credit EMIs</span><div class="sc-bar-w"><div class="sc-bar-f" style="width:80%;background:#A8402F"></div></div><span class="sc-pill f" style="font-size:8px">Part</span></div>
+      <div class="sc-row"><span>Equity SIP</span><div class="sc-bar-w"><div class="sc-bar-f" style="width:100%;background:#127A6B"></div></div><span class="sc-pill s" style="font-size:8px">Done</span></div>
+      <div class="sc-row"><span>Lifestyle</span><div class="sc-bar-w"><div class="sc-bar-f" style="width:0%;background:#C9871F"></div></div><span class="sc-pill x" style="font-size:8px">Pending</span></div>
+      <div style="background:#29D9A8;border-radius:5px;padding:5px 8px;font-size:9px;font-weight:700;color:#062F3A;text-align:center;margin-top:5px">Dashboard ready!</div>
+    </div>`,
+  ];
+
+  const STEP_DURATION = 2800; // ms per step
+  let currentStep = 0;
+  let progressStart = null;
+  let animFrame;
+
+  function showStep(step) {
+    const screen = document.getElementById('demoScreen');
+    if (!screen) return;
+    screen.innerHTML = screens[step];
+
+    document.querySelectorAll('.demo-step').forEach((el, i) => {
+      el.classList.toggle('active', i === step);
+    });
+
+    // Reset + animate progress bar
+    const fill = document.getElementById('demoProgressFill');
+    if (fill) { fill.style.width = '0%'; fill.style.transition = 'none'; }
+    progressStart = null;
+    cancelAnimationFrame(animFrame);
+    animateProgress();
+  }
+
+  function animateProgress() {
+    const fill = document.getElementById('demoProgressFill');
+    if (!fill) return;
+    const now = performance.now();
+    if (!progressStart) progressStart = now;
+    const elapsed = now - progressStart;
+    const pct = Math.min(100, (elapsed / STEP_DURATION) * 100);
+    fill.style.transition = 'none';
+    fill.style.width = pct + '%';
+    if (pct < 100) {
+      animFrame = requestAnimationFrame(animateProgress);
+    } else {
+      currentStep = (currentStep + 1) % screens.length;
+      setTimeout(() => showStep(currentStep), 120);
+    }
+  }
+
+  // Allow clicking steps manually
+  document.querySelectorAll('.demo-step').forEach((el) => {
+    el.addEventListener('click', () => {
+      currentStep = +el.dataset.step;
+      showStep(currentStep);
+    });
+  });
+
+  // Start
+  if (document.getElementById('demoScreen')) showStep(0);
+})();
+</script>
+
 </body>
 </html>
