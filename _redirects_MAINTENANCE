@@ -1,0 +1,3 @@
+# ── RENAME THIS FILE TO _redirects TO ENABLE MAINTENANCE MODE ──
+# Rename back to _redirects_MAINTENANCE to disable it
+/*  /maintenance.html  200

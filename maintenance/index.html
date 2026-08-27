@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BudgetFlow — Back soon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: #0A4A5A;
+  color: #EFF1E9;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(41,217,168,.08) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(41,217,168,.06) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.floaters { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+.floater {
+  position: absolute; font-family: 'IBM Plex Mono', monospace;
+  font-size: 14px; color: rgba(41,217,168,.08);
+  animation: floatUp linear infinite;
+}
+@keyframes floatUp {
+  0%   { transform: translateY(110vh) rotate(-10deg); opacity: 0; }
+  10%  { opacity: 1; } 90% { opacity: 1; }
+  100% { transform: translateY(-10vh) rotate(10deg); opacity: 0; }
+}
+
+.card {
+  position: relative; z-index: 1;
+  background: rgba(239,241,233,.05);
+  border: 1.5px solid rgba(239,241,233,.12);
+  border-radius: 16px; padding: 48px 44px;
+  max-width: 540px; width: 100%; text-align: center;
+  backdrop-filter: blur(10px);
+}
+
+.icon-wrap { width: 80px; height: 80px; margin: 0 auto 24px; position: relative; }
+.coin {
+  width: 80px; height: 80px;
+  background: linear-gradient(135deg, #29D9A8, #1CB88E);
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  animation: pulse 2.5s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(41,217,168,.4); }
+  50%  { box-shadow: 0 0 0 20px rgba(41,217,168,.0); }
+  100% { box-shadow: 0 0 0 0 rgba(41,217,168,.0); }
+}
+.coin svg { width: 40px; height: 40px; stroke: #062F3A; fill: none; stroke-width: 2; }
+.wrench-badge {
+  position: absolute; bottom: -4px; right: -4px;
+  width: 28px; height: 28px; background: #EFF1E9; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  animation: spin 4s linear infinite;
+}
+.wrench-badge svg { width: 16px; height: 16px; stroke: #0A4A5A; fill: none; stroke-width: 2; }
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+.logo { font-size: 12px; font-weight: 700; font-family: 'IBM Plex Mono', monospace; letter-spacing: .1em; color: rgba(239,241,233,.35); text-transform: uppercase; margin-bottom: 14px; }
+h1 { font-size: clamp(24px, 5vw, 36px); font-weight: 800; letter-spacing: -.03em; color: #EFF1E9; line-height: 1.05; margin-bottom: 12px; }
+h1 em { font-style: normal; color: #29D9A8; }
+.sub { font-size: 14px; color: rgba(239,241,233,.5); line-height: 1.7; margin-bottom: 28px; max-width: 36ch; margin-left: auto; margin-right: auto; }
+
+/* Live status indicator */
+.live-status {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  margin-bottom: 28px; font-size: 13px; font-family: 'IBM Plex Mono', monospace;
+}
+.live-dot {
+  width: 8px; height: 8px; border-radius: 50%; background: #FFC164;
+  animation: blink 1.2s ease-in-out infinite; flex-shrink: 0;
+}
+.live-dot.checking { background: #FFC164; animation: blink 1.2s ease-in-out infinite; }
+.live-dot.up { background: #29D9A8; animation: none; }
+.live-dot.down { background: #FF8A80; animation: none; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+.live-text { color: rgba(239,241,233,.5); }
+
+/* Progress */
+.progress-wrap { margin-bottom: 24px; }
+.progress-label { display: flex; justify-content: space-between; font-size: 11px; font-family: 'IBM Plex Mono', monospace; color: rgba(239,241,233,.35); margin-bottom: 7px; }
+.progress-track { height: 5px; background: rgba(239,241,233,.1); border-radius: 3px; overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, #29D9A8, #1CB88E); border-radius: 3px; transition: width .5s ease; width: 70%; }
+
+/* Status list */
+.status-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; text-align: left; }
+.status-item { display: flex; align-items: center; gap: 12px; background: rgba(239,241,233,.05); border: 1px solid rgba(239,241,233,.08); border-radius: 8px; padding: 10px 14px; }
+.status-dot-sm { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.dot-done  { background: #29D9A8; }
+.dot-doing { background: #FFC164; animation: blink 1.2s ease-in-out infinite; }
+.dot-wait  { background: rgba(239,241,233,.2); }
+.status-text { font-size: 13px; color: rgba(239,241,233,.65); flex: 1; }
+.status-text strong { color: #EFF1E9; font-weight: 600; }
+.status-badge { font-size: 10px; font-family: 'IBM Plex Mono', monospace; font-weight: 600; padding: 2px 8px; border-radius: 20px; }
+.badge-done  { background: rgba(41,217,168,.15); color: #29D9A8; }
+.badge-doing { background: rgba(255,193,100,.15); color: #FFC164; }
+.badge-wait  { background: rgba(239,241,233,.08); color: rgba(239,241,233,.35); }
+
+/* Auto retry */
+.retry-card {
+  background: rgba(41,217,168,.07); border: 1px solid rgba(41,217,168,.18);
+  border-radius: 10px; padding: 14px 18px; margin-bottom: 22px;
+  display: flex; align-items: center; gap: 12px; text-align: left;
+}
+.retry-icon svg { width: 20px; height: 20px; stroke: #29D9A8; fill: none; stroke-width: 2; }
+.retry-label { font-size: 11px; font-family: 'IBM Plex Mono', monospace; color: rgba(239,241,233,.4); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 2px; }
+.retry-value { font-size: 14px; font-weight: 600; color: #EFF1E9; }
+.retry-count { font-size: 12px; color: rgba(239,241,233,.35); margin-top: 1px; }
+
+/* Manual retry button */
+.retry-btn {
+  width: 100%; background: rgba(239,241,233,.08); border: 1.5px solid rgba(239,241,233,.15);
+  border-radius: 8px; padding: 12px; font-size: 14px; font-weight: 600;
+  color: #EFF1E9; cursor: pointer; font-family: 'Inter', sans-serif;
+  transition: all .15s; margin-bottom: 0;
+}
+.retry-btn:hover { background: rgba(239,241,233,.14); border-color: rgba(239,241,233,.3); }
+.retry-btn:disabled { opacity: .5; cursor: default; }
+
+.maint-footer {
+  position: relative; z-index: 1; margin-top: 20px;
+  font-size: 11px; font-family: 'IBM Plex Mono', monospace;
+  color: rgba(239,241,233,.18); text-align: center; letter-spacing: .04em;
+}
+
+@media (max-width: 480px) { .card { padding: 32px 20px; } }
+</style>
+</head>
+<body>
+
+<div class="floaters" id="floaters"></div>
+
+<div class="card">
+  <div class="logo">BudgetFlow</div>
+
+  <div class="icon-wrap">
+    <div class="coin">
+      <svg viewBox="0 0 24 24">
+        <line x1="6" y1="6" x2="18" y2="6"/>
+        <line x1="6" y1="10" x2="18" y2="10"/>
+        <path d="M6 10c0 4 3 8 6 8"/>
+        <path d="M14 18L6 6"/>
+        <line x1="6" y1="14" x2="12" y2="14"/>
+      </svg>
+    </div>
+    <div class="wrench-badge">
+      <svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+    </div>
+  </div>
+
+  <h1>We're balancing<br>the <em>books.</em></h1>
+  <p class="sub">BudgetFlow is getting a quick upgrade. Your data is completely safe — we'll bring you back automatically the moment we're online.</p>
+
+  <!-- Live status -->
+  <div class="live-status">
+    <div class="live-dot checking" id="liveDot"></div>
+    <span class="live-text" id="liveText">Checking status...</span>
+  </div>
+
+  <!-- Progress bar -->
+  <div class="progress-wrap">
+    <div class="progress-label"><span>Maintenance progress</span><span id="pctLabel">—</span></div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+
+  <!-- Status items -->
+  <div class="status-list">
+    <div class="status-item">
+      <div class="status-dot-sm dot-done"></div>
+      <div class="status-text"><strong>Database backup</strong> — All your budget data secured</div>
+      <span class="status-badge badge-done">Done</span>
+    </div>
+    <div class="status-item">
+      <div class="status-dot-sm dot-doing"></div>
+      <div class="status-text"><strong>Applying updates</strong> — New features and improvements</div>
+      <span class="status-badge badge-doing">In progress</span>
+    </div>
+    <div class="status-item">
+      <div class="status-dot-sm dot-wait"></div>
+      <div class="status-text"><strong>Final checks</strong> — Testing before we go live</div>
+      <span class="status-badge badge-wait">Pending</span>
+    </div>
+  </div>
+
+  <!-- Auto retry countdown -->
+  <div class="retry-card">
+    <div class="retry-icon">
+      <svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+    </div>
+    <div>
+      <div class="retry-label">Auto-checking every</div>
+      <div class="retry-value">30 seconds</div>
+      <div class="retry-count" id="nextCheck">Next check in 30s</div>
+    </div>
+  </div>
+
+  <button class="retry-btn" id="retryBtn" onclick="checkNow()">
+    Check now &rarr;
+  </button>
+</div>
+
+<div class="maint-footer">
+  Your data is safe &nbsp;·&nbsp; Secured with Supabase RLS &nbsp;·&nbsp; Auto-redirecting when back online
+</div>
+
+<script>
+// ── Config ──
+const SUPABASE_URL = 'https://yccxlyghjrbpchryrtl.supabase.co';
+const CHECK_INTERVAL = 30; // seconds
+let countdown = CHECK_INTERVAL;
+let checkTimer, countdownTimer;
+let pct = 65;
+
+// ── Floating symbols ──
+const symbols = ['₹','₹','%','↑','₹','₹','$'];
+const floaters = document.getElementById('floaters');
+for (let i = 0; i < 16; i++) {
+  const el = document.createElement('div');
+  el.className = 'floater';
+  el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+  el.style.left = Math.random() * 100 + 'vw';
+  el.style.animationDuration = (14 + Math.random() * 16) + 's';
+  el.style.animationDelay = (Math.random() * 14) + 's';
+  el.style.fontSize = (10 + Math.random() * 16) + 'px';
+  floaters.appendChild(el);
+}
+
+// ── Progress animation ──
+function animateProgress() {
+  pct = pct < 88 ? pct + 0.15 : 62;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('pctLabel').textContent = Math.round(pct) + '%';
+}
+setInterval(animateProgress, 120);
+
+// ── Health check ──
+async function checkHealth() {
+  const dot = document.getElementById('liveDot');
+  const txt = document.getElementById('liveText');
+  const btn = document.getElementById('retryBtn');
+
+  dot.className = 'live-dot checking';
+  txt.textContent = 'Checking status...';
+  btn.disabled = true;
+  btn.textContent = 'Checking...';
+
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 7000);
+    const res = await fetch(SUPABASE_URL + '/rest/v1/', {
+      method: 'HEAD', signal: controller.signal
+    });
+    clearTimeout(timeout);
+
+    if (res.status < 500) {
+      // Back online!
+      dot.className = 'live-dot up';
+      txt.textContent = 'Back online — redirecting you now...';
+      btn.textContent = 'Back online! Redirecting...';
+      btn.style.background = 'rgba(41,217,168,.2)';
+      btn.style.borderColor = 'rgba(41,217,168,.4)';
+      clearInterval(checkTimer);
+      clearInterval(countdownTimer);
+      setTimeout(() => {
+        const returnUrl = sessionStorage.getItem('bf_return') || '/';
+        window.location.href = returnUrl;
+      }, 1800);
+    } else {
+      stillDown(dot, txt, btn);
+    }
+  } catch (e) {
+    stillDown(dot, txt, btn);
+  }
+}
+
+function stillDown(dot, txt, btn) {
+  dot.className = 'live-dot down';
+  txt.textContent = 'Still updating — hang tight';
+  btn.disabled = false;
+  btn.textContent = 'Check again';
+  resetCountdown();
+}
+
+function resetCountdown() {
+  countdown = CHECK_INTERVAL;
+  clearInterval(countdownTimer);
+  countdownTimer = setInterval(() => {
+    countdown--;
+    document.getElementById('nextCheck').textContent =
+      countdown > 0 ? `Next check in ${countdown}s` : 'Checking now...';
+    if (countdown <= 0) {
+      clearInterval(countdownTimer);
+      checkHealth();
+    }
+  }, 1000);
+}
+
+function checkNow() {
+  clearInterval(countdownTimer);
+  checkHealth();
+}
+
+// ── Start ──
+checkHealth();
+resetCountdown();
+</script>
+</body>
+</html>
