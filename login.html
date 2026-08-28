@@ -5,22 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>BudgetFlow — Sign in</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 <style>
-/* Eye toggle */
 .pw-wrap { position: relative; display: block; width: 100%; }
 .pw-wrap input { padding-right: 46px !important; width: 100%; }
 .pw-eye {
-  position: absolute; right: 12px; top: 50%;
-  transform: translateY(-50%);
-  background: none; border: none; cursor: pointer;
-  padding: 4px; color: #66756D;
-  display: flex; align-items: center; justify-content: center;
-  z-index: 10; line-height: 1;
+  position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+  background: none; border: none; cursor: pointer; padding: 4px; color: #66756D;
+  display: flex; align-items: center; justify-content: center; z-index: 10; line-height: 1;
 }
 .pw-eye:hover { color: #15252E; }
 .pw-eye svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; display: block; }
+
+/* Reset panel */
+.reset-icon {
+  width: 52px; height: 52px; background: #E1F5EE; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; margin: 0 auto 14px;
+}
+.reset-icon svg { width: 24px; height: 24px; stroke: #127A6B; fill: none; stroke-width: 2; }
 </style>
 </head>
 <body class="auth-page">
@@ -28,36 +31,24 @@
 <!-- LEFT BRAND PANEL -->
 <div class="auth-brand">
   <div class="auth-brand-logo">BudgetFlow</div>
-
   <div class="auth-brand-middle">
-    <div class="auth-brand-headline">
-      Every rupee.<br>Accounted for.<br><em>Every month.</em>
-    </div>
-    <p class="auth-brand-sub">
-      Set your salary plan once. Log actuals each month. Get reminded on WhatsApp and email until it's all settled.
-    </p>
+    <div class="auth-brand-headline">Every rupee.<br>Accounted for.<br><em>Every month.</em></div>
+    <p class="auth-brand-sub">Set your salary plan once. Log actuals each month. Get reminded on WhatsApp and email until it's all settled.</p>
     <div class="auth-features">
       <div class="auth-feature">
-        <div class="auth-feature-icon">
-          <svg viewBox="0 0 24 24" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-        </div>
+        <div class="auth-feature-icon"><svg viewBox="0 0 24 24" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
         <div class="auth-feature-text"><strong>Payday reminders</strong> — full plan delivered to email and WhatsApp every month.</div>
       </div>
       <div class="auth-feature">
-        <div class="auth-feature-icon">
-          <svg viewBox="0 0 24 24" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-        </div>
+        <div class="auth-feature-icon"><svg viewBox="0 0 24 24" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
         <div class="auth-feature-text"><strong>Corpus tracking</strong> — watch FD and SIP compound in real time.</div>
       </div>
       <div class="auth-feature">
-        <div class="auth-feature-icon">
-          <svg viewBox="0 0 24 24" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        </div>
+        <div class="auth-feature-icon"><svg viewBox="0 0 24 24" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
         <div class="auth-feature-text"><strong>Private by design</strong> — your numbers are only visible to you.</div>
       </div>
     </div>
   </div>
-
   <div class="auth-brand-footer">Free forever &nbsp;·&nbsp; No credit card &nbsp;·&nbsp; No app to install</div>
 </div>
 
@@ -67,7 +58,6 @@
     <div class="auth-form-title">Welcome back</div>
     <p class="auth-form-sub">Sign in to your account or create a new one.</p>
 
-    <!-- TAB SWITCHER — keep classes/IDs exactly as JS expects -->
     <div class="auth-tabs">
       <button class="auth-tab active" data-tab="login">Log in</button>
       <button class="auth-tab" data-tab="signup">Sign up</button>
@@ -88,8 +78,8 @@
         <label>Password</label>
         <div class="pw-wrap">
           <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password">
-          <button class="pw-eye" type="button" onclick="togglePw('loginPassword', this)" tabindex="-1" aria-label="Show password">
-            <svg id="eye-loginPassword" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          <button class="pw-eye" type="button" onclick="togglePw('loginPassword',this)" tabindex="-1" aria-label="Show password">
+            <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
           </button>
         </div>
       </div>
@@ -107,7 +97,7 @@
       <div class="or-divider"><span>or</span></div>
       <div class="form-group">
         <label>Full name</label>
-        <input type="text" id="signupName" placeholder="Kunal Varma" autocomplete="name">
+        <input type="text" id="signupName" placeholder="Your name" autocomplete="name">
       </div>
       <div class="form-group">
         <label>Email</label>
@@ -117,8 +107,8 @@
         <label>Password</label>
         <div class="pw-wrap">
           <input type="password" id="signupPassword" placeholder="Min 8 characters" autocomplete="new-password">
-          <button class="pw-eye" type="button" onclick="togglePw('signupPassword', this)" tabindex="-1" aria-label="Show password">
-            <svg id="eye-signupPassword" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          <button class="pw-eye" type="button" onclick="togglePw('signupPassword',this)" tabindex="-1" aria-label="Show password">
+            <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
           </button>
         </div>
       </div>
@@ -143,6 +133,37 @@
       <div class="auth-msg" id="signupMsg"></div>
     </div>
 
+    <!-- RESET PASSWORD PANEL — shown when user clicks reset link from email -->
+    <div class="auth-panel" id="panel-reset">
+      <div style="text-align:center;margin-bottom:24px">
+        <div class="reset-icon">
+          <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        </div>
+        <div style="font-size:18px;font-weight:700;color:#15252E;margin-bottom:6px">Set new password</div>
+        <div style="font-size:13px;color:#66756D">Choose a strong password for your account</div>
+      </div>
+      <div class="form-group">
+        <label>New password</label>
+        <div class="pw-wrap">
+          <input type="password" id="newPassword" placeholder="Min 8 characters" autocomplete="new-password">
+          <button class="pw-eye" type="button" onclick="togglePw('newPassword',this)" tabindex="-1">
+            <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Confirm new password</label>
+        <div class="pw-wrap">
+          <input type="password" id="newPassword2" placeholder="Repeat password" autocomplete="new-password">
+          <button class="pw-eye" type="button" onclick="togglePw('newPassword2',this)" tabindex="-1">
+            <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+      <button class="btn btn-primary btn-full" id="saveNewPwBtn">Save new password</button>
+      <div class="auth-msg" id="resetMsg"></div>
+    </div>
+
   </div>
 </div>
 
@@ -150,6 +171,7 @@
 <script src="js/config.js"></script>
 <script src="js/auth.js"></script>
 <script>
+  // Tab switching
   document.querySelectorAll('.auth-tab').forEach(tab => {
     tab.addEventListener('click', () => {
       document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
@@ -161,20 +183,17 @@
   if (location.hash === '#signup') {
     document.querySelector('[data-tab="signup"]').click();
   }
-</script>
 
-<script>
-function togglePw(inputId, btn) {
-  const input = document.getElementById(inputId);
-  const isHidden = input.type === 'password';
-  input.type = isHidden ? 'text' : 'password';
-  // Swap eye icon
-  btn.querySelector('svg').innerHTML = isHidden
-    ? /* eye-off */ '<path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>'
-    : /* eye-on  */ '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
-  btn.setAttribute('aria-label', isHidden ? 'Hide password' : 'Show password');
-}
+  // Eye toggle
+  function togglePw(inputId, btn) {
+    const input = document.getElementById(inputId);
+    const isHidden = input.type === 'password';
+    input.type = isHidden ? 'text' : 'password';
+    btn.querySelector('svg').innerHTML = isHidden
+      ? '<path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>'
+      : '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+    btn.setAttribute('aria-label', isHidden ? 'Hide password' : 'Show password');
+  }
 </script>
-
 </body>
 </html>
