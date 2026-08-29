@@ -292,11 +292,16 @@
 .comp-two-col {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 56px;
+  gap: 0;
   align-items: start;
 }
-.comp-left {}
-.comp-right {}
+.comp-left {
+  padding-right: 56px;
+  border-right: 1.5px solid #C6CFBC;
+}
+.comp-right {
+  padding-left: 56px;
+}
 .comp-table {
   width: 100%;
   border-collapse: collapse;
@@ -490,7 +495,9 @@
 }
 
 @media (max-width: 900px) {
-  .comp-two-col { grid-template-columns: 1fr; gap: 40px; }
+  .comp-two-col { grid-template-columns: 1fr; gap: 0; }
+  .comp-left { padding-right: 0; border-right: none; border-bottom: 1.5px solid #C6CFBC; padding-bottom: 48px; margin-bottom: 0; }
+  .comp-right { padding-left: 0; padding-top: 48px; }
   .comp-right .section-title { margin-bottom: 20px; }
 }
 
