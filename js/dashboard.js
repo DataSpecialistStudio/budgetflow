@@ -494,6 +494,17 @@ function renderSettings(){
   document.getElementById('saveSettingsBtn').onclick=async()=>{
     const income=parseFloat(document.getElementById('settIncome').value)||0;
     const payday=+document.getElementById('settPayday').value;
+
+    // Read rows in current DOM order so drag-and-drop reordering is respected
+    const rows=document.getElementById('settPlanBody').querySelectorAll('tr');
+    const orderedPlan=Array.from(rows).map(row=>{
+      const el=row.querySelector('[data-i]');
+      return el ? settPlan[+el.dataset.i] : null;
+    }).filter(Boolean);
+    // Sync settPlan to DOM order and re-index data-i
+    settPlan=orderedPlan;
+    rows.forEach((row,idx)=>row.querySelectorAll('[data-i]').forEach(el=>el.dataset.i=idx));
+
     const {error}=await sb.from('profiles').update({income,payday_date:payday,plan:settPlan}).eq('id',USER.id);
     if(error){msg('settMsg',error.message,true);return;}
     PROFILE.income=income; PROFILE.payday_date=payday; PROFILE.plan=settPlan;
