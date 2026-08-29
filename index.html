@@ -580,6 +580,298 @@
 }
 
 
+/* ── COMPARISON TWO COL ── */
+.comp-two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  align-items: start;
+}
+.comp-left {
+  padding-right: 56px;
+  border-right: 1.5px solid #C6CFBC;
+}
+.comp-right {
+  padding-left: 56px;
+}
+.comp-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1.5px solid #C6CFBC;
+  border-radius: 10px;
+  overflow: hidden;
+  font-size: 13px;
+}
+.comp-table th {
+  padding: 10px 14px; text-align: left;
+  background: #E5E9DC; font-size: 11px;
+  font-weight: 600; color: #66756D;
+  text-transform: uppercase; letter-spacing: .06em;
+}
+.comp-table th.bf { background: #0A4A5A; color: #29D9A8; }
+.comp-table td { padding: 10px 14px; border-bottom: 1px solid #E5E9DC; font-size: 13px; color: #15252E; }
+.comp-table tr:last-child td { border-bottom: none; }
+.comp-table td.bf { background: rgba(10,74,90,.04); font-weight: 600; }
+.check  { color: #127A6B; font-weight: 600; }
+.cross  { color: #A8402F; }
+.neutral{ color: #66756D; }
+
+/* ── SETUP DEMO ── */
+.setup-demo {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.demo-phone {
+  width: 160px;
+  flex-shrink: 0;
+  background: #15252E;
+  border-radius: 20px;
+  padding: 12px;
+  box-shadow: 0 16px 48px rgba(10,74,90,.25);
+  position: relative;
+}
+.demo-phone::before {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 4px;
+  background: rgba(255,255,255,.15);
+  border-radius: 2px;
+  margin: 0 auto 10px;
+}
+.demo-screen {
+  background: #EFF1E9;
+  border-radius: 12px;
+  min-height: 260px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Screen content */
+.screen-content {
+  padding: 14px 12px;
+  height: 100%;
+  animation: fadeInUp .4s ease;
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.sc-label {
+  font-size: 8px;
+  font-weight: 600;
+  color: #0A4A5A;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  margin-bottom: 8px;
+}
+.sc-title { font-size: 12px; font-weight: 700; color: #15252E; margin-bottom: 10px; }
+.sc-input {
+  background: #fff;
+  border: 1px solid #C6CFBC;
+  border-radius: 5px;
+  padding: 7px 8px;
+  font-size: 10px;
+  color: #15252E;
+  margin-bottom: 6px;
+  width: 100%;
+}
+.sc-btn {
+  background: #0A4A5A;
+  color: #EFF1E9;
+  border-radius: 5px;
+  padding: 7px;
+  font-size: 10px;
+  font-weight: 600;
+  text-align: center;
+  margin-top: 4px;
+}
+.sc-google {
+  background: #fff;
+  border: 1px solid #C6CFBC;
+  border-radius: 5px;
+  padding: 7px;
+  font-size: 10px;
+  font-weight: 500;
+  text-align: center;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+.sc-g-dot {
+  width: 12px; height: 12px; border-radius: 50%;
+  background: linear-gradient(135deg,#4285F4,#EA4335,#FBBC05,#34A853);
+  flex-shrink: 0;
+}
+.sc-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  border-radius: 5px;
+  padding: 6px 8px;
+  margin-bottom: 4px;
+  font-size: 9px;
+  color: #15252E;
+}
+.sc-pill {
+  font-size: 8px;
+  font-weight: 600;
+  padding: 2px 5px;
+  border-radius: 20px;
+}
+.sc-pill.s { background: #E1F5EE; color: #127A6B; }
+.sc-pill.f { background: #FCEAE8; color: #A8402F; }
+.sc-pill.x { background: #FAF0DC; color: #C9871F; }
+.sc-bar-w { width: 30px; height: 3px; background: #E5E9DC; border-radius: 2px; }
+.sc-bar-f { height: 3px; border-radius: 2px; }
+.sc-metric {
+  background: #0A4A5A;
+  border-radius: 6px;
+  padding: 7px 8px;
+  margin-bottom: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.sc-metric-l { font-size: 8px; color: rgba(239,241,233,.5); }
+.sc-metric-v { font-size: 13px; font-weight: 700; color: #29D9A8; }
+.sc-or { text-align: center; font-size: 9px; color: #66756D; margin: 5px 0; }
+
+/* Steps list */
+.demo-steps { flex: 1; display: flex; flex-direction: column; gap: 10px; }
+.demo-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1.5px solid transparent;
+  transition: all .3s;
+  cursor: pointer;
+  opacity: .45;
+}
+.demo-step.active {
+  background: #F6F7F1;
+  border-color: #C6CFBC;
+  opacity: 1;
+}
+.ds-num {
+  width: 26px; height: 26px; border-radius: 50%;
+  background: #E5E9DC; color: #66756D;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; flex-shrink: 0;
+  transition: all .3s;
+}
+.demo-step.active .ds-num { background: #0A4A5A; color: #EFF1E9; }
+.ds-title { font-size: 13px; font-weight: 600; color: #15252E; }
+.ds-sub   { font-size: 11px; color: #66756D; margin-top: 2px; }
+
+.demo-progress-bar {
+  height: 3px;
+  background: #E5E9DC;
+  border-radius: 2px;
+  margin-top: 6px;
+  overflow: hidden;
+}
+.demo-progress-fill {
+  height: 100%;
+  background: #0A4A5A;
+  border-radius: 2px;
+  width: 0%;
+  transition: width .05s linear;
+}
+
+@media (max-width: 900px) {
+  .comp-two-col { grid-template-columns: 1fr; gap: 0; }
+  .comp-left { padding-right: 0; border-right: none; border-bottom: 1.5px solid #C6CFBC; padding-bottom: 48px; margin-bottom: 0; }
+  .comp-right { padding-left: 0; padding-top: 48px; }
+  .comp-right .section-title { margin-bottom: 20px; }
+}
+
+
+/* ── REMINDER SECTION ENHANCED ── */
+.reminder-section { background: var(--brand); padding: 72px 24px; }
+.reminder-section .section-eyebrow { color: rgba(239,241,233,.35); }
+.reminder-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start; }
+.reminder-col { display: flex; flex-direction: column; gap: 12px; }
+
+.rem-label {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12px; font-weight: 600; color: rgba(239,241,233,.6);
+  font-family: 'IBM Plex Mono', monospace; letter-spacing: .06em; text-transform: uppercase;
+}
+.rem-label-dot { width: 8px; height: 8px; border-radius: 50%; }
+.rem-note { font-size: 12px; color: rgba(239,241,233,.3); text-align: center; font-family: 'IBM Plex Mono', monospace; }
+
+/* Notification banner */
+.notif-banner {
+  display: flex; align-items: center; gap: 10px;
+  border-radius: 14px; padding: 10px 14px;
+  animation: slideDown .5s ease;
+}
+@keyframes slideDown { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:translateY(0); } }
+.wa-notif { background: rgba(37,211,102,.15); border: 1px solid rgba(37,211,102,.25); }
+.email-notif { background: rgba(234,67,53,.12); border: 1px solid rgba(234,67,53,.2); }
+.notif-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.notif-title { font-size: 12px; font-weight: 600; color: #EFF1E9; }
+.notif-text { font-size: 11px; color: rgba(239,241,233,.5); }
+.notif-time { font-size: 10px; color: rgba(239,241,233,.35); margin-left: auto; flex-shrink: 0; font-family: 'IBM Plex Mono', monospace; }
+
+/* WhatsApp phone */
+.wa-phone { background: #1A1A1A; border-radius: 28px; padding: 14px; box-shadow: 0 24px 64px rgba(0,0,0,.5); }
+.wa-status-bar { display: flex; justify-content: space-between; align-items: center; padding: 0 4px 8px; font-size: 11px; color: #fff; }
+.wa-app { background: #111B21; border-radius: 18px; overflow: hidden; }
+.wa-header { background: #202C33; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; }
+.wa-avatar { width: 36px; height: 36px; background: #29D9A8; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #062F3A; flex-shrink: 0; }
+.wa-contact-name { font-size: 13px; font-weight: 600; color: #E9EDEF; }
+.wa-contact-sub { font-size: 11px; color: #25D366; }
+.wa-body { padding: 10px 10px 0; background: #0B141A; }
+.wa-date-chip { text-align: center; font-size: 10px; color: #8696A0; background: rgba(134,150,160,.15); border-radius: 8px; padding: 3px 10px; display: inline-block; margin: 0 auto 8px; display: block; width: fit-content; margin-left: auto; margin-right: auto; }
+.wa-bubble { background: #202C33; border-radius: 0 10px 10px 10px; padding: 10px 12px; max-width: 95%; margin-bottom: 2px; }
+.wa-reply { background: #005C4B; border-radius: 10px 10px 0 10px; max-width: 75%; margin-left: auto; }
+.wa-text { font-size: 12px; color: #E9EDEF; line-height: 1.7; }
+.wa-line-item { display: flex; align-items: center; gap: 4px; padding: 2px 0; font-size: 11px; }
+.wa-amt { font-weight: 600; margin-left: auto; }
+.wa-status { font-size: 10px; padding: 1px 6px; border-radius: 20px; }
+.wa-status.pending { background: rgba(255,138,128,.2); color: #FF8A80; }
+.wa-status.done { background: rgba(37,211,102,.2); color: #25D366; }
+.wa-time-row { display: flex; justify-content: flex-end; margin-top: 4px; }
+.wa-time { font-size: 10px; color: #8696A0; }
+.wa-input-bar { background: #202C33; padding: 8px 10px; display: flex; align-items: center; gap: 8px; }
+.wa-input { flex: 1; background: #2A3942; border-radius: 20px; padding: 8px 12px; font-size: 12px; color: #8696A0; }
+.wa-send { width: 32px; height: 32px; background: #29D9A8; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+/* Email */
+.email-card { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,.25); }
+.email-toolbar { background: #F6F8FC; padding: 10px 16px; border-bottom: 1px solid #E8EAED; display: flex; align-items: center; gap: 6px; }
+.email-dot { width: 10px; height: 10px; border-radius: 50%; }
+.email-header { padding: 14px 18px; border-bottom: 1px solid #F0F0F0; }
+.email-from { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; }
+.email-avatar { width: 36px; height: 36px; background: #0A4A5A; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #29D9A8; flex-shrink: 0; margin-top: 2px; }
+.email-sender-name { font-size: 13px; font-weight: 600; color: #202124; }
+.email-sender-addr { font-size: 11px; color: #5F6368; }
+.email-subject { font-size: 15px; font-weight: 700; color: #202124; }
+.email-date { font-size: 11px; color: #5F6368; white-space: nowrap; }
+.email-body { padding: 16px 18px; }
+.email-greeting { font-size: 13px; color: #202124; margin-bottom: 14px; line-height: 1.7; }
+.email-table { width: 100%; border-collapse: collapse; margin-bottom: 14px; font-size: 12px; }
+.email-table th { font-size: 10px; text-transform: uppercase; letter-spacing: .05em; color: #5F6368; padding: 6px 10px; text-align: left; border-bottom: 1px solid #E8EAED; }
+.email-table td { padding: 8px 10px; border-bottom: 1px solid #F1F3F4; color: #202124; }
+.email-pending { color: #C5221F; font-weight: 600; }
+.email-done { color: #137333; font-weight: 600; }
+.email-cta { display: inline-block; background: #0A4A5A; color: #fff !important; padding: 10px 20px; border-radius: 6px; font-size: 13px; font-weight: 600; text-decoration: none; }
+.email-footer-text { font-size: 11px; color: #9AA0A6; line-height: 1.5; }
+
+@media (max-width: 768px) {
+  .reminder-grid { grid-template-columns: 1fr; }
+}
+
+
 /* ── REMINDER ANIMATION ─────────────────────────────── */
 .reminder-section { position: relative; }
 
@@ -670,6 +962,123 @@
   40%  { background: rgba(37,180,100,.12); }
   100% { background: transparent; }
 }
+
+/* ══════════════════════════════════════════════════════
+   REALISTIC VIDEO ANIMATION — Reminder Section
+══════════════════════════════════════════════════════ */
+
+/* Typing dots */
+.typing-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #8696A0; display: inline-block;
+  animation: typingBounce 1.2s infinite ease-in-out;
+}
+.typing-dot:nth-child(2) { animation-delay: .2s; }
+.typing-dot:nth-child(3) { animation-delay: .4s; }
+@keyframes typingBounce {
+  0%,60%,100% { transform: translateY(0); opacity:.5; }
+  30%          { transform: translateY(-6px); opacity:1; }
+}
+
+/* Progress bar */
+.rem-progress-bar-wrap {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
+  background: rgba(255,255,255,.1);
+}
+.rem-progress-bar {
+  height: 100%; background: rgba(37,211,102,.7);
+  width: 0%; transition: width linear;
+}
+
+/* Replay button */
+.anim-replay {
+  position: absolute; top: 20px; right: 24px;
+  background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2);
+  color: #EFF1E9; font-size: 12px; font-weight: 600; letter-spacing:.05em;
+  padding: 7px 14px; border-radius: 20px; cursor: pointer;
+  display: flex; align-items: center; gap: 6px;
+  transition: background .2s, opacity .3s;
+  opacity: 0; pointer-events: none;
+}
+.anim-replay.visible { opacity:1; pointer-events:auto; }
+.anim-replay:hover { background: rgba(255,255,255,.2); }
+.anim-replay svg { width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2.2; }
+
+/* Base hidden states */
+#waBanner, #emailBanner {
+  opacity: 0; transform: translateY(-28px);
+  transition: opacity .45s ease, transform .45s cubic-bezier(.34,1.56,.64,1);
+}
+#waPhone {
+  opacity: 0; transform: translateY(36px) scale(.96);
+  transition: opacity .55s ease, transform .55s cubic-bezier(.34,1.3,.64,1);
+}
+#emailCard {
+  opacity: 0; transform: translateY(36px) scale(.96);
+  transition: opacity .55s ease, transform .55s cubic-bezier(.34,1.3,.64,1);
+}
+#waMsg {
+  opacity: 0;
+  transition: opacity .4s ease;
+}
+#waReply {
+  opacity: 0; transform: translateY(10px);
+  transition: opacity .4s ease, transform .4s ease;
+}
+#emailGreeting {
+  opacity: 0; transform: translateY(8px);
+  transition: opacity .4s ease, transform .4s ease;
+}
+#waLine0,#waLine1,#waLine2,#waLine3,#waLine4 {
+  opacity: 0; transform: translateX(-8px);
+  transition: opacity .3s ease, transform .3s ease;
+}
+#eRow0,#eRow1,#eRow2,#eRow3,#eRow4 {
+  opacity: 0; transform: translateY(8px);
+  transition: opacity .3s ease, transform .3s ease;
+}
+#emailCta {
+  opacity: 0; transform: translateY(10px);
+  transition: opacity .4s ease, transform .4s ease;
+}
+#emailNote {
+  opacity: 0;
+  transition: opacity .5s ease;
+}
+
+/* Show states */
+.rem-visible {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* Settled row flash */
+@keyframes settledFlash {
+  0%   { background: transparent; }
+  30%  { background: rgba(37,211,102,.18); }
+  100% { background: transparent; }
+}
+.row-settled { animation: settledFlash .8s ease forwards; }
+
+/* WA clock tick */
+.wa-clock-tick {
+  animation: clockPulse .3s ease;
+}
+@keyframes clockPulse {
+  0%   { color: #8696A0; }
+  50%  { color: #fff; font-weight:700; }
+  100% { color: #8696A0; }
+}
+
+/* Phone screen tap ripple */
+@keyframes tapRipple {
+  0%   { transform: scale(0); opacity:1; }
+  100% { transform: scale(2.2); opacity:0; }
+}
+.tap-fire {
+  animation: tapRipple .5s ease forwards;
+}
+
 </style>
 </head>
 <body class="landing-page">
@@ -767,11 +1176,13 @@
 </section>
 
 <!-- REMINDER PREVIEW -->
-<section class="reminder-section">
-  <button class="anim-replay" id="reminderReplay" onclick="playReminderAnim(true)">
+<section class="reminder-section" style="position:relative">
+  <button class="anim-replay" id="reminderReplay" onclick="replayReminderAnim()">
     <svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
     Replay
   </button>
+  <div class="rem-progress-bar-wrap"><div class="rem-progress-bar" id="remProgress"></div></div>
+  
   <div class="section-inner">
     <div class="section-eyebrow">Payday reminders</div>
     <h2 class="section-title" style="color:#EFF1E9">See exactly what lands on<br>your phone and inbox</h2>
@@ -787,7 +1198,7 @@
         </div>
 
         <!-- Notification banner -->
-        <div class="notif-banner wa-notif">
+        <div class="notif-banner wa-notif" id="waBanner">
           <div class="notif-icon" style="background:#25D366">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.149-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M11.999 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.985-1.309A9.951 9.951 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2z" fill-opacity=".2"/></svg>
           </div>
@@ -799,7 +1210,7 @@
         </div>
 
         <!-- Phone -->
-        <div class="wa-phone">
+        <div class="wa-phone" id="waPhone">
           <div class="wa-status-bar">
             <span style="font-weight:600">9:01</span>
             <span style="display:flex;gap:3px;align-items:center;font-size:10px">▲▲▲ 🔋</span>
@@ -820,15 +1231,20 @@
             </div>
             <div class="wa-body">
               <div class="wa-date-chip">Today</div>
-              <div class="wa-bubble">
+              <div id="waTyping" style="display:none;padding:6px 10px;margin-bottom:4px">
+                <div style="background:#1e2d33;border-radius:12px 12px 12px 4px;padding:10px 14px;display:inline-flex;gap:5px;align-items:center">
+                  <span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>
+                </div>
+              </div>
+              <div class="wa-bubble" id="waMsg">
                 <div class="wa-text">
                   Hi <b>Harshad</b>, it's the 1st — payday time!<br><br>
                   Here's your <b>August 2026</b> plan:<br>
-                  <div class="wa-line-item"><span>FD savings</span><span class="wa-amt">₹20,700</span><span class="wa-status pending">Pending</span></div>
-                  <div class="wa-line-item"><span>Credit EMIs</span><span class="wa-amt">₹10,200</span><span class="wa-status pending">Pending</span></div>
-                  <div class="wa-line-item"><span>Emergency fund</span><span class="wa-amt">₹5,000</span><span class="wa-status pending">Pending</span></div>
-                  <div class="wa-line-item"><span>Equity SIP</span><span class="wa-amt">₹2,000</span><span class="wa-status pending">Pending</span></div>
-                  <div class="wa-line-item"><span>Lifestyle</span><span class="wa-amt">₹4,800</span><span class="wa-status pending">Pending</span></div>
+                  <div class="wa-line-item" id="waLine0"><span>FD savings</span><span class="wa-amt">₹20,700</span><span class="wa-status pending">Pending</span></div>
+                  <div class="wa-line-item" id="waLine1"><span>Credit EMIs</span><span class="wa-amt">₹10,200</span><span class="wa-status pending">Pending</span></div>
+                  <div class="wa-line-item" id="waLine2"><span>Emergency fund</span><span class="wa-amt">₹5,000</span><span class="wa-status pending">Pending</span></div>
+                  <div class="wa-line-item" id="waLine3"><span>Equity SIP</span><span class="wa-amt">₹2,000</span><span class="wa-status pending">Pending</span></div>
+                  <div class="wa-line-item" id="waLine4"><span>Lifestyle</span><span class="wa-amt">₹4,800</span><span class="wa-status pending">Pending</span></div>
                   <br>
                   Tap below to log your actuals now.<br>
                   <div style="margin-top:6px;background:rgba(37,211,102,.2);border-radius:5px;padding:5px 8px;font-size:11px;color:#25D366;font-weight:600;text-align:center">
@@ -839,12 +1255,15 @@
                   <span class="wa-time">9:01 AM ✓✓</span>
                 </div>
               </div>
-              <div class="wa-bubble wa-reply" style="margin-top:8px">
+              <div class="wa-bubble wa-reply" id="waReply" style="margin-top:8px">
                 <div class="wa-text" style="color:#25D366;font-weight:600;font-size:11px">✓ Marked FD savings as settled</div>
                 <div class="wa-time-row"><span class="wa-time">9:05 AM</span></div>
               </div>
             </div>
-            <div class="wa-input-bar">
+            <div id="waTapCursor" style="display:none;position:absolute;pointer-events:none;z-index:99">
+                <div id="waTapRipple" style="width:36px;height:36px;border-radius:50%;border:2.5px solid rgba(37,211,102,.8);background:rgba(37,211,102,.15);transform:scale(0);transition:transform .2s ease"></div>
+              </div>
+              <div class="wa-input-bar">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8696A0" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
               <div class="wa-input">Type a message</div>
               <div class="wa-send">
@@ -864,7 +1283,7 @@
         </div>
 
         <!-- Notification banner -->
-        <div class="notif-banner email-notif">
+        <div class="notif-banner email-notif" id="emailBanner">
           <div class="notif-icon" style="background:#fff">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#EA4335" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
           </div>
@@ -876,7 +1295,7 @@
         </div>
 
         <!-- Email client -->
-        <div class="email-card">
+        <div class="email-card" id="emailCard">
           <div class="email-toolbar">
             <div class="email-dot" style="background:#FF5F57"></div>
             <div class="email-dot" style="background:#FFBD2E"></div>
@@ -897,19 +1316,19 @@
             <div class="email-subject">August 2026 budget — 5 lines pending</div>
           </div>
           <div class="email-body">
-            <div class="email-greeting">Hi <b>Harshad</b>,<br><br>Your August salary plan is ready. Here are the lines that need your attention today:</div>
+            <div class="email-greeting" id="emailGreeting">Hi <b>Harshad</b>,<br><br>Your August salary plan is ready. Here are the lines that need your attention today:</div>
             <table class="email-table">
               <thead><tr><th>Budget line</th><th>Planned</th><th>Status</th></tr></thead>
               <tbody>
-                <tr><td>FD savings</td><td>₹20,700</td><td class="email-pending">● Pending</td></tr>
-                <tr><td>Credit card EMIs</td><td>₹10,200</td><td class="email-pending">● Pending</td></tr>
-                <tr><td>Emergency fund</td><td>₹5,000</td><td class="email-pending">● Pending</td></tr>
-                <tr><td>Equity SIP</td><td>₹2,000</td><td class="email-done">✓ Settled</td></tr>
-                <tr><td>Lifestyle</td><td>₹4,800</td><td class="email-pending">● Pending</td></tr>
+                <tr id="eRow0"><td>FD savings</td><td>₹20,700</td><td class="email-pending">● Pending</td></tr>
+                <tr id="eRow1"><td>Credit card EMIs</td><td>₹10,200</td><td class="email-pending">● Pending</td></tr>
+                <tr id="eRow2"><td>Emergency fund</td><td>₹5,000</td><td class="email-pending">● Pending</td></tr>
+                <tr id="eRow3"><td>Equity SIP</td><td>₹2,000</td><td class="email-done">✓ Settled</td></tr>
+                <tr id="eRow4"><td>Lifestyle</td><td>₹4,800</td><td class="email-pending">● Pending</td></tr>
               </tbody>
             </table>
-            <div class="email-cta-wrap" style="margin-bottom:14px"><a href="#" class="email-cta">Log your actuals now →</a></div>
-            <div class="email-note-box" style="background:#F8FFF8;border:1px solid #C3E6C3;border-radius:6px;padding:10px 12px;font-size:12px;color:#1A6640;margin-bottom:12px">
+            <div class="email-cta-wrap" id="emailCta" style="margin-bottom:14px"><a href="#" class="email-cta">Log your actuals now →</a></div>
+            <div class="email-note-box" id="emailNote" style="background:#F8FFF8;border:1px solid #C3E6C3;border-radius:6px;padding:10px 12px;font-size:12px;color:#1A6640;margin-bottom:12px">
               We'll send a gentle reminder every few days until all lines are logged. It stops automatically once everything is settled.
             </div>
             <div class="email-footer-text">
@@ -1308,31 +1727,182 @@ document.querySelectorAll('.faq-q').forEach(q => {
 </script>
 
 
-<script>
-// Reminder section animation
-function playReminderAnim(force) {
-  var sec = document.querySelector('.reminder-section');
-  if (!sec) return;
-  sec.classList.remove('playing');
-  void sec.offsetWidth; // reflow to restart
-  sec.classList.add('playing');
-}
 
-// Trigger on scroll into view
-(function() {
-  var sec = document.querySelector('.reminder-section');
-  if (!sec) return;
-  var triggered = false;
-  var obs = new IntersectionObserver(function(entries) {
-    entries.forEach(function(e) {
-      if (e.isIntersecting && !triggered) {
-        triggered = true;
-        setTimeout(function(){ playReminderAnim(false); }, 200);
+<script>
+(function(){
+  /* ── REALISTIC REMINDER ANIMATION ── */
+  var TOTAL_DURATION = 9000; // ms total
+  var timers = [];
+  var playing = false;
+
+  function show(id){
+    var el = document.getElementById(id);
+    if(el) el.classList.add('rem-visible');
+  }
+  function hide(id){
+    var el = document.getElementById(id);
+    if(el) el.classList.remove('rem-visible');
+  }
+  function resetAll(){
+    var ids = ['waBanner','emailBanner','waPhone','emailCard','waMsg',
+      'waReply','emailGreeting','waLine0','waLine1','waLine2','waLine3','waLine4',
+      'eRow0','eRow1','eRow2','eRow3','eRow4','emailCta','emailNote'];
+    ids.forEach(function(id){
+      var el = document.getElementById(id);
+      if(el){ el.classList.remove('rem-visible','row-settled'); }
+    });
+    hideTyping();
+    hideTap();
+    var clock = document.querySelector('.wa-status-bar span');
+    if(clock) clock.textContent = '9:01';
+    var prog = document.getElementById('remProgress');
+    if(prog){ prog.style.transition='none'; prog.style.width='0%'; }
+    var btn = document.getElementById('reminderReplay');
+    if(btn) btn.classList.remove('visible');
+  }
+
+  function showTyping(){
+    var t = document.getElementById('waTyping');
+    if(t){ t.style.display='block'; t.style.opacity='0'; t.style.transition='opacity .3s'; setTimeout(function(){ t.style.opacity='1'; },20); }
+  }
+  function hideTyping(){
+    var t = document.getElementById('waTyping');
+    if(t){ t.style.opacity='0'; setTimeout(function(){ t.style.display='none'; },300); }
+  }
+
+  function showTap(targetId, cb){
+    var target = document.getElementById(targetId);
+    var cursor = document.getElementById('waTapCursor');
+    var ripple = document.getElementById('waTapRipple');
+    if(!target||!cursor||!ripple) { if(cb) cb(); return; }
+    var rect = target.getBoundingClientRect();
+    var phoneRect = document.getElementById('waPhone').getBoundingClientRect();
+    cursor.style.display='block';
+    cursor.style.left = (rect.left - phoneRect.left + rect.width/2 - 18) + 'px';
+    cursor.style.top  = (rect.top - phoneRect.top + rect.height/2 - 18) + 'px';
+    cursor.style.opacity='1';
+    ripple.style.transform='scale(0)';
+    ripple.classList.remove('tap-fire');
+    setTimeout(function(){
+      ripple.classList.add('tap-fire');
+      if(cb) setTimeout(cb,400);
+    },300);
+    setTimeout(function(){ cursor.style.opacity='0'; setTimeout(function(){ cursor.style.display='none'; },300); }, 900);
+  }
+  function hideTap(){
+    var c = document.getElementById('waTapCursor');
+    if(c){ c.style.display='none'; c.style.opacity='0'; }
+  }
+
+  function tickClock(newTime){
+    var spans = document.querySelectorAll('.wa-status-bar span');
+    if(spans.length){ spans[0].textContent=newTime; spans[0].classList.remove('wa-clock-tick'); void spans[0].offsetWidth; spans[0].classList.add('wa-clock-tick'); }
+  }
+
+  function startProgress(){
+    var prog = document.getElementById('remProgress');
+    if(prog){
+      prog.style.transition='none'; prog.style.width='0%';
+      setTimeout(function(){
+        prog.style.transition='width '+TOTAL_DURATION+'ms linear';
+        prog.style.width='100%';
+      },50);
+    }
+  }
+
+  function at(ms, fn){ timers.push(setTimeout(fn, ms)); }
+
+  function playAnim(){
+    timers.forEach(clearTimeout); timers=[];
+    resetAll();
+    playing = true;
+    startProgress();
+
+    at(300,  function(){ show('waBanner'); });
+    at(700,  function(){ show('emailBanner'); });
+    at(1100, function(){ show('waPhone'); });
+    at(1500, function(){ show('emailCard'); });
+
+    // WhatsApp typing indicator
+    at(1800, function(){ showTyping(); });
+    at(3000, function(){ hideTyping(); show('waMsg'); });
+
+    // Line items appear one by one
+    at(3300, function(){ show('waLine0'); });
+    at(3650, function(){ show('waLine1'); });
+    at(4000, function(){ show('waLine2'); });
+    at(4350, function(){ show('waLine3'); });
+    at(4700, function(){ show('waLine4'); });
+
+    // Tap on "Open BudgetFlow" button (the green div inside wa-bubble)
+    at(5400, function(){
+      var btn = document.querySelector('#waMsg .wa-text > div[style*="Open BudgetFlow"], #waMsg .wa-text > div');
+      var cursor = document.getElementById('waTapCursor');
+      var ripple = document.getElementById('waTapRipple');
+      if(btn && cursor && ripple){
+        var bRect = btn.getBoundingClientRect();
+        var pRect = document.getElementById('waPhone').getBoundingClientRect();
+        cursor.style.position = 'absolute';
+        cursor.style.display='block';
+        cursor.style.left = (bRect.left - pRect.left + bRect.width/2 - 18)+'px';
+        cursor.style.top  = (bRect.top  - pRect.top  + bRect.height/2 - 18)+'px';
+        cursor.style.transition='opacity .3s';
+        cursor.style.opacity='1';
+        ripple.classList.remove('tap-fire');
+        setTimeout(function(){
+          ripple.classList.add('tap-fire');
+        },350);
+        setTimeout(function(){ cursor.style.opacity='0'; setTimeout(function(){ cursor.style.display='none';},300); },900);
       }
     });
-  }, { threshold: 0.25 });
-  obs.observe(sec);
+
+    // Clock ticks to 9:05 (FD savings settled)
+    at(5900, function(){ tickClock('9:05'); });
+
+    // Reply bubble slides in
+    at(6100, function(){ show('waReply'); });
+
+    // Email content appears
+    at(6400, function(){ show('emailGreeting'); });
+    at(6700, function(){ show('eRow0'); });
+    at(7000, function(){ show('eRow1'); });
+    at(7300, function(){ show('eRow2'); });
+    at(7600, function(){
+      show('eRow3');
+      setTimeout(function(){
+        var r = document.getElementById('eRow3');
+        if(r) r.classList.add('row-settled');
+      },100);
+    });
+    at(7900, function(){ show('eRow4'); });
+    at(8300, function(){ show('emailCta'); });
+    at(8700, function(){ show('emailNote'); });
+
+    // Show replay button at end
+    at(TOTAL_DURATION, function(){
+      playing=false;
+      var btn=document.getElementById('reminderReplay');
+      if(btn) btn.classList.add('visible');
+    });
+  }
+
+  window.replayReminderAnim = function(){ playAnim(); };
+
+  // Trigger on scroll into view
+  var triggered = false;
+  var sec = document.querySelector('.reminder-section');
+  if(sec){
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting && !triggered){
+          triggered=true;
+          setTimeout(playAnim, 300);
+        }
+      });
+    },{threshold:0.2});
+    obs.observe(sec);
+  }
 })();
 </script>
+
 </body>
-</html>
