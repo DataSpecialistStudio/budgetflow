@@ -579,6 +579,97 @@
   .reminder-grid { grid-template-columns: 1fr; }
 }
 
+
+/* ── REMINDER ANIMATION ─────────────────────────────── */
+.reminder-section { position: relative; }
+
+/* replay button */
+.anim-replay {
+  position: absolute; top: 24px; right: 24px;
+  background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2);
+  color: #EFF1E9; font-size: 12px; font-weight: 600; letter-spacing:.05em;
+  padding: 7px 14px; border-radius: 20px; cursor: pointer;
+  display: flex; align-items: center; gap: 6px; backdrop-filter: blur(6px);
+  transition: background .2s;
+}
+.anim-replay:hover { background: rgba(255,255,255,.18); }
+.anim-replay svg { width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2.2; }
+
+/* base: everything hidden */
+.notif-banner, .wa-phone, .email-card,
+.wa-bubble, .wa-reply,
+.wa-line-item, .email-table tr, .email-greeting,
+.email-cta-wrap, .email-note-box {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+/* When playing class is added, fire the sequence */
+.reminder-section.playing .notif-banner.wa-notif {
+  animation: remFadeUp .5s ease forwards;
+  animation-delay: .2s;
+}
+.reminder-section.playing .notif-banner.email-notif {
+  animation: remFadeUp .5s ease forwards;
+  animation-delay: .5s;
+}
+.reminder-section.playing .wa-phone {
+  animation: remFadeUp .6s cubic-bezier(.22,.68,0,1.2) forwards;
+  animation-delay: .7s;
+}
+.reminder-section.playing .email-card {
+  animation: remFadeUp .6s cubic-bezier(.22,.68,0,1.2) forwards;
+  animation-delay: 1s;
+}
+.reminder-section.playing .wa-bubble {
+  animation: remFadeUp .4s ease forwards;
+  animation-delay: 1.1s;
+}
+.reminder-section.playing .wa-line-item:nth-child(1) { animation: remFadeUp .3s ease forwards; animation-delay: 1.3s; }
+.reminder-section.playing .wa-line-item:nth-child(2) { animation: remFadeUp .3s ease forwards; animation-delay: 1.5s; }
+.reminder-section.playing .wa-line-item:nth-child(3) { animation: remFadeUp .3s ease forwards; animation-delay: 1.7s; }
+.reminder-section.playing .wa-line-item:nth-child(4) { animation: remFadeUp .3s ease forwards; animation-delay: 1.9s; }
+.reminder-section.playing .wa-line-item:nth-child(5) { animation: remFadeUp .3s ease forwards; animation-delay: 2.1s; }
+
+.reminder-section.playing .wa-reply {
+  animation: remFadeUp .4s ease forwards;
+  animation-delay: 2.6s;
+}
+
+/* email content rows */
+.reminder-section.playing .email-greeting {
+  animation: remFadeUp .4s ease forwards;
+  animation-delay: 1.4s;
+}
+.reminder-section.playing .email-table tr:nth-child(1) { animation: remFadeUp .3s ease forwards; animation-delay: 1.7s; }
+.reminder-section.playing .email-table tr:nth-child(2) { animation: remFadeUp .3s ease forwards; animation-delay: 1.9s; }
+.reminder-section.playing .email-table tr:nth-child(3) { animation: remFadeUp .3s ease forwards; animation-delay: 2.1s; }
+.reminder-section.playing .email-table tr:nth-child(4) { animation: remFadeUp .3s ease forwards; animation-delay: 2.3s; }
+.reminder-section.playing .email-table tr:nth-child(5) { animation: remFadeUp .3s ease forwards; animation-delay: 2.5s; }
+.reminder-section.playing .email-cta-wrap {
+  animation: remFadeUp .4s ease forwards;
+  animation-delay: 2.8s;
+}
+.reminder-section.playing .email-note-box {
+  animation: remFadeUp .4s ease forwards;
+  animation-delay: 3s;
+}
+
+/* settled flash on row 4 of email (Equity SIP) */
+.reminder-section.playing .email-table tr:nth-child(4) {
+  animation: remFadeUp .3s ease forwards, settledFlash .6s ease forwards;
+  animation-delay: 2.3s, 2.3s;
+}
+
+@keyframes remFadeUp {
+  from { opacity:0; transform: translateY(14px); }
+  to   { opacity:1; transform: translateY(0); }
+}
+@keyframes settledFlash {
+  0%   { background: transparent; }
+  40%  { background: rgba(37,180,100,.12); }
+  100% { background: transparent; }
+}
 </style>
 </head>
 <body class="landing-page">
@@ -677,6 +768,10 @@
 
 <!-- REMINDER PREVIEW -->
 <section class="reminder-section">
+  <button class="anim-replay" id="reminderReplay" onclick="playReminderAnim(true)">
+    <svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
+    Replay
+  </button>
   <div class="section-inner">
     <div class="section-eyebrow">Payday reminders</div>
     <h2 class="section-title" style="color:#EFF1E9">See exactly what lands on<br>your phone and inbox</h2>
@@ -813,10 +908,8 @@
                 <tr><td>Lifestyle</td><td>₹4,800</td><td class="email-pending">● Pending</td></tr>
               </tbody>
             </table>
-            <div style="margin-bottom:14px">
-              <a href="#" class="email-cta">Log your actuals now →</a>
-            </div>
-            <div style="background:#F8FFF8;border:1px solid #C3E6C3;border-radius:6px;padding:10px 12px;font-size:12px;color:#1A6640;margin-bottom:12px">
+            <div class="email-cta-wrap" style="margin-bottom:14px"><a href="#" class="email-cta">Log your actuals now →</a></div>
+            <div class="email-note-box" style="background:#F8FFF8;border:1px solid #C3E6C3;border-radius:6px;padding:10px 12px;font-size:12px;color:#1A6640;margin-bottom:12px">
               We'll send a gentle reminder every few days until all lines are logged. It stops automatically once everything is settled.
             </div>
             <div class="email-footer-text">
@@ -1214,5 +1307,32 @@ document.querySelectorAll('.faq-q').forEach(q => {
 })();
 </script>
 
+
+<script>
+// Reminder section animation
+function playReminderAnim(force) {
+  var sec = document.querySelector('.reminder-section');
+  if (!sec) return;
+  sec.classList.remove('playing');
+  void sec.offsetWidth; // reflow to restart
+  sec.classList.add('playing');
+}
+
+// Trigger on scroll into view
+(function() {
+  var sec = document.querySelector('.reminder-section');
+  if (!sec) return;
+  var triggered = false;
+  var obs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting && !triggered) {
+        triggered = true;
+        setTimeout(function(){ playReminderAnim(false); }, 200);
+      }
+    });
+  }, { threshold: 0.25 });
+  obs.observe(sec);
+})();
+</script>
 </body>
 </html>
