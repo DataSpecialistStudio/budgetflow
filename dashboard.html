@@ -186,6 +186,31 @@
 }
 </style>
 
+
+<style>
+/* ══ DRAG-TO-REORDER — Settings Plan Table ══════════════════ */
+.drag-handle {
+  cursor: grab; color: #B0BAB4; padding: 0 6px;
+  display: flex; align-items: center; justify-content: center;
+  user-select: none; font-size: 16px; line-height: 1;
+  transition: color .15s;
+}
+.drag-handle:active { cursor: grabbing; }
+.drag-handle:hover { color: #66756D; }
+
+#settPlanBody tr { transition: background .12s, box-shadow .15s; }
+#settPlanBody tr.dragging {
+  opacity: .45; background: #E8F5F0 !important;
+}
+#settPlanBody tr.drag-over {
+  box-shadow: 0 -3px 0 0 #127A6B;
+  background: #F0FAF6 !important;
+}
+
+/* Drag handle column header */
+.drag-th { width: 28px; }
+</style>
+
 </head>
 <body class="app-page">
 
@@ -631,6 +656,87 @@
   });
   // Also try on load
   setTimeout(updateBars, 800);
+})();
+</script>
+
+
+<script>
+/* ── DRAG-TO-REORDER for Settings plan rows ── */
+(function(){
+  var tbody = document.getElementById('settPlanBody');
+  if(!tbody) return;
+
+  // Add drag-handle cell to each existing + future row
+  function addHandle(row){
+    if(row.querySelector('.drag-handle')) return; // already added
+    var td = document.createElement('td');
+    td.style.width = '28px';
+    td.style.padding = '0';
+    td.innerHTML = '<div class="drag-handle" title="Drag to reorder">⠿</div>';
+    row.insertBefore(td, row.firstChild);
+  }
+
+  // Patch the table header to add an empty TH
+  function patchHeader(){
+    var thead = tbody.closest('table').querySelector('thead tr');
+    if(thead && !thead.querySelector('.drag-th')){
+      var th = document.createElement('th');
+      th.className = 'drag-th';
+      thead.insertBefore(th, thead.firstChild);
+    }
+  }
+
+  // Wire up HTML5 drag on a row
+  function wireRow(row){
+    addHandle(row);
+    row.setAttribute('draggable', 'true');
+
+    row.addEventListener('dragstart', function(e){
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', ''); // needed for Firefox
+      dragSrc = row;
+      setTimeout(function(){ row.classList.add('dragging'); }, 0);
+    });
+    row.addEventListener('dragend', function(){
+      row.classList.remove('dragging');
+      tbody.querySelectorAll('tr').forEach(function(r){ r.classList.remove('drag-over'); });
+      dragSrc = null;
+    });
+    row.addEventListener('dragover', function(e){
+      e.preventDefault(); e.dataTransfer.dropEffect = 'move';
+      if(dragSrc && row !== dragSrc){
+        tbody.querySelectorAll('tr').forEach(function(r){ r.classList.remove('drag-over'); });
+        row.classList.add('drag-over');
+      }
+    });
+    row.addEventListener('drop', function(e){
+      e.preventDefault();
+      if(dragSrc && row !== dragSrc){
+        // Insert dragSrc before or after target based on Y position
+        var rect = row.getBoundingClientRect();
+        var mid  = rect.top + rect.height / 2;
+        if(e.clientY < mid){
+          tbody.insertBefore(dragSrc, row);
+        } else {
+          tbody.insertBefore(dragSrc, row.nextSibling);
+        }
+        row.classList.remove('drag-over');
+      }
+    });
+  }
+
+  var dragSrc = null;
+
+  // Observe tbody for new rows (dashboard.js adds rows dynamically)
+  var obs = new MutationObserver(function(){
+    patchHeader();
+    tbody.querySelectorAll('tr').forEach(wireRow);
+  });
+  obs.observe(tbody, { childList: true });
+
+  // Also patch anything already there
+  patchHeader();
+  tbody.querySelectorAll('tr').forEach(wireRow);
 })();
 </script>
 
