@@ -126,7 +126,7 @@ function renderMonth(){
         <span class="type-pill ${typePillClass(l.type)}">${l.type}</span>
       </td>
       <td class="num">
-        ${INR(l.amount)}
+        <span class="plan-amt-click" data-line="${esc(l.name)}" data-amount="${l.amount}" title="Double-click to mark as fully paid" style="cursor:pointer;border-bottom:1.5px dashed rgba(0,0,0,.18);display:inline-block">${INR(l.amount)}</span>
         <div class="bar-wrap" style="margin-top:5px;min-width:60px">
           <div class="bar-fill" style="width:${pct}%;background:${barCol}"></div>
         </div>
@@ -146,6 +146,24 @@ function renderMonth(){
     <td></td>
     <td class="num">${totalPlan?Math.round(totalAdded/totalPlan*100):0}%</td>
   </tr>`;
+
+  // Double-click plan amount → auto-fill added
+  tbody.querySelectorAll('.plan-amt-click').forEach(span=>{
+    span.ondblclick=async()=>{
+      const line=span.dataset.line;
+      const amount=parseFloat(span.dataset.amount)||0;
+      // Fill the matching amt-input
+      const inp=tbody.querySelector(`.amt-input[data-line="${line}"]`);
+      if(inp){ inp.value=amount; inp.classList.remove(''); }
+      // Flash green confirmation
+      span.style.transition='color .2s';
+      span.style.color='#127A6B';
+      setTimeout(()=>span.style.color='',600);
+      // Save immediately
+      await saveEntry(line, amount, null);
+      renderMonth();
+    };
+  });
 
   // Wire inputs
   tbody.querySelectorAll('.amt-input').forEach(inp=>{
