@@ -114,6 +114,78 @@
 #settAddLineBtn:hover { background: #E4F5EE; border-color: #127A6B; }
 </style>
 
+
+<style>
+/* ══ ALLOCATION DONUT — enhanced v2 ═════════════════════════ */
+
+/* Container */
+.month-summary-v2 {
+  display: flex; align-items: center; gap: 24px;
+  background: #fff; border: 1.5px solid #E0E3D8;
+  border-radius: 14px; padding: 20px 24px;
+  margin-bottom: 20px; box-shadow: 0 1px 4px rgba(0,0,0,.04);
+}
+
+/* Donut with centred text overlay */
+.donut-center-wrap {
+  position: relative; flex-shrink: 0; width: 130px; height: 130px;
+}
+.donut-center-wrap canvas { width: 130px !important; height: 130px !important; }
+.donut-center-label {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  pointer-events: none;
+}
+.donut-center-title {
+  font-size: 13px; font-weight: 700; color: #15252E; letter-spacing: -.01em;
+}
+.donut-center-sub { font-size: 11px; color: #66756D; margin-top: 1px; }
+
+/* 3 stat cards side by side */
+.alloc-cards {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 12px; flex: 1;
+}
+.alloc-card {
+  background: var(--ac-bg);
+  border: 1.5px solid color-mix(in srgb, var(--ac) 20%, transparent);
+  border-radius: 12px; padding: 14px 16px;
+  transition: transform .15s, box-shadow .15s;
+}
+.alloc-card:hover { transform: translateY(-2px); box-shadow: 0 4px 14px rgba(0,0,0,.08); }
+.alloc-card-top {
+  display: flex; align-items: center; gap: 6px; margin-bottom: 8px;
+}
+.alloc-icon { font-size: 16px; line-height: 1; }
+.alloc-label {
+  font-size: 11px; font-weight: 700; letter-spacing: .07em;
+  text-transform: uppercase; color: var(--ac);
+}
+.alloc-amount {
+  font-family: 'IBM Plex Mono', monospace; font-size: 17px;
+  font-weight: 600; color: #15252E; letter-spacing: -.02em;
+  margin-bottom: 8px;
+}
+.alloc-bar-track {
+  height: 4px; background: rgba(0,0,0,.08); border-radius: 99px;
+  overflow: hidden; margin-bottom: 6px;
+}
+.alloc-bar {
+  height: 100%; background: var(--ac-bar);
+  border-radius: 99px; width: 0%;
+  transition: width .8s cubic-bezier(.4,0,.2,1);
+}
+.alloc-pct {
+  font-size: 11px; font-weight: 600; color: var(--ac); letter-spacing: .02em;
+}
+
+@media (max-width: 700px) {
+  .month-summary-v2 { flex-direction: column; }
+  .alloc-cards { grid-template-columns: 1fr; }
+}
+</style>
+
 </head>
 <body class="app-page">
 
@@ -225,32 +297,47 @@
           <div class="kpi"><div class="kpi-l">Days left</div><div class="kpi-v" id="kpiDays">—</div></div>
         </div>
 
-        <!-- Allocation donut -->
-        <div class="month-summary">
-          <div class="donut-wrap">
+        <!-- Allocation donut — enhanced -->
+        <div class="month-summary-v2">
+          <!-- Donut with centre label -->
+          <div class="donut-center-wrap">
             <canvas id="monthDonut"></canvas>
+            <div class="donut-center-label">
+              <div class="donut-center-title">Budget</div>
+              <div class="donut-center-sub">3 types</div>
+            </div>
           </div>
-          <div class="donut-legend">
-            <div class="legend-row">
-              <div class="legend-left">
-                <div class="legend-dot" style="background:#A8402F"></div>
-                <span class="legend-name">Fixed</span>
+
+          <!-- Stat cards -->
+          <div class="alloc-cards">
+            <div class="alloc-card" style="--ac:#A8402F;--ac-bg:#FDE8E4;--ac-bar:#A8402F">
+              <div class="alloc-card-top">
+                <div class="alloc-icon">🔒</div>
+                <div class="alloc-label">Fixed</div>
               </div>
-              <span class="legend-val" style="color:#A8402F" id="legendFixed">—</span>
+              <div class="alloc-amount" id="legendFixed">—</div>
+              <div class="alloc-bar-track"><div class="alloc-bar" id="barFixed"></div></div>
+              <div class="alloc-pct" id="pctFixed">—%</div>
             </div>
-            <div class="legend-row">
-              <div class="legend-left">
-                <div class="legend-dot" style="background:#127A6B"></div>
-                <span class="legend-name">Savings</span>
+
+            <div class="alloc-card" style="--ac:#127A6B;--ac-bg:#E4F5EE;--ac-bar:#127A6B">
+              <div class="alloc-card-top">
+                <div class="alloc-icon">📈</div>
+                <div class="alloc-label">Savings</div>
               </div>
-              <span class="legend-val" style="color:#127A6B" id="legendSavings">—</span>
+              <div class="alloc-amount" id="legendSavings">—</div>
+              <div class="alloc-bar-track"><div class="alloc-bar" id="barSavings"></div></div>
+              <div class="alloc-pct" id="pctSavings">—%</div>
             </div>
-            <div class="legend-row">
-              <div class="legend-left">
-                <div class="legend-dot" style="background:#C9871F"></div>
-                <span class="legend-name">Flexible</span>
+
+            <div class="alloc-card" style="--ac:#C9871F;--ac-bg:#FDF3DF;--ac-bar:#C9871F">
+              <div class="alloc-card-top">
+                <div class="alloc-icon">🌀</div>
+                <div class="alloc-label">Flexible</div>
               </div>
-              <span class="legend-val" style="color:#C9871F" id="legendFlex">—</span>
+              <div class="alloc-amount" id="legendFlex">—</div>
+              <div class="alloc-bar-track"><div class="alloc-bar" id="barFlex"></div></div>
+              <div class="alloc-pct" id="pctFlex">—%</div>
             </div>
           </div>
         </div>
@@ -507,5 +594,45 @@
   if (navUser) observer.observe(navUser, { childList: true, characterData: true, subtree: true });
 })();
 </script>
+
+<script>
+// Update alloc bars + percentages when legend values are set
+(function(){
+  function parseInr(str){
+    if(!str||str==='—') return 0;
+    return parseInt(str.replace(/[^0-9]/g,''))||0;
+  }
+  function updateBars(){
+    var fixed   = parseInr(document.getElementById('legendFixed')?.textContent);
+    var savings = parseInr(document.getElementById('legendSavings')?.textContent);
+    var flex    = parseInr(document.getElementById('legendFlex')?.textContent);
+    var total   = fixed + savings + flex;
+    if(!total) return;
+    function setPct(barId, pctId, val){
+      var pct = Math.round(val/total*100);
+      var b = document.getElementById(barId);
+      var p = document.getElementById(pctId);
+      if(b) setTimeout(function(){ b.style.width = pct+'%'; }, 200);
+      if(p) p.textContent = pct+'%';
+    }
+    setPct('barFixed',   'pctFixed',   fixed);
+    setPct('barSavings', 'pctSavings', savings);
+    setPct('barFlex',    'pctFlex',    flex);
+    // Update donut centre subtitle
+    var sub = document.querySelector('.donut-center-sub');
+    if(sub) sub.textContent = '₹'+Math.round(total).toLocaleString('en-IN');
+    var title = document.querySelector('.donut-center-title');
+    if(title) title.textContent = 'Total';
+  }
+  // Watch for legend value changes
+  ['legendFixed','legendSavings','legendFlex'].forEach(function(id){
+    var el = document.getElementById(id);
+    if(el) new MutationObserver(updateBars).observe(el,{childList:true,characterData:true,subtree:true});
+  });
+  // Also try on load
+  setTimeout(updateBars, 800);
+})();
+</script>
+
 </body>
 </html>
