@@ -9,267 +9,109 @@
 <link rel="stylesheet" href="css/style.css">
 
 <style>
-/* ══ DASHBOARD POLISH — Settings & Global App UI ═══════════════ */
+/* ══ SETTINGS SECTION POLISH — scoped, no global side-effects ══ */
 
-/* Better fonts */
-@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap');
-
-:root {
-  --brand:      #0A4A5A;
-  --brand-mid:  #127A6B;
-  --accent:     #1CB88E;
-  --red:        #A8402F;
-  --amber:      #C9871F;
-  --bg:         #F4F5EF;
-  --surface:    #FFFFFF;
-  --border:     #E0E3D8;
-  --text:       #15252E;
-  --muted:      #66756D;
-  --radius:     12px;
-}
-
-body.app-page { background: var(--bg); }
-
-/* ── Sidebar ─────────────────────────────── */
-.sidebar {
-  background: #15252E;
-  border-right: none;
-  box-shadow: 2px 0 16px rgba(0,0,0,.1);
-}
-.sidebar-logo {
-  font-family: 'Bricolage Grotesque', sans-serif !important;
-  font-size: 20px; font-weight: 800;
-  color: #EFF1E9; letter-spacing: -.03em;
-  text-decoration: none; display: block;
-  padding: 24px 20px 8px;
-}
-.sidebar-nav-label {
-  font-size: 10px; font-weight: 700; letter-spacing: .12em;
-  text-transform: uppercase; color: rgba(239,241,233,.35);
-  padding: 20px 20px 6px;
-}
-.app-tab {
-  display: flex; align-items: center; gap: 10px;
-  width: 100%; padding: 10px 16px; border-radius: 8px;
-  font-size: 14px; font-weight: 500; color: rgba(239,241,233,.6);
-  border: none; background: none; cursor: pointer;
-  transition: background .15s, color .15s;
-  margin: 1px 4px; width: calc(100% - 8px);
-}
-.app-tab:hover { background: rgba(255,255,255,.07); color: #EFF1E9; }
-.app-tab.active {
-  background: rgba(255,255,255,.12); color: #EFF1E9;
-  font-weight: 600;
-}
-.app-tab svg { opacity: .7; flex-shrink: 0; }
-.app-tab.active svg { opacity: 1; }
-
-/* ── Topbar ──────────────────────────────── */
-.app-topbar {
-  background: var(--surface);
-  border-bottom: 1.5px solid var(--border);
-  padding: 16px 28px;
-  display: flex; align-items: center; justify-content: space-between;
-}
-.topbar-title {
-  font-size: 18px; font-weight: 700; color: var(--text);
-  font-family: 'Bricolage Grotesque', sans-serif !important;
-  letter-spacing: -.02em;
-}
-.topbar-sub { font-size: 13px; color: var(--muted); margin-top: 1px; }
-.payday-badge {
-  background: #E8F5F0; border: 1.5px solid #B2DACE;
-  color: var(--brand-mid); font-size: 12px; font-weight: 600;
-  padding: 5px 12px; border-radius: 20px; letter-spacing: .01em;
-}
-
-/* ── App body padding ────────────────────── */
-.app-body { padding: 24px 28px; max-width: 860px; }
-
-/* ── Cards ───────────────────────────────── */
-.card {
-  background: var(--surface);
-  border: 1.5px solid var(--border);
-  border-radius: var(--radius);
-  padding: 24px; margin-bottom: 16px;
-  box-shadow: 0 1px 4px rgba(0,0,0,.04);
-}
-.card h3 {
-  font-family: 'Bricolage Grotesque', sans-serif !important;
-  font-size: 16px; font-weight: 700; color: var(--text);
-  letter-spacing: -.02em;
-}
-
-/* ── Section card headers with accent bar ── */
+/* Card-level icon headers */
 .card-section-header {
-  display: flex; align-items: center; gap: 10px;
+  display: flex; align-items: center; gap: 12px;
   margin-bottom: 20px; padding-bottom: 16px;
-  border-bottom: 1.5px solid var(--border);
+  border-bottom: 1.5px solid #E0E3D8;
 }
 .card-section-icon {
-  width: 34px; height: 34px; border-radius: 8px;
+  width: 36px; height: 36px; border-radius: 9px;
   display: flex; align-items: center; justify-content: center;
-  font-size: 17px; flex-shrink: 0;
+  font-size: 18px; flex-shrink: 0;
 }
-.card-section-icon.green { background: #E8F5F0; }
-.card-section-icon.blue  { background: #E6EEF5; }
-.card-section-icon.amber { background: #FDF3E0; }
+.card-section-icon.green { background: #E4F5EE; }
+.card-section-icon.blue  { background: #E3EEF7; }
+.card-section-icon.amber { background: #FDF3DF; }
 .card-section-icon.red   { background: #FDE8E4; }
-.card-section-title { font-family: 'Bricolage Grotesque', sans-serif !important; font-size: 16px; font-weight: 700; color: var(--text); letter-spacing: -.02em; }
-.card-section-sub   { font-size: 12px; color: var(--muted); margin-top: 1px; }
-
-/* ── Form groups ─────────────────────────── */
-.form-group { margin-bottom: 18px; }
-.form-group label {
-  display: block; font-size: 12px; font-weight: 600;
-  color: var(--muted); letter-spacing: .05em; text-transform: uppercase;
-  margin-bottom: 6px;
+.card-section-title {
+  font-size: 15px; font-weight: 700; color: #15252E;
+  letter-spacing: -.02em; line-height: 1.2;
 }
-.form-group input,
-.form-group select {
+.card-section-sub { font-size: 12px; color: #66756D; margin-top: 2px; }
+
+/* Labels — uppercase + spaced */
+#section-settings .form-group label {
+  font-size: 11px; font-weight: 700; letter-spacing: .08em;
+  text-transform: uppercase; color: #66756D; margin-bottom: 6px; display: block;
+}
+
+/* Inputs & selects */
+#section-settings .form-group input,
+#section-settings .form-group select {
   width: 100%; padding: 11px 14px;
-  background: var(--bg); border: 1.5px solid var(--border);
-  border-radius: 8px; font-size: 15px; color: var(--text);
+  background: #F4F5EF; border: 1.5px solid #E0E3D8;
+  border-radius: 8px; font-size: 15px; color: #15252E;
   font-family: 'Inter', sans-serif;
-  transition: border-color .15s, box-shadow .15s;
-  appearance: none; -webkit-appearance: none;
+  transition: border-color .15s, box-shadow .15s, background .15s;
+  appearance: none; -webkit-appearance: none; box-sizing: border-box;
 }
-.form-group input:focus,
-.form-group select:focus {
-  outline: none;
-  border-color: var(--brand-mid);
-  box-shadow: 0 0 0 3px rgba(18,122,107,.12);
-  background: #fff;
+#section-settings .form-group input:focus,
+#section-settings .form-group select:focus {
+  outline: none; border-color: #127A6B;
+  box-shadow: 0 0 0 3px rgba(18,122,107,.12); background: #fff;
 }
-.form-group select {
+#section-settings .form-group select {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2366756D' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 14px center;
-  padding-right: 36px;
+  background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px;
+  background-color: #F4F5EF;
 }
+#section-settings .form-group select:focus { background-color: #fff; }
 
-/* ── Plan table ──────────────────────────── */
-.plan-header {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 16px;
-}
-.balance-badge {
-  font-size: 12px; font-weight: 700; padding: 5px 12px;
-  border-radius: 20px; border: 1.5px solid;
-}
-.plan-table { width: 100%; border-collapse: collapse; }
-.plan-table thead th {
-  font-size: 10px; font-weight: 700; letter-spacing: .1em;
-  text-transform: uppercase; color: var(--muted);
-  padding: 0 10px 10px; text-align: left;
-  border-bottom: 1.5px solid var(--border);
-}
-.plan-table tbody tr {
-  border-bottom: 1px solid var(--border);
-  transition: background .12s;
-}
-.plan-table tbody tr:last-child { border-bottom: none; }
-.plan-table tbody tr:hover { background: #F8F9F4; }
-.plan-table td { padding: 10px; }
-.plan-table td input,
-.plan-table td select {
-  width: 100%; padding: 8px 10px;
-  background: #F4F5EF; border: 1.5px solid transparent;
-  border-radius: 7px; font-size: 14px; color: var(--text);
-  font-family: 'Inter', sans-serif;
+/* Plan table inputs */
+#section-settings .plan-table td input,
+#section-settings .plan-table td select {
+  padding: 8px 10px; background: #F4F5EF;
+  border: 1.5px solid transparent; border-radius: 7px;
+  font-size: 14px; color: #15252E; width: 100%;
+  font-family: 'Inter', sans-serif; box-sizing: border-box;
   transition: border-color .15s, background .15s;
 }
-.plan-table td input:focus,
-.plan-table td select:focus {
-  outline: none; border-color: var(--brand-mid);
-  background: #fff;
-  box-shadow: 0 0 0 3px rgba(18,122,107,.1);
+#section-settings .plan-table td input:focus,
+#section-settings .plan-table td select:focus {
+  outline: none; border-color: #127A6B;
+  background: #fff; box-shadow: 0 0 0 3px rgba(18,122,107,.1);
 }
-.plan-table td:first-child input { font-weight: 500; }
-.plan-table td:nth-child(2) input { font-family: 'IBM Plex Mono', monospace !important; font-size: 13px; }
-
-/* Delete row btn */
-.plan-table td button.btn-icon {
-  width: 28px; height: 28px; border-radius: 6px;
-  border: none; background: none; cursor: pointer;
-  color: #BEC7BF; display: flex; align-items: center; justify-content: center;
-  transition: background .15s, color .15s;
+#section-settings .plan-table tbody tr { transition: background .12s; }
+#section-settings .plan-table tbody tr:hover { background: #F8F9F4; }
+#section-settings .plan-table td:nth-child(2) input {
+  font-family: 'IBM Plex Mono', monospace; font-size: 13px;
 }
-.plan-table td button.btn-icon:hover { background: #FDE8E4; color: var(--red); }
 
-/* ── Buttons ─────────────────────────────── */
-.btn-primary {
-  background: var(--text); color: #EFF1E9;
-  border: none; border-radius: 8px;
-  padding: 12px 22px; font-size: 14px; font-weight: 600;
-  cursor: pointer; transition: background .15s, transform .1s;
+/* Save button with icon */
+#saveSettingsBtn {
   display: inline-flex; align-items: center; gap: 7px;
+  padding: 12px 22px; font-size: 14px; font-weight: 600;
+  border-radius: 8px; cursor: pointer;
+  transition: background .15s, transform .1s;
 }
-.btn-primary:hover { background: var(--brand); transform: translateY(-1px); }
-.btn-primary:active { transform: translateY(0); }
-.btn-outline {
-  background: none; border: 1.5px solid var(--border);
-  border-radius: 8px; padding: 8px 14px;
-  font-size: 13px; font-weight: 500; color: var(--text);
-  cursor: pointer; transition: border-color .15s, background .15s;
-}
-.btn-outline:hover { border-color: var(--brand-mid); background: #E8F5F0; color: var(--brand-mid); }
-.btn-sm { padding: 6px 12px; font-size: 12px; }
+#saveSettingsBtn:hover { transform: translateY(-1px); }
+#saveSettingsBtn:active { transform: translateY(0); }
 
-/* ── Add a line btn ──────────────────────── */
-#settAddLineBtn {
-  margin-top: 4px; color: var(--brand-mid);
-  border-color: #B2DACE; font-weight: 600;
-}
-#settAddLineBtn:hover { background: #E8F5F0; border-color: var(--brand-mid); }
-
-/* ── Save card ───────────────────────────── */
+/* Save card subtle highlight */
 #section-settings .card:has(#saveSettingsBtn) {
-  background: linear-gradient(135deg, #F4F5EF 0%, #E8F5F0 100%);
+  background: linear-gradient(135deg, #F4F5EF, #E8F5F0);
   border-color: #B2DACE;
 }
 
-/* ── Danger zone ─────────────────────────── */
-.danger-zone {
+/* Danger zone */
+#section-settings .danger-zone {
   border-color: #F5CECA !important;
-  background: linear-gradient(135deg, #fff 0%, #FEF5F3 100%) !important;
+  background: linear-gradient(135deg, #fff, #FEF5F3) !important;
 }
-.danger-zone h3 { color: var(--red) !important; }
+#section-settings .danger-zone .card-section-title { color: #A8402F; }
 .btn-danger {
-  background: none; border: 1.5px solid var(--red);
-  color: var(--red); border-radius: 8px;
-  padding: 10px 18px; font-size: 14px; font-weight: 600;
+  background: none; border: 1.5px solid #A8402F; color: #A8402F;
+  border-radius: 8px; padding: 10px 18px; font-size: 14px; font-weight: 600;
   cursor: pointer; transition: background .15s, color .15s;
 }
-.btn-danger:hover { background: var(--red); color: #fff; }
+.btn-danger:hover { background: #A8402F; color: #fff; }
 
-/* ── Auth / toast msgs ───────────────────── */
-.auth-msg { font-size: 13px; margin-top: 10px; color: var(--brand-mid); }
-
-/* ── User avatar ─────────────────────────── */
-.user-avatar {
-  width: 34px; height: 34px; border-radius: 50%;
-  background: var(--brand-mid); color: #fff;
-  font-size: 13px; font-weight: 700;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0; letter-spacing: .02em;
-}
-.user-name  { font-size: 13px; font-weight: 600; color: #EFF1E9; }
-.user-email { font-size: 11px; color: rgba(239,241,233,.5); }
-
-/* ── KPI strip ───────────────────────────── */
-.kpi-strip {
-  display: grid; grid-template-columns: repeat(4,1fr);
-  border: 1.5px solid var(--border); border-radius: var(--radius);
-  overflow: hidden; background: var(--surface);
-  margin-bottom: 20px; box-shadow: 0 1px 4px rgba(0,0,0,.04);
-}
-.kpi { padding: 16px 18px; border-right: 1.5px solid var(--border); }
-.kpi:last-child { border-right: none; }
-.kpi-l { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
-.kpi-v { font-family: 'IBM Plex Mono', monospace !important; font-size: 20px; font-weight: 600; color: var(--text); }
-.kpi-v.red { color: var(--red); }
-.kpi-v.green { color: var(--brand-mid); }
+/* Add a line btn */
+#settAddLineBtn { color: #127A6B; border-color: #B2DACE; font-weight: 600; }
+#settAddLineBtn:hover { background: #E4F5EE; border-color: #127A6B; }
 </style>
 
 </head>
@@ -500,13 +342,7 @@ body.app-page { background: var(--bg); }
       <!-- ══ REMINDERS ══════════════════════════════════ -->
       <section class="tab-section" id="section-reminders">
         <div class="card">
-          <div class="card-section-header">
-            <div class="card-section-icon amber">🔔</div>
-            <div>
-              <div class="card-section-title">Reminder settings</div>
-              <div class="card-section-sub">WhatsApp and email notifications</div>
-            </div>
-          </div>
+          <h3 style="margin-bottom:16px">Reminder settings</h3>
           <div class="form-group">
             <label>Email</label>
             <input type="email" id="remEmail" readonly class="input-readonly">
@@ -564,7 +400,7 @@ body.app-page { background: var(--bg); }
             <div class="card-section-icon green">💰</div>
             <div>
               <div class="card-section-title">Income</div>
-              <div class="card-section-sub">Your monthly take-home and payday</div>
+              <div class="card-section-sub">Monthly take-home &amp; payday</div>
             </div>
           </div>
           <div class="form-group">
@@ -590,11 +426,11 @@ body.app-page { background: var(--bg); }
             <div class="card-section-icon blue">📋</div>
             <div>
               <div class="card-section-title">Monthly plan</div>
-              <div class="card-section-sub">Set your budget lines for each month</div>
+              <div class="card-section-sub">Budget lines tracked each month</div>
             </div>
           </div>
           <div class="plan-header">
-            <h3>Monthly plan</h3>
+            <h3 style="visibility:hidden;height:0;margin:0">Monthly plan</h3>
             <div class="balance-badge" id="settBalanceBadge">—</div>
           </div>
           <table class="plan-table">
@@ -607,7 +443,7 @@ body.app-page { background: var(--bg); }
         </div>
         <div class="card">
           <button class="btn btn-primary" id="saveSettingsBtn">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
             Save all settings
           </button>
           <div class="auth-msg" id="settMsg"></div>
@@ -616,7 +452,7 @@ body.app-page { background: var(--bg); }
           <div class="card-section-header" style="border-color:#F5CECA">
             <div class="card-section-icon red">⚠️</div>
             <div>
-              <div class="card-section-title" style="color:#A8402F">Danger zone</div>
+              <div class="card-section-title">Danger zone</div>
               <div class="card-section-sub">These actions cannot be undone</div>
             </div>
           </div>
