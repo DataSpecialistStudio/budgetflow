@@ -385,16 +385,165 @@ function renderYear(){
   document.getElementById('yearTable').innerHTML=head+'<tbody>'+body+'</tbody>';
 
   const savLabels=MONTHS.map(m=>m.label.split(' ')[0]);
-  const savPlan=MONTHS.map(()=>plan.filter(l=>SAVINGS_TYPES.includes(l.type)).reduce((s,l)=>s+l.amount,0));
+  const planPerMonth=plan.filter(l=>SAVINGS_TYPES.includes(l.type)).reduce((s,l)=>s+l.amount,0);
+  const savPlan=MONTHS.map(()=>planPerMonth);
   const savAct=MONTHS.map(m=>plan.filter(l=>SAVINGS_TYPES.includes(l.type)).reduce((s,l)=>s+((ACTUALS[m.id]||{})[l.name]?.added||0),0));
+
+  // Color bars: teal=settled, amber=partial, light gray=not started
+  const barColors=savAct.map(a=>
+    a===0 ? 'rgba(198,207,188,.45)'
+    : a>=planPerMonth ? 'rgba(18,122,107,.85)'
+    : 'rgba(201,135,31,.8)'
+  );
+  const barBorders=savAct.map(a=>
+    a===0 ? 'rgba(180,190,175,.6)'
+    : a>=planPerMonth ? '#0F6E56'
+    : '#B07818'
+  );
+
+  // YTD summary stats
+  const ytdSaved=savAct.reduce((s,v)=>s+v,0);
+  const monthsDone=savAct.filter(v=>v>0).length;
+  const bestMonth=Math.max(...savAct);
+  const bestIdx=savAct.indexOf(bestMonth);
+
+  // Inject summary strip above chart
+  const chartWrap=document.getElementById('savingsChart').parentElement;
+  let strip=chartWrap.querySelector('.sav-summary-strip');
+  if(!strip){
+    strip=document.createElement('div');
+    strip.className='sav-summary-strip';
+    strip.style.cssText='display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px';
+    chartWrap.insertBefore(strip,chartWrap.firstChild);
+  }
+  strip.innerHTML=[
+    {l:'YTD saved',v:INRs(ytdSaved),c:'#127A6B'},
+    {l:'Best month',v:bestMonth>0?savLabels[bestIdx]+' · '+INRs(bestMonth):'—',c:'#C9871F'},
+    {l:'Monthly target',v:INR(planPerMonth),c:'#2E4A7D'}
+  ].map(({l,v,c})=>`<div style="background:#fff;border:1.5px solid #E0E3D8;border-radius:10px;padding:10px 14px">
+    <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#66756D;margin-bottom:3px">${l}</div>
+    <div style="font-size:15px;font-weight:700;color:${c};font-family:'IBM Plex Mono',monospace">${v}</div>
+  </div>`).join('');
+
   if(savingsChart) savingsChart.destroy();
+
+  // Custom plugin: pct labels above bars + goal line
+  const pctLabelPlugin={
+    id:'pctLabels',
+    afterDatasetsDraw(chart){
+      const {ctx,data,scales:{x,y}}=chart;
+      data.datasets[0].data.forEach((_,i)=>{
+        const actual=savAct[i], plan2=planPerMonth;
+        if(actual===0) return;
+        const pct=plan2?Math.round(actual/plan2*100):0;
+        const meta=chart.getDatasetMeta(0);
+        const bar=meta.data[i];
+        ctx.save();
+        ctx.font='600 11px Inter, sans-serif';
+        ctx.fillStyle=actual>=plan2?'#0F6E56':'#B07818';
+        ctx.textAlign='center';
+        ctx.textBaseline='bottom';
+        ctx.fillText(pct+'%', bar.x, bar.y-3);
+        ctx.restore();
+      });
+    }
+  };
+
+  const goalLinePlugin={
+    id:'goalLine',
+    afterDraw(chart){
+      const {ctx,scales:{y},chartArea:{left,right}}=chart;
+      const yVal=y.getPixelForValue(planPerMonth);
+      ctx.save();
+      ctx.setLineDash([6,4]);
+      ctx.lineWidth=1.5;
+      ctx.strokeStyle='rgba(46,74,125,.5)';
+      ctx.beginPath(); ctx.moveTo(left,yVal); ctx.lineTo(right,yVal); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.font='500 10px Inter, sans-serif';
+      ctx.fillStyle='rgba(46,74,125,.75)';
+      ctx.textAlign='right';
+      ctx.fillText('Target', right, yVal-4);
+      ctx.restore();
+    }
+  };
+
   savingsChart=new Chart(document.getElementById('savingsChart'),{
     type:'bar',
-    data:{labels:savLabels,datasets:[
-      {label:'Plan',data:savPlan,backgroundColor:'rgba(198,207,188,.7)',borderColor:'var(--rule)',borderWidth:1},
-      {label:'Actual',data:savAct,backgroundColor:'rgba(18,122,107,.7)',borderColor:'#127A6B',borderWidth:1}
-    ]},
-    options:{responsive:true,plugins:{legend:{position:'top'}},scales:{y:{ticks:{callback:v=>`₹${(v/1000).toFixed(0)}k`}}}}
+    data:{
+      labels:savLabels,
+      datasets:[{
+        label:'Actual saved',
+        data:savAct,
+        backgroundColor:barColors,
+        borderColor:barBorders,
+        borderWidth:1.5,
+        borderRadius:6,
+        borderSkipped:false,
+        hoverBackgroundColor:savAct.map(a=>a===0?'rgba(198,207,188,.7)':a>=planPerMonth?'rgba(18,122,107,1)':'rgba(201,135,31,1)'),
+      }]
+    },
+    options:{
+      responsive:true,
+      maintainAspectRatio:true,
+      plugins:{
+        legend:{display:false},
+        tooltip:{
+          backgroundColor:'rgba(21,37,46,.95)',
+          titleColor:'#EFF1E9',
+          bodyColor:'#B0C4BD',
+          titleFont:{size:13,weight:'700'},
+          bodyFont:{size:12},
+          padding:{top:12,bottom:12,left:14,right:14},
+          cornerRadius:10,
+          callbacks:{
+            title:ctx=>{
+              const i=ctx[0].dataIndex;
+              return MONTHS[i].label;
+            },
+            label:ctx=>{
+              const i=ctx.dataIndex;
+              const a=savAct[i], p=planPerMonth;
+              const pct=p?Math.round(a/p*100):0;
+              const status=a===0?'Not started':a>=p?'✓ Fully saved':'Partial — '+pct+'% done';
+              return [
+                '  Saved:  '+INR(a),
+                '  Target: '+INR(p),
+                '  Status: '+status
+              ];
+            }
+          }
+        }
+      },
+      onClick:(evt,elements)=>{
+        if(elements.length){
+          const i=elements[0].index;
+          activeMonth=MONTHS[i].id;
+          // Switch to This Month tab
+          document.querySelector('[data-section="month"]')?.click();
+        }
+      },
+      onHover:(evt,elements)=>{
+        evt.native.target.style.cursor=elements.length?'pointer':'default';
+      },
+      scales:{
+        x:{
+          grid:{display:false},
+          ticks:{font:{size:11,weight:'500'},color:'#66756D'}
+        },
+        y:{
+          grid:{color:'rgba(0,0,0,.05)'},
+          ticks:{
+            callback:v=>`₹${(v/1000).toFixed(0)}k`,
+            font:{size:11},
+            color:'#66756D'
+          },
+          beginAtZero:true
+        }
+      },
+      animation:{duration:700,easing:'easeOutQuart'}
+    },
+    plugins:[pctLabelPlugin, goalLinePlugin]
   });
 }
 
