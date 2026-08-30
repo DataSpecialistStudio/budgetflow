@@ -217,6 +217,15 @@
 .drag-th { width: 28px; }
 </style>
 
+
+<style>
+/* Tab section visibility — explicit to override any inline display styles */
+.tab-section { display: none !important; }
+.tab-section.active { display: block !important; }
+#section-corpus.active { display: block !important; }
+#section-year.active { display: block !important; }
+</style>
+
 </head>
 <body class="app-page">
 
@@ -424,7 +433,8 @@
       </section>
 
       <!-- ══ CORPUS ═════════════════════════════════════ -->
-      <section class="tab-section" id="section-corpus" style="display:flex;flex-direction:column;height:calc(100vh - 100px);gap:10px">
+      <section class="tab-section" id="section-corpus">
+        <div style="display:flex;flex-direction:column;height:calc(100vh - 100px);gap:10px">
 
         <!-- KPI strip -->
         <div class="kpi-strip" style="flex-shrink:0">
@@ -472,6 +482,7 @@
           </div>
 
         </div>
+        </div><!-- inner corpus wrapper -->
       </section>
 
       <!-- ══ REMINDERS ══════════════════════════════════ -->
