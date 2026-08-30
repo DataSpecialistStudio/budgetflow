@@ -99,6 +99,7 @@ function renderMonth(){
 
   // KPIs
   const daysLeft=new Date(now.getFullYear(),now.getMonth()+1,0).getDate()-now.getDate();
+  const salaryEl=document.getElementById('kpiSalary'); if(salaryEl) salaryEl.textContent=INR(PROFILE.income||0);
   document.getElementById('kpiLogged').textContent=INR(totalAdded);
   document.getElementById('kpiPending').textContent=INR(Math.max(totalPlan-totalAdded,0));
   document.getElementById('kpiSaved').textContent=INR(totalSaved);
