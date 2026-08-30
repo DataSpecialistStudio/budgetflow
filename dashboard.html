@@ -138,9 +138,15 @@
   pointer-events: none;
 }
 .donut-center-title {
-  font-size: 13px; font-weight: 700; color: #15252E; letter-spacing: -.01em;
+  font-size: 12px; font-weight: 700; color: #15252E; letter-spacing: -.01em;
+  transition: all .2s ease;
 }
-.donut-center-sub { font-size: 11px; color: #66756D; margin-top: 1px; }
+.donut-center-sub {
+  font-size: 11px; color: #66756D; margin-top: 2px;
+  font-family: 'IBM Plex Mono', monospace;
+  transition: all .2s ease;
+  max-width: 90px; text-align: center;
+}
 
 /* 3 stat cards side by side */
 .alloc-cards {

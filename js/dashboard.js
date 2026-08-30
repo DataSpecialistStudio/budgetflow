@@ -224,6 +224,9 @@ function renderMonthDonut(fixed, savings, flex){
     }
   };
 
+  // Richer segment colors with lighter hover variants
+  const hoverColors=['#BF4F38','#0F8F7A','#D99A28'];
+
   donutChart=new Chart(canvas,{
     type:'doughnut',
     data:{
@@ -231,48 +234,31 @@ function renderMonthDonut(fixed, savings, flex){
       datasets:[{
         data:values,
         backgroundColor:colors,
-        hoverBackgroundColor:colors,
-        borderWidth:3,
+        hoverBackgroundColor:hoverColors,
+        borderWidth:4,
         borderColor:'#F4F5EF',
-        hoverBorderColor:'#fff',
-        hoverOffset:14,
-        spacing:2
+        hoverBorderColor:'#ffffff',
+        hoverOffset:18,
+        spacing:3
       }]
     },
     options:{
-      cutout:'68%',
+      cutout:'70%',
       plugins:{
         legend:{display:false},
-        tooltip:{
-          enabled:true,
-          backgroundColor:'rgba(21,37,46,.92)',
-          titleColor:'#EFF1E9',
-          bodyColor:'#B0C4BD',
-          titleFont:{size:13,weight:'700'},
-          bodyFont:{size:12},
-          padding:{top:10,bottom:10,left:14,right:14},
-          cornerRadius:10,
-          displayColors:true,
-          boxWidth:10, boxHeight:10, boxPadding:4,
-          callbacks:{
-            title:ctx=>icons[ctx[0].dataIndex]+' '+ctx[0].label,
-            label:ctx=>{
-              const pct=total?Math.round(ctx.raw/total*100):0;
-              return '  '+INR(ctx.raw)+'  ('+pct+'%)';
-            }
-          }
-        }
+        tooltip:{enabled:false}   // centre label handles hover info — no overlap
       },
       animation:{
         animateRotate:true,
         animateScale:true,
-        duration:900,
+        duration:1000,
         easing:'easeOutQuart'
       },
       onHover:(evt,elements)=>{
         if(elements.length){
           const i=elements[0].index;
-          setCentre(icons[i]+' '+labels[i], INR(values[i]));
+          const pct=total?Math.round(values[i]/total*100):0;
+          setCentre(icons[i]+' '+labels[i], INR(values[i])+'  ·  '+pct+'%');
           canvas.style.cursor='pointer';
         } else {
           setCentre('Total', total?INR(total):'—');
