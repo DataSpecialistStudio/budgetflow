@@ -276,7 +276,7 @@ function renderMonthRail(){
   if(!rail){
     rail=document.createElement('div');
     rail.id='monthRail';
-    rail.style.cssText='display:flex;overflow-x:auto;border:1.5px solid var(--ink);border-top:0;background:var(--paper2);margin-bottom:16px;scrollbar-width:thin;-webkit-overflow-scrolling:touch';
+    rail.style.cssText='display:flex;overflow:hidden;border:1.5px solid var(--ink);border-top:0;background:var(--paper2);margin-bottom:16px;width:100%;box-sizing:border-box';
     document.getElementById('entryBody').closest('.card').before(rail);
   }
   rail.innerHTML=MONTHS.map(m=>{
@@ -286,11 +286,11 @@ function renderMonthRail(){
     const ta=plan.reduce((s,l)=>s+Math.min((acts[l.name]||{}).added||0,l.amount),0);
     const pct=tp?Math.round(ta/tp*100):0;
     const bits=m.label.split(' ');
-    return `<button style="flex:0 0 auto;min-width:74px;padding:9px 11px;border:0;border-right:1px solid var(--rule);
-      background:${m.id===activeMonth?'var(--ink)':'none'};color:${m.id===activeMonth?'var(--paper)':'var(--ink)'};cursor:pointer;text-align:left"
+    return `<button style="flex:1 1 0;min-width:0;padding:9px 6px;border:0;border-right:1px solid var(--rule);
+      background:${m.id===activeMonth?'var(--ink)':'none'};color:${m.id===activeMonth?'var(--paper)':'var(--ink)'};cursor:pointer;text-align:center"
       data-mid="${m.id}">
-      <b style="font-family:var(--display);font-weight:700;font-size:13px;display:block">${bits[0]}</b>
-      <span style="font-family:var(--mono);font-size:9.5px;color:${m.id===activeMonth?'#A9B7AC':'var(--slate)'}">${bits[1]}</span>
+      <b style="font-family:var(--display);font-weight:700;font-size:12px;display:block;white-space:nowrap">${bits[0]}</b>
+      <span style="font-family:var(--mono);font-size:9px;color:${m.id===activeMonth?'#A9B7AC':'var(--slate)'}">${bits[1]}</span>
       <div style="height:3px;background:${m.id===activeMonth?'#3A4B54':'var(--rule-soft)'};margin-top:6px">
         <div style="height:100%;width:${pct}%;background:var(--teal)"></div>
       </div>
