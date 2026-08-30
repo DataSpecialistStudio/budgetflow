@@ -583,7 +583,7 @@ function renderCorpus(){
       {type:'line',label:'Estimated',data:ests,borderColor:'#127A6B',backgroundColor:'rgba(18,122,107,.08)',borderWidth:2.5,pointRadius:3,fill:true,tension:.3},
       {type:'line',label:'Plan',data:plans,borderColor:'#8C9A90',borderWidth:1.8,borderDash:[5,4],pointRadius:0,fill:false}
     ]},
-    options:{responsive:true,plugins:{legend:{position:'top'}},scales:{y:{ticks:{callback:v=>INRs(v)}}}}
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:11},boxWidth:20}}},scales:{y:{grid:{color:'rgba(0,0,0,.04)'},ticks:{callback:v=>INRs(v),font:{size:10}}},x:{grid:{display:false},ticks:{font:{size:10}}}}}
   });
   renderProjection();
 }
@@ -609,12 +609,12 @@ function renderProjection(){
       {label:'Corpus',data:totY,borderColor:'#127A6B',backgroundColor:'rgba(18,122,107,.1)',fill:true,borderWidth:2.5,tension:.4},
       {label:'Invested',data:putY,borderColor:'#8C9A90',borderWidth:1.8,borderDash:[5,4],fill:false,tension:.4}
     ]},
-    options:{responsive:true,plugins:{legend:{position:'top'}},scales:{y:{ticks:{callback:v=>INRs(v)}}}}
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:11},boxWidth:20}}},scales:{y:{grid:{color:'rgba(0,0,0,.04)'},ticks:{callback:v=>INRs(v),font:{size:10}}},x:{grid:{display:false},ticks:{font:{size:10}}}}}
   });
   const ms=document.getElementById('projMilestones');
   ms.innerHTML=[[1,12],[3,36],[5,60],[10,120]].map(([yr,i])=>{
     const v=tot[i-1]||0,p=put[i-1]||0;
-    return `<div class="kpi"><div class="kpi-l">Year ${yr}</div><div class="kpi-v">${INRs(v)}</div><div style="font-size:11px;color:var(--slate)">+${INRs(v-p)} gain</div></div>`;
+    return `<div class="kpi" style="padding:8px 10px"><div class="kpi-l" style="font-size:9px">Year ${yr}</div><div class="kpi-v" style="font-size:14px">${INRs(v)}</div><div style="font-size:10px;color:var(--slate)">+${INRs(v-p)}</div></div>`;
   }).join('');
   document.getElementById('projRate')?.addEventListener('change',renderProjection);
   document.getElementById('projFd')?.addEventListener('change',renderProjection);

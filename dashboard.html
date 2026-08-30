@@ -430,40 +430,53 @@
       </section>
 
       <!-- ══ CORPUS ═════════════════════════════════════ -->
-      <section class="tab-section" id="section-corpus">
-        <div class="kpi-strip" style="margin-bottom:20px">
+      <section class="tab-section" id="section-corpus" style="display:flex;flex-direction:column;height:calc(100vh - 100px);gap:10px">
+
+        <!-- KPI strip -->
+        <div class="kpi-strip" style="flex-shrink:0">
           <div class="kpi"><div class="kpi-l">Total deposited</div><div class="kpi-v" id="cDeposited">₹0</div></div>
           <div class="kpi"><div class="kpi-l">Est. value</div><div class="kpi-v green" id="cEst">₹0</div></div>
           <div class="kpi"><div class="kpi-l">Growth added</div><div class="kpi-v green" id="cGain">₹0</div></div>
           <div class="kpi"><div class="kpi-l">Year target</div><div class="kpi-v" id="cTarget">₹0</div></div>
         </div>
-        <div class="card">
-          <h3 style="margin-bottom:8px">Corpus growth</h3>
-          <p class="lede">Bars = deposited &nbsp;·&nbsp; Green line = estimated with growth &nbsp;·&nbsp; Dashed = plan</p>
-          <canvas id="corpusChart" height="260"></canvas>
-        </div>
-        <div class="card">
-          <h3 style="margin-bottom:14px">10-year projection</h3>
-          <div class="projection-controls">
-            <div class="ctl">
-              <label>Equity return</label>
-              <select id="projRate">
-                <option value="10">10% conservative</option>
-                <option value="12" selected>12% base case</option>
-                <option value="14">14% optimistic</option>
-              </select>
-            </div>
-            <div class="ctl">
-              <label>FD rate</label>
-              <select id="projFd">
-                <option value="6.5" selected>6.5%</option>
-                <option value="7">7.0%</option>
-                <option value="7.5">7.5%</option>
-              </select>
+
+        <!-- Two charts side by side -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;flex:1;min-height:0">
+
+          <!-- LEFT: Corpus growth -->
+          <div class="card" style="margin-bottom:0;padding:14px 16px;display:flex;flex-direction:column;overflow:hidden">
+            <h3 style="font-size:14px;margin-bottom:2px;flex-shrink:0">Corpus growth</h3>
+            <p class="lede" style="font-size:11px;margin-bottom:8px;flex-shrink:0">Bars = deposited · Green = estimated · Dashed = plan</p>
+            <div style="flex:1;position:relative;min-height:0">
+              <canvas id="corpusChart" style="position:absolute;inset:0;width:100%!important;height:100%!important"></canvas>
             </div>
           </div>
-          <canvas id="projChart" height="220"></canvas>
-          <div class="kpi-strip" id="projMilestones" style="margin-top:16px"></div>
+
+          <!-- RIGHT: 10-year projection -->
+          <div class="card" style="margin-bottom:0;padding:14px 16px;display:flex;flex-direction:column;overflow:hidden">
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-shrink:0;margin-bottom:8px">
+              <h3 style="font-size:14px;margin:0">10-year projection</h3>
+              <div style="display:flex;gap:8px;align-items:center">
+                <select id="projRate" style="font-size:11px;padding:3px 6px;border:1.5px solid #E0E3D8;border-radius:6px;background:#F4F5EF">
+                  <option value="10">10% conservative</option>
+                  <option value="12" selected>12% base case</option>
+                  <option value="14">14% optimistic</option>
+                </select>
+                <select id="projFd" style="font-size:11px;padding:3px 6px;border:1.5px solid #E0E3D8;border-radius:6px;background:#F4F5EF">
+                  <option value="6.5" selected>FD 6.5%</option>
+                  <option value="7">FD 7.0%</option>
+                  <option value="7.5">FD 7.5%</option>
+                </select>
+              </div>
+            </div>
+            <!-- Milestone strip -->
+            <div class="kpi-strip" id="projMilestones" style="flex-shrink:0;margin-bottom:8px;border-radius:8px;overflow:hidden"></div>
+            <!-- Chart -->
+            <div style="flex:1;position:relative;min-height:0">
+              <canvas id="projChart" style="position:absolute;inset:0;width:100%!important;height:100%!important"></canvas>
+            </div>
+          </div>
+
         </div>
       </section>
 
