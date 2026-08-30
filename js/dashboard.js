@@ -188,33 +188,99 @@ function renderMonth(){
 function renderMonthDonut(fixed, savings, flex){
   const canvas=document.getElementById('monthDonut');
   if(!canvas) return;
-  // Update legend values
+
+  // Update alloc-card legend values (new rich cards)
   const lf=document.getElementById('legendFixed');
   const ls=document.getElementById('legendSavings');
   const lx=document.getElementById('legendFlex');
   if(lf) lf.textContent=INR(fixed);
   if(ls) ls.textContent=INR(savings);
   if(lx) lx.textContent=INR(flex);
+
+  const total=fixed+savings+flex;
+  const labels=['Fixed','Savings','Flexible'];
+  const values=[fixed,savings,flex];
+  const colors=['#A8402F','#127A6B','#C9871F'];
+  const lightColors=['rgba(168,64,47,.15)','rgba(18,122,107,.15)','rgba(201,135,31,.15)'];
+  const icons=['🔒','📈','🌀'];
+
+  // Centre label elements
+  const titleEl=document.querySelector('.donut-center-title');
+  const subEl=document.querySelector('.donut-center-sub');
+
+  function setCentre(label, value){
+    if(titleEl) titleEl.textContent=label||'Total';
+    if(subEl)   subEl.textContent=value||(total?INR(total):'—');
+  }
+  setCentre('Total', total?INR(total):'—');
+
   if(donutChart) donutChart.destroy();
+
+  // Custom centre-label plugin
+  const centreLabelPlugin={
+    id:'centreLabel',
+    beforeDraw(chart){
+      // handled by DOM overlay — nothing needed here
+    }
+  };
+
   donutChart=new Chart(canvas,{
     type:'doughnut',
     data:{
-      labels:['Fixed','Savings','Flexible'],
+      labels,
       datasets:[{
-        data:[fixed, savings, flex],
-        backgroundColor:['#A8402F','#127A6B','#C9871F'],
-        borderWidth:0,
-        hoverOffset:4
+        data:values,
+        backgroundColor:colors,
+        hoverBackgroundColor:colors,
+        borderWidth:3,
+        borderColor:'#F4F5EF',
+        hoverBorderColor:'#fff',
+        hoverOffset:14,
+        spacing:2
       }]
     },
     options:{
-      cutout:'72%',
+      cutout:'68%',
       plugins:{
         legend:{display:false},
-        tooltip:{callbacks:{label:ctx=>' '+INR(ctx.raw)}}
+        tooltip:{
+          enabled:true,
+          backgroundColor:'rgba(21,37,46,.92)',
+          titleColor:'#EFF1E9',
+          bodyColor:'#B0C4BD',
+          titleFont:{size:13,weight:'700'},
+          bodyFont:{size:12},
+          padding:{top:10,bottom:10,left:14,right:14},
+          cornerRadius:10,
+          displayColors:true,
+          boxWidth:10, boxHeight:10, boxPadding:4,
+          callbacks:{
+            title:ctx=>icons[ctx[0].dataIndex]+' '+ctx[0].label,
+            label:ctx=>{
+              const pct=total?Math.round(ctx.raw/total*100):0;
+              return '  '+INR(ctx.raw)+'  ('+pct+'%)';
+            }
+          }
+        }
       },
-      animation:{duration:600}
-    }
+      animation:{
+        animateRotate:true,
+        animateScale:true,
+        duration:900,
+        easing:'easeOutQuart'
+      },
+      onHover:(evt,elements)=>{
+        if(elements.length){
+          const i=elements[0].index;
+          setCentre(icons[i]+' '+labels[i], INR(values[i]));
+          canvas.style.cursor='pointer';
+        } else {
+          setCentre('Total', total?INR(total):'—');
+          canvas.style.cursor='default';
+        }
+      }
+    },
+    plugins:[centreLabelPlugin]
   });
 }
 
