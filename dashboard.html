@@ -408,14 +408,21 @@
 
       <!-- ══ YEAR VIEW ══════════════════════════════════ -->
       <section class="tab-section" id="section-year">
-        <div class="card">
-          <h3 style="margin-bottom:8px">Year at a glance</h3>
-          <p class="lede">Green = settled &nbsp;·&nbsp; Amber = part-paid &nbsp;·&nbsp; Red = pending &nbsp;·&nbsp; Dot = not started</p>
-          <div class="table-wrap"><table class="year-table" id="yearTable"></table></div>
-        </div>
-        <div class="card">
-          <h3 style="margin-bottom:16px">Monthly savings vs plan</h3>
-          <canvas id="savingsChart" height="220"></canvas>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start">
+
+          <!-- LEFT: Year at a glance -->
+          <div class="card" style="margin-bottom:0;padding:16px 18px">
+            <h3 style="margin-bottom:4px;font-size:14px">Year at a glance</h3>
+            <p class="lede" style="font-size:11px;margin-bottom:10px">Green = settled · Amber = part-paid · Red = pending · Dot = not started</p>
+            <div class="table-wrap" style="overflow-x:auto;max-height:none"><table class="year-table" id="yearTable" style="font-size:12px"></table></div>
+          </div>
+
+          <!-- RIGHT: Savings chart -->
+          <div class="card" style="margin-bottom:0;padding:16px 18px">
+            <h3 style="margin-bottom:10px;font-size:14px">Monthly savings vs plan</h3>
+            <canvas id="savingsChart" height="260"></canvas>
+          </div>
+
         </div>
       </section>
 

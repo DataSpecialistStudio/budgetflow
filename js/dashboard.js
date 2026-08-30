@@ -413,16 +413,16 @@ function renderYear(){
   if(!strip){
     strip=document.createElement('div');
     strip.className='sav-summary-strip';
-    strip.style.cssText='display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px';
+    strip.style.cssText='display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px';
     chartWrap.insertBefore(strip,chartWrap.firstChild);
   }
   strip.innerHTML=[
     {l:'YTD saved',v:INRs(ytdSaved),c:'#127A6B'},
     {l:'Best month',v:bestMonth>0?savLabels[bestIdx]+' · '+INRs(bestMonth):'—',c:'#C9871F'},
     {l:'Monthly target',v:INR(planPerMonth),c:'#2E4A7D'}
-  ].map(({l,v,c})=>`<div style="background:#fff;border:1.5px solid #E0E3D8;border-radius:10px;padding:10px 14px">
-    <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#66756D;margin-bottom:3px">${l}</div>
-    <div style="font-size:15px;font-weight:700;color:${c};font-family:'IBM Plex Mono',monospace">${v}</div>
+  ].map(({l,v,c})=>`<div style="background:#F8F9F4;border:1.5px solid #E0E3D8;border-radius:8px;padding:8px 10px">
+    <div style="font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#66756D;margin-bottom:2px">${l}</div>
+    <div style="font-size:13px;font-weight:700;color:${c};font-family:'IBM Plex Mono',monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${v}</div>
   </div>`).join('');
 
   if(savingsChart) savingsChart.destroy();
@@ -541,7 +541,7 @@ function renderYear(){
           beginAtZero:true
         }
       },
-      animation:{duration:700,easing:'easeOutQuart'}
+      animation:{duration:500,easing:'easeOutQuart'}
     },
     plugins:[pctLabelPlugin, goalLinePlugin]
   });
