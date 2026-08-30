@@ -408,19 +408,21 @@
 
       <!-- ══ YEAR VIEW ══════════════════════════════════ -->
       <section class="tab-section" id="section-year">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:stretch;height:calc(100vh - 148px)">
 
           <!-- LEFT: Year at a glance -->
-          <div class="card" style="margin-bottom:0;padding:16px 18px">
-            <h3 style="margin-bottom:4px;font-size:14px">Year at a glance</h3>
-            <p class="lede" style="font-size:11px;margin-bottom:10px">Green = settled · Amber = part-paid · Red = pending · Dot = not started</p>
-            <div class="table-wrap" style="overflow-x:auto;max-height:none"><table class="year-table" id="yearTable" style="font-size:12px"></table></div>
+          <div class="card" style="margin-bottom:0;padding:16px 18px;display:flex;flex-direction:column;overflow:hidden">
+            <h3 style="margin-bottom:4px;font-size:14px;flex-shrink:0">Year at a glance</h3>
+            <p class="lede" style="font-size:11px;margin-bottom:10px;flex-shrink:0">Green = settled · Amber = part-paid · Red = pending · Dot = not started</p>
+            <div class="table-wrap" style="overflow:auto;flex:1"><table class="year-table" id="yearTable" style="font-size:12px"></table></div>
           </div>
 
           <!-- RIGHT: Savings chart -->
-          <div class="card" style="margin-bottom:0;padding:16px 18px">
-            <h3 style="margin-bottom:10px;font-size:14px">Monthly savings vs plan</h3>
-            <canvas id="savingsChart" height="260"></canvas>
+          <div class="card" style="margin-bottom:0;padding:16px 18px;display:flex;flex-direction:column;overflow:hidden">
+            <h3 style="margin-bottom:6px;font-size:14px;flex-shrink:0">Monthly savings vs plan</h3>
+            <div id="savChartWrap" style="flex:1;position:relative;min-height:0">
+              <canvas id="savingsChart" style="position:absolute;inset:0;width:100%!important;height:100%!important"></canvas>
+            </div>
           </div>
 
         </div>

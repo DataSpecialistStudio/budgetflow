@@ -408,13 +408,13 @@ function renderYear(){
   const bestIdx=savAct.indexOf(bestMonth);
 
   // Inject summary strip above chart
-  const chartWrap=document.getElementById('savingsChart').parentElement;
+  const chartWrap=document.getElementById('savChartWrap')?.parentElement||document.getElementById('savingsChart').parentElement;
   let strip=chartWrap.querySelector('.sav-summary-strip');
   if(!strip){
     strip=document.createElement('div');
     strip.className='sav-summary-strip';
     strip.style.cssText='display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px';
-    chartWrap.insertBefore(strip,chartWrap.firstChild);
+    const savWrap=document.getElementById('savChartWrap'); if(savWrap) savWrap.parentElement.insertBefore(strip, savWrap); else chartWrap.insertBefore(strip,chartWrap.firstChild);
   }
   strip.innerHTML=[
     {l:'YTD saved',v:INRs(ytdSaved),c:'#127A6B'},
@@ -485,7 +485,7 @@ function renderYear(){
     },
     options:{
       responsive:true,
-      maintainAspectRatio:true,
+      maintainAspectRatio:false,
       plugins:{
         legend:{display:false},
         tooltip:{
