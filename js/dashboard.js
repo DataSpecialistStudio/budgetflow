@@ -166,13 +166,24 @@ function renderMonth(){
     <td class="num">${totalPlan?Math.round(totalAdded/totalPlan*100):0}%</td>
   </tr>`;
 
-  // Hover tooltip on plan amount
+  // Hover tooltip on plan amount — auto-scroll so tooltip is always visible
   tbody.querySelectorAll('.plan-amt-click').forEach(span=>{
     const td=span.closest('td');
     const tip=td?.querySelector('.invest-tooltip');
     if(!tip) return;
-    td.addEventListener('mouseenter',()=>tip.style.display='block');
-    td.addEventListener('mouseleave',()=>tip.style.display='none');
+    td.addEventListener('mouseenter',()=>{
+      tip.style.display='block';
+      requestAnimationFrame(()=>{
+        const tipRect=tip.getBoundingClientRect();
+        const viewH=window.innerHeight;
+        if(tipRect.bottom > viewH - 12){
+          const overflowBy=tipRect.bottom - viewH + 20;
+          const scroller=document.querySelector('.app-main')||document.documentElement;
+          scroller.scrollBy({top:overflowBy, behavior:'smooth'});
+        }
+      });
+    });
+    td.addEventListener('mouseleave',()=>{ tip.style.display='none'; });
   });
 
   // Double-click plan amount → auto-fill added
