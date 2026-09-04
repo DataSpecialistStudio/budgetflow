@@ -717,56 +717,48 @@ function renderSettings(){
         <td><select data-i="${i}" data-f="type">
           ${['Fixed','Savings','Flexible'].map(t=>`<option${l.type===t?' selected':''}>${t}</option>`).join('')}
         </select></td>
-        <td class="invest-cell">
-          ${['FD','SIP','Cash','EMI','Insurance','Other'].includes(l.investment||'Other') && l.investment!=='Other'
-            ? `<select data-i="${i}" data-f="investment" style="width:110px" class="invest-select">
-                ${['FD','SIP','Cash','EMI','Insurance','Other'].map(v=>`<option${(l.investment||'FD')===v?' selected':''}>${v}</option>`).join('')}
-               </select>`
-            : `<div style="display:flex;gap:4px;align-items:center">
-                <select data-i="${i}" data-f="investment" style="width:80px" class="invest-select">
-                  ${['FD','SIP','Cash','EMI','Insurance','Other'].map(v=>`<option${(!l.investment||l.investment==='Other'||!['FD','SIP','Cash','EMI','Insurance'].includes(l.investment))?v==='Other':l.investment===v?' selected':''}>${v}</option>`).join('')}
-                </select>
-                <input type="text" class="invest-custom" data-i="${i}" data-f="investment"
-                  placeholder="e.g. PPF" value="${!['FD','SIP','Cash','EMI','Insurance','Other'].includes(l.investment||'')?esc(l.investment||''):''"}"
-                  style="width:90px;padding:5px 8px;border:1.5px solid #127A6B;border-radius:7px;font-size:13px">
-               </div>`
-          }
+        <td>
+          <select data-i="${i}" data-f="investment" class="invest-select" style="width:110px">
+            ${['FD','SIP','Cash','EMI','Insurance','Other'].map(v=>`<option${(l.investment||'FD')===v?' selected':''}>${v}</option>`).join('')}
+          </select>
+          ${!['FD','SIP','Cash','EMI','Insurance','Other',''].includes(l.investment||'FD')?`<input type='text' class='invest-custom' data-i='${i}' placeholder='Custom...' value='${esc(l.investment)}' style='margin-top:4px;width:100%;padding:4px 8px;border:1.5px solid #127A6B;border-radius:6px;font-size:12px'>`:``}
         </td>
         <td><button class="del-btn" data-del="${i}">✕</button></td>
       </tr>`).join('');
     tbody.querySelectorAll('[data-f]').forEach(el=>{
       el.onchange=()=>{const i=+el.dataset.i,f=el.dataset.f;settPlan[i][f]=f==='amount'?(parseFloat(el.value)||0):el.value;updateSettBal();};
     });
-    // Investment dropdown: switch to custom text input when "Other" is selected
+    // Investment dropdown: when Other selected, show a text input below
     tbody.querySelectorAll('.invest-select').forEach(sel=>{
       sel.addEventListener('change',()=>{
         const i=+sel.dataset.i;
+        settPlan[i].investment=sel.value;
+        updateSettBal();
+        // Show/hide custom input dynamically
+        const td=sel.closest('td');
+        let customInp=td.querySelector('.invest-custom');
         if(sel.value==='Other'){
-          settPlan[i].investment='Other';
-          renderSettPlan();
-          // Focus the custom input in the re-rendered row
-          const row=tbody.querySelectorAll('tr')[i];
-          const inp=row?.querySelector('.invest-custom');
-          if(inp) inp.focus();
+          if(!customInp){
+            customInp=document.createElement('input');
+            customInp.type='text';
+            customInp.className='invest-custom';
+            customInp.dataset.i=i;
+            customInp.placeholder='e.g. PPF, NPS, Gold';
+            customInp.style.cssText='margin-top:4px;width:100%;padding:4px 8px;border:1.5px solid #127A6B;border-radius:6px;font-size:12px;display:block';
+            customInp.addEventListener('input',()=>{ settPlan[i].investment=customInp.value.trim()||'Other'; });
+            td.appendChild(customInp);
+          }
+          customInp.style.display='block';
+          customInp.focus();
         } else {
-          settPlan[i].investment=sel.value;
-          updateSettBal();
+          if(customInp) customInp.style.display='none';
         }
       });
     });
-    // Custom text input: save value as investment
+    // Wire existing custom inputs (for lines already set to custom)
     tbody.querySelectorAll('.invest-custom').forEach(inp=>{
       inp.addEventListener('input',()=>{
-        const i=+inp.dataset.i;
-        settPlan[i].investment=inp.value.trim()||'Other';
-      });
-      // If user clears and presses Escape, revert to dropdown
-      inp.addEventListener('keydown',e=>{
-        if(e.key==='Escape'){
-          const i=+inp.dataset.i;
-          settPlan[i].investment='FD';
-          renderSettPlan();
-        }
+        settPlan[+inp.dataset.i].investment=inp.value.trim()||'Other';
       });
     });
     tbody.querySelectorAll('[data-del]').forEach(b=>{b.onclick=()=>{settPlan.splice(+b.dataset.del,1);renderSettPlan();};});
