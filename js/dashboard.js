@@ -126,10 +126,28 @@ function renderMonth(){
         <strong>${esc(l.name)}</strong><br>
         <span class="type-pill ${typePillClass(l.type)}">${l.type}</span>
       </td>
-      <td class="num">
-        <span class="plan-amt-click" data-line="${esc(l.name)}" data-amount="${l.amount}" title="Double-click to mark as fully paid" style="cursor:pointer;border-bottom:1.5px dashed rgba(0,0,0,.18);display:inline-block">${INR(l.amount)}</span>
+      <td class="num" style="position:relative">
+        <span class="plan-amt-click" data-line="${esc(l.name)}" data-amount="${l.amount}" data-invest="${esc(l.investment||'Other')}" title="Double-click to mark as fully paid" style="cursor:pointer;border-bottom:1.5px dashed rgba(0,0,0,.18);display:inline-block">${INR(l.amount)}</span>
         <div class="bar-wrap" style="margin-top:5px;min-width:60px">
           <div class="bar-fill" style="width:${pct}%;background:${barCol}"></div>
+        </div>
+        <div class="invest-tooltip" style="display:none;position:absolute;left:0;top:calc(100% + 4px);z-index:99;background:#fff;border:1.5px solid #E0E3D8;border-radius:10px;padding:10px 14px;min-width:200px;box-shadow:0 4px 16px rgba(0,0,0,.1);pointer-events:none">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+            <span style="font-size:11px;color:#66756D">Investment</span>
+            <span style="font-size:11px;padding:2px 8px;border-radius:99px;font-weight:600;${l.investment==='FD'?'background:#E6F1FB;color:#185FA5':l.investment==='SIP'?'background:#EAF3DE;color:#3B6D11':l.investment==='EMI'?'background:#FAECE7;color:#993C1D':l.investment==='Insurance'?'background:#FAEEDA;color:#854F0B':'background:#F1EFE8;color:#5F5E5A'}">${l.investment||'Other'}</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+            <span style="font-size:11px;color:#66756D">Planned</span>
+            <span style="font-size:12px;font-weight:600;font-family:'IBM Plex Mono',monospace">${INR(l.amount)}</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+            <span style="font-size:11px;color:#66756D">Added</span>
+            <span style="font-size:12px;font-weight:600;font-family:'IBM Plex Mono',monospace;color:${pct===100?'#127A6B':pct>0?'#B07818':'#66756D'}">${INR(added)}</span>
+          </div>
+          <div style="height:4px;background:#E0E3D8;border-radius:99px;overflow:hidden">
+            <div style="height:100%;width:${pct}%;background:${pct===100?'#127A6B':pct>0?'#C9871F':'#E0E3D8'};border-radius:99px"></div>
+          </div>
+          <div style="font-size:10px;color:#66756D;margin-top:4px;text-align:right">${pct}% done</div>
         </div>
       </td>
       <td><input class="amt-input ${cls}" type="number" inputmode="decimal" step="50" min="0" placeholder="0"
@@ -147,6 +165,15 @@ function renderMonth(){
     <td></td>
     <td class="num">${totalPlan?Math.round(totalAdded/totalPlan*100):0}%</td>
   </tr>`;
+
+  // Hover tooltip on plan amount
+  tbody.querySelectorAll('.plan-amt-click').forEach(span=>{
+    const td=span.closest('td');
+    const tip=td?.querySelector('.invest-tooltip');
+    if(!tip) return;
+    td.addEventListener('mouseenter',()=>tip.style.display='block');
+    td.addEventListener('mouseleave',()=>tip.style.display='none');
+  });
 
   // Double-click plan amount → auto-fill added
   tbody.querySelectorAll('.plan-amt-click').forEach(span=>{
@@ -276,7 +303,7 @@ function renderMonthRail(){
   if(!rail){
     rail=document.createElement('div');
     rail.id='monthRail';
-    rail.style.cssText='display:flex;overflow:hidden;border:1.5px solid var(--ink);border-top:0;background:var(--paper2);margin-bottom:16px;width:100%;box-sizing:border-box';
+    rail.style.cssText='display:flex;overflow:hidden;border:1.5px solid var(--ink);border-top:0;background:var(--paper2);margin-bottom:16px;width:100%;box-sizing:border-box;position:sticky;top:0;z-index:50;box-shadow:0 2px 8px rgba(0,0,0,.08)';
     document.getElementById('entryBody').closest('.card').before(rail);
   }
   rail.innerHTML=MONTHS.map(m=>{
@@ -689,6 +716,9 @@ function renderSettings(){
         <td><input type="number" value="${l.amount}" data-i="${i}" data-f="amount" min="0" step="100" style="width:110px"></td>
         <td><select data-i="${i}" data-f="type">
           ${['Fixed','Savings','Flexible'].map(t=>`<option${l.type===t?' selected':''}>${t}</option>`).join('')}
+        </select></td>
+        <td><select data-i="${i}" data-f="investment" style="width:110px">
+          ${['FD','SIP','Cash','EMI','Insurance','Other'].map(v=>`<option${(l.investment||'Other')===v?' selected':''}>${v}</option>`).join('')}
         </select></td>
         <td><button class="del-btn" data-del="${i}">✕</button></td>
       </tr>`).join('');
