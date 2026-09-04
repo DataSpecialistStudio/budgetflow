@@ -226,6 +226,14 @@
 #section-year.active { display: block !important; }
 </style>
 
+
+<style>
+/* Log this month — auto-height, no scroll clipping */
+#section-month .card { overflow: visible; }
+#section-month .table-wrap { overflow-y: visible !important; max-height: none !important; }
+#section-month { overflow-y: auto; }
+</style>
+
 </head>
 <body class="app-page">
 
@@ -393,7 +401,7 @@
               <button class="btn btn-outline btn-sm" id="copyLastBtn">Copy last month</button>
             </div>
           </div>
-          <div class="table-wrap">
+          <div class="table-wrap" style="overflow-y:visible;overflow-x:auto;max-height:none">
             <table class="entry-table">
               <thead>
                 <tr>
